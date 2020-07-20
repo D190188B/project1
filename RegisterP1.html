@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    crossorigin="anonymous">
+
+    <title>REGISTER</title>
+<style>
+  body{
+    margin: 0;
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #212529;
+    text-align: left;
+    background-color: #62c2e4;
+}
+
+.colorgraph {
+    height: 5px;
+    border-top: 0;
+    background: #c4e17f;
+    border-radius: 5px;
+    background-image: -webkit-linear-gradient(left,#c4e17f,#c4e17f 12.5%,#f7fdca 12.5%,#f7fdca 25%,#fecf71 25%,#fecf71 37.5%,#f0776c 37.5%,#f0776c 50%,#db9dbe 50%,#db9dbe 62.5%,#c49cde 62.5%,#c49cde 75%,#669ae1 75%,#669ae1 87.5%,#62c2e4 87.5%,#62c2e4);
+    background-image: -moz-linear-gradient(left,#c4e17f,#c4e17f 12.5%,#f7fdca 12.5%,#f7fdca 25%,#fecf71 25%,#fecf71 37.5%,#f0776c 37.5%,#f0776c 50%,#db9dbe 50%,#db9dbe 62.5%,#c49cde 62.5%,#c49cde 75%,#669ae1 75%,#669ae1 87.5%,#62c2e4 87.5%,#62c2e4);
+    background-image: -o-linear-gradient(left,#c4e17f,#c4e17f 12.5%,#f7fdca 12.5%,#f7fdca 25%,#fecf71 25%,#fecf71 37.5%,#f0776c 37.5%,#f0776c 50%,#db9dbe 50%,#db9dbe 62.5%,#c49cde 62.5%,#c49cde 75%,#669ae1 75%,#669ae1 87.5%,#62c2e4 87.5%,#62c2e4);
+    background-image: linear-gradient(to right,#c4e17f,#c4e17f 12.5%,#f7fdca 12.5%,#f7fdca 25%,#fecf71 25%,#fecf71 37.5%,#f0776c 37.5%,#f0776c 50%,#db9dbe 50%,#db9dbe 62.5%,#c49cde 62.5%,#c49cde 75%,#669ae1 75%,#669ae1 87.5%,#62c2e4 87.5%,#62c2e4);
+}
+.container
+{
+    width:100%;
+   
+}
+
+form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    display:block;
+}
+
+.my-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.login-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.login-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+    </style>
+  </head>
+<body style>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button"
+    data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false"aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+    
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    <li class="nav-item active">
+    <a class="nav-link" href="#"> HOME <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item active">
+    <a class="nav-link" href="LoginP1.html"> LOGIN <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item active">
+    <a class="nav-link" href="RegisterP1.html"> REGISTER <span class="sr-only">(current)</span></a>
+    </li>
+    </ul>
+    </nav>
+
+  <main class="login-form">
+    <div class="container">
+    <div class="row justify-content-center" style="margin-top:60px;">
+    <div class="col-md-8">
+    <div class="card">
+    <fieldset>
+    <h3 class="sign-up-title" style="color:dimgray; text-align: center">Welcome Register Now!</h3>      
+    <hr class="colorgraph">
+    <div class="card-body">
+    <form action="" method="">
+        <div class="form-group row">
+            <label for="password" class="col-md-4 col-form-label text-md-right">Username</label>
+            <div class="col-md-6">
+                <input type="username" id="username" class="form-control" name="username" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="phone" class="col-md-4 col-form-label text-md-right">PhoneNo</label>
+            <div class="col-md-6">
+                <input type="phone" name="phone" id="phone" size="30" pattern="[0-9]{2}-[0-9]{7}">
+            </div>
+        </div>
+                      <div class="form-group row">
+                          <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
+                          <div class="col-md-6">
+                              <input type="text" id="email_address" class="form-control" name="email-address" required autofocus>
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+                          <div class="col-md-6">
+                              <input type="password" id="password" class="form-control" name="password" required>
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="Cpassword" class="col-md-4 col-form-label text-md-right">Comfirm Password</label>
+                        <div class="col-md-6">
+                            <input type="Cpassword" id="Cpassword" class="form-control" name="Cpassword" required>
+                        </div>
+                    </div>
+
+                      <div class="col-md-6 offset-md-4">
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Register">
+                      </div>
+
+                      <div class="col-md-6 offset-md-4"> 
+                        <p>Already have an account? <a href="LoginP1.html">Sign in</a>.</p>
+                        </div>
+              </div>
+              </form>
+          </div>
+      </div>
+        </div>
+    </div>
+  </main>
+
+    <footer class="bs-footer" role="contentinfo">
+      
+    
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
