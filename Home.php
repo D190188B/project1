@@ -10,14 +10,38 @@ $conn = new mysqli($servername, $username, $password,$database);
 // Check connection #scawx
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+    
 }
+
+session_start();
 ?>
 
 <!doctype html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="project1.css">
     <title>Home</title>
+
+  <style>
+    
+  .carousel-item {
+    height: 650px;
+  }
+
+  .carousel-item img{
+    height: 650px;
+  }
+  @media screen and (max-width:767px){
+    .carousel-item {
+    height: 300px;
+  }
+    .carousel-item img{
+    height: 300px;
+    }
+
+}
+  
+
+    </style>
 </head>
 
 
@@ -26,17 +50,48 @@ if ($conn->connect_error) {
 </header>
   
 <body>
-<div class="content" >
-
-    <div class="content-top" align="center">
-
-      <img src="images/counselling.jpg">
-
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="margin-top:60px;">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="images/counselling.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h3 style="padding-bottom:10px;color:black">Facing some problem?</h5>
+        <h5 style="padding-bottom:30px;color:black;">Nulla vitae elit libero, a pharetra augue mollis interdum.</h5>
+      </div>
     </div>
+    <div class="carousel-item">
+      <img src="images/depression.jpg" class="d-block w-100 " alt="..." >
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Second slide label</h5>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="images/anxiety.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Third slide label</h5>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+      </div>
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
-    
+
+<div class="content">
     <div class="arti">
-
         <div class="arti-contentWhole1">
 
             <div class="arti-contentLeft">
@@ -72,7 +127,7 @@ if ($conn->connect_error) {
                 When you need someone to talk to, we're here to listen and help you feel better.<br>
                 </p>
 
-                <button class="btn1"><a href="#">Make Appointment Now!</a></button>
+                <button class="btn1" type="submit"><a href="#">Make Appointment Now!</a></button>
             </div>
             
 
@@ -82,7 +137,7 @@ if ($conn->connect_error) {
         
             <div class="arti-content2Left">
             <h3><strong>Try self help made easy</strong></h3><br>
-                <img src="images/depression.jpg">
+                <img src="images/depression1.jpg">
 
             </div>
 
@@ -99,17 +154,14 @@ if ($conn->connect_error) {
             </div>
 
       </div>
-
     </div>
 
+    <?php require_once ("footer.php");?>
 </div>
-    
+
+
+
 </body>
-
-<footer>
-  <?php require_once ("footer.php");?>
-
-</footer>
 
 
 </html>
