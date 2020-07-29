@@ -15,6 +15,29 @@ if ($conn->connect_error) {
 
 mysqli_set_charset($conn, 'utf8');
 
+function upload_profile($path, $file){
+    $targetDir = $path;
+    $default = "images/beard.png";
+
+    // get the filename
+    $filename = basename($file['name']);
+    $targetFilePath = $targetDir . $filename;
+    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+    if(!empty($filename)){
+        // allow certain file format
+        $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
+        if(in_array($fileType, $allowType)){
+            // upload file to the server
+            if(move_uploaded_file($file['tmp_name'], $targetFilePath)){
+                return $targetFilePath;
+            }
+        }
+    }
+    // return default image
+    return $path . $default;
+}
+
 session_start();
 function validate_input_text($textValue){
     if (!empty($textValue)){
@@ -35,6 +58,8 @@ function validate_input_email($emailValue){
     }
     return '';
 }
+
+
 
 
 if(isset($_POST['login'])){
@@ -73,27 +98,52 @@ if(empty($error)){
         else{
             echo '<script>window.alert("Unavariable name or password")</script>';
         }
-     } echo '<script>window.alert("No account available..!")</script>';
+     } 
 }else{
-    echo "Please Fill out email and password to login!";
+    echo '<script>window.alert（"Please Fill out email and password to login!"）</script>';
 }
 }
 ?>
 <!doctype html>
 <html lang="en">
-    <?php require_once ("header1.php"); ?>
-<header>
+<head>
+    <style>
     
+
+
+    .container{
+        margin-top:-50px;
+        margin-left:10px;
+    }
+    
+    .row{
+        border-radius:30px;
+        border-style:solid;
+        background-image: linear-gradient( 95.2deg,  rgba(173,252,234,1) 26.8%, rgba(192,229,246,1) 64% );
+        box-shadow:1px 1px 22px #7584bb;
+    }
+    
+    
+    @media screen and (max-width:767px){
+        #login-form .container{
+    margin-top:30px;
+}
+}
+    </style>
+</head>
+<header>
+<?php require_once ("header1.php"); ?>
 </header>
 <!-- registration area -->
+<body>
 <section id="login-form">
     
+    <div class="container">
     <div class="row m-0">
         <div class="col-lg-4 offset-lg-4">
             <div class="text-center pb-5">
                 <h1 class="login-title text-dark">Login</h1>
                 <p class="p-1 m-0 font-ubuntu text-black-50">Login and enjoy additional features</p>
-                <span class="font-ubuntu text-black-50">Create a new <a href="register.php">account</a></span>
             </div>
             <div class="upload-profile-image d-flex justify-content-center pb-4">
                 <div class="text-center">
@@ -120,10 +170,11 @@ if(empty($error)){
                     <div class="form-row my-0">
                         <div class="col">
                             <p>Forget your password? Click here <a href="#">Reset Password</a></p> 
+                            <span class="text-black-100"><strong>Don't have account?</strong></span> &nbsp;<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">Register</button>
                         </div>
                     </div>
 
-                    <div class="submit-btn text-center my-5">
+                    <div class="submit-btn text-center my-3">
                         <input type="submit" name="login" value="submit">
                     </div>
 
@@ -131,6 +182,10 @@ if(empty($error)){
             </div>
         </div>
     </div>
+</div>
 </section>
+</body>
+<?php include ("modal.php") ?>
+
 </html>
 
