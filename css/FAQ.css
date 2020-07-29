@@ -1,0 +1,47 @@
+/*FAQ.php css*/
+div.faqPage{
+    display: block;
+}
+
+b, strong {
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+
+h1.faqHeader{
+    font-size: 27px;
+    margin: 20px;
+    font-family: 'Ubuntu', 'Times New Roman', Times, serif;
+    font-weight: 700;
+    line-height: 1.1;
+    color: inherit;
+    display: block;
+    margin-top: 100px;
+
+}
+
+.panel-group {
+    margin-bottom: 20px;
+}
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 4px;
+}
+
+.faqPage .panel-default {
+    border: none;
+}
+
+.faqPage .panel-heading {
+    background-color: rgba(255, 255, 255, 0.397);
+    font-family: 'Ubuntu', 'Times New Roman', Times, serif;
+}
+
+.panel-title>a, .panel-title>small, .panel-title>.small, .panel-title>small>a, .panel-title>.small>a {
+    color: inherit;
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border-top-color: #ddd;
+}
