@@ -9,9 +9,9 @@
     font: normal 500 16px var(--font-ubuntu);
 }
 
-#register, #login-form {
+#login-form {
     padding: 10% 0;
-    background-image: radial-gradient( circle 1224px at 10.6% 8.8%,  rgba(255,255,255,1) 0%, rgba(153,202,251,1) 100.2% );
+    background-color: white;
     background-size: cover;
 }
 
@@ -34,8 +34,17 @@
     top: 0;
     z-index: 10;
     width: 200px;
-    margin-top: 0px;
+    margin-top:5px;
+    margin-left:283px;
     opacity: 0;
+}
+
+@media screen and (max-width:767px){
+#upload-profile {
+    margin-left:100px;
+    opacity: 0;
+    }
+
 }
 
 #upload-profile::-webkit-file-upload-button{
@@ -113,10 +122,3 @@
     outline: none;
     box-shadow: none;
 }
-
-
-
-
-
-
-
