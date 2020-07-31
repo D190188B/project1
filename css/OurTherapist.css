@@ -25,9 +25,8 @@ a:focus, a:hover { text-decoration: none; color: #f85759; }
 
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 #team {
-    background: #eee !important;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(130,205,221,1) 0%, rgb(255, 223, 153) 90% );
 }
-
 .btn-primary:hover,
 .btn-primary:focus {
     background-color: #108d6f;
