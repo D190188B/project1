@@ -1,0 +1,13 @@
+body { padding-top:20px; }
+.panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+body{
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgb(221, 212, 130) 0%, rgb(255, 153, 250) 90% );
+  }
+  
+.panel-group {
+    margin-bottom: 20px;
+}
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 4px;
+}
