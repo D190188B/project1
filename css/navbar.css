@@ -1,11 +1,42 @@
 .navbar-nav > li{
   padding-left:5px;
-  padding-right:5px;
+  padding-right:20px;
 }
 
 button[type="submit"]:focus {
   outline: none;
 }
+
+.navbar-nav .nav-item{
+  font-family:Times New Roman;
+  transition: filter .8s ease;
+}
+
+.navbar .navbar-expand-md{
+  background-color:linear-gradient(179.4deg,rgba(34,19,48),rgba(79,56,102),rgba(172,132,182));
+}
+
+.navbar-nav .nav-item:hover{
+  filter: drop-shadow(1px 1px 22px #7584bb);
+}
+
+#header1 ul.navbar-nav{
+  margin-right:76px;
+}
+
+#header1 a.navbar-brand{
+  padding-left:105px;
+}
+
+@media screen and (max-width:767px){
+  #header1 a.navbar-brand{
+    padding-left:0;
+  }
+}
+
+/* .navbar-nav .nav-item button:hover {
+  filter: drop-shadow(1px 1px 22px #75abbb);
+} */
 
 
 
