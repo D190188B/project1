@@ -1,11 +1,11 @@
 <?php
-$servername = "localhost";//localhost for local PC or use IP address
+$servername = "localhost"; //localhost for local PC or use IP address
 $username = "root"; //database name
-$password = "";//database password
-$database = "oncoun";//database name
+$password = ""; //database password
+$database = "oncoun"; //database name
 
 // Create connection #scawx
-$conn = new mysqli($servername, $username, $password,$database);
+$conn = new mysqli($servername, $username, $password, $database);
 
 // Check connection #scawx
 if ($conn->connect_error) {
@@ -28,11 +28,15 @@ mysqli_set_charset($conn, 'utf8');
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/home.css">
     <link rel="stylesheet" type="text/css" href="css/FAQ.css">
+    <link rel="stylesheet" type="text/css" href="css/service.css">
     <link rel="stylesheet" type="text/css" href="css/Therapistinfo.css">
+    <link rel="stylesheet" type="text/css" href="css/Profile.css">
+    <link rel="stylesheet" type="text/css" href="css/Reviews.css">
+    <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
     <!-- jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
 
 
@@ -41,67 +45,67 @@ mysqli_set_charset($conn, 'utf8');
 <html>
 <html lang="en">
 
-<header id="header1">
-<!-- nav bar -->
-<form action="header1.php" method="post">
+    <header id="header1">
+        <!-- nav bar -->
+        <form action="header1.php" method="post">
 
-        <nav class="navbar navbar-expand-md bg-warning navbar-dark fixed-top" style="position:fixed;background-image: linear-gradient( 89.2deg,  rgba(191,241,236,1) 22.3%, rgba(109,192,236,1) 84.1% );">
-            <!-- Brand -->
-            <a class="navbar-brand" href="Home.php">Logo</a>
-          
-            <!-- Toggler/collapsibe Button -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Navbar links -->
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2 " id="collapsibleNavbar">
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="position:fixed;background-color:rgba(34,19,48);">
+                <!-- Brand -->
+                <a class="navbar-brand" href="Home.php">Logo</a>
 
-                <ul class="navbar-nav ml-auto">
+                <!-- Toggler/collapsibe Button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Navbar links -->
+                <div class="navbar-collapse collapse w-100 order-3 dual-collapse2 " id="collapsibleNavbar">
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="Appointment.php" style="color:black">Appointment</a>
-                    </li>
+                    <ul class="navbar-nav ml-auto">
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="FAQ.php" style="color:black">FAQ</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="help.php" style="color:white">Service</a>
+                        </li>
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="Reviews.php" style="color:black">Reviews</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="FAQ.php" style="color:white">FAQ</a>
+                        </li>
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="ourThera.php" style="color:black">Our Therapist</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="Reviews.php" style="color:white">Reviews</a>
+                        </li>
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="TherapistInfo.php" style="color:black">Therapist Job</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="OurTherapist.php" style="color:white">Our Therapist</a>
+                        </li>
 
-                    <li class="nav-item active">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="Therapistinfo.php" style="color:white">Therapist Job</a>
+                        </li>
+
+                        <!-- <li class="nav-item active">
                         <a class="nav-link" href="#">
-                          <button type="submit" style="background-image: linear-gradient( 109.6deg,  rgba(102,203,149,1) 11.2%, rgba(39,210,175,1) 98.7% );color:white;border:solid;border-radius:9px;border-width:1px;border-color:green;color:black;">Self Test</button>
+                            <button type="submit" style="background-image: linear-gradient( 109.6deg,  rgba(102,203,149,1) 11.2%, rgba(39,210,175,1) 98.7% );color:white;border:solid;border-radius:9px;border-width:1px;border-color:green;color:black;">Self Test</button>
                         </a>
-                    </li>
+                    </li> -->
 
-                
-                    <?php
-                    if(isset($_SESSION['name'])){ 
-                    echo "<a class=\"nav-link\" href=\"FAQ.php\" style=\"color:black;\">Profile</a>";
-                    }
-                    else{
-                    echo "<a class=\"nav-link\" href=\"login.php\" style=\"color:black;\">Login</a>";    
-                    }
-                    ?>
-                  </li>
-                  
-                </ul>
-                
 
-            </div>
-            
-          </nav>
-          
+                        <?php
+                        if (isset($_SESSION['name'])) {
+                            echo " <li class=\"nav-item active\"><a class=\"nav-link\" href=\"profile.php\" style=\"color:white;\">Profile</a></li>";
+                        } else {
+                            echo "<li class=\"nav-item active\"><a class=\"nav-link\" href=\"login.php\" style=\"color:white;\">Login</a></li>";
+                        }
+                        ?>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+            </nav>
+
         </form>
-        </header>          
-</html>       
+    </header>
+
+</html>
