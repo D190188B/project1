@@ -1,47 +1,106 @@
 /*FAQ.php css*/
-div.faqPage{
+#faq div.faqPage{
     display: block;
 }
 
-b, strong {
+#faq b, strong {
     font-weight: bold;
     box-sizing: border-box;
 }
 
 
-h1.faqHeader{
+#faq h1.faqHeader{
+    padding-top:20px;
     font-size: 27px;
-    margin: 20px;
+    margin-top:56px;
+    margin-bottom:20px;
     font-family: 'Ubuntu', 'Times New Roman', Times, serif;
     font-weight: 700;
     line-height: 1.1;
-    color: inherit;
     display: block;
-    margin-top: 100px;
-
+    text-align: center;
+    color:rgba(34,19,48);
 }
 
-.panel-group {
+#faq .panel-group {
     margin-bottom: 20px;
 }
-.panel-group .panel {
+
+#faq .panel-group .panel {
     margin-bottom: 0;
     border-radius: 4px;
 }
 
-.faqPage .panel-default {
+#faq .faqPage .panel-default {
     border: none;
 }
 
-.faqPage .panel-heading {
+#faq .faqPage .panel-heading {
     background-color: rgba(255, 255, 255, 0.397);
     font-family: 'Ubuntu', 'Times New Roman', Times, serif;
+    width:100%;
 }
 
-.panel-title>a, .panel-title>small, .panel-title>.small, .panel-title>small>a, .panel-title>.small>a {
-    color: inherit;
+#faq .panel-title>a, .panel-title>small, .panel-title>.small, .panel-title>small>a, .panel-title>.small>a {
+    color: rgba(46,78,117);
 }
 
-.panel-default>.panel-heading+.panel-collapse>.panel-body {
+#faq .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border-top-color: #ddd;
 }
+
+#faq #line{
+    background-color:white;
+    height:auto;
+}
+
+#faq .container {
+    background-color: rgba(153, 156, 191);
+    height: 550px;
+    width: 1115px;
+  }
+
+  #faq .container#line {
+    background-color: white;
+    height: 20px;
+    width: 1115px;
+  }
+
+  #faq hr {
+    background-color: rgba(34, 19, 48);
+    border-width: 2px;
+    width: 1150px;
+    margin-left: -30px;
+    margin-top: 56px;
+  }
+
+
+  @media screen and (max-width:767px) {
+    #faq .container {
+      height: auto;
+      width: auto;
+      padding-bottom: 10px;
+    }
+
+    #faq .content {
+      margin-top: 100px;
+    }
+  }
+
+  @media screen and (max-width:414px) {
+    #faq .container {
+      margin-top:-43px;
+      height: auto;
+      width: 495px;
+      padding-bottom: 10px;
+    }
+
+    #faq .container#line{
+      width: 495px;
+    }
+
+    #faq hr{
+      width: 510px;
+    }
+  }
+
