@@ -21,10 +21,10 @@ if (isset($_POST['logout'])) {
 }
 
 
-if (isset($_SESSION['name'])) {
-    $username = $_SESSION['name'];
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
 
-    $sql = "select * from client where name ='$username'"; //id is database name
+    $sql = "select * from client where id ='$id'"; //id is database name
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
