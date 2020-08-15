@@ -51,7 +51,7 @@ function upload_thera($path, $file)
   $default = "beard.png";
   // get the filename
   $filename = basename($file['name']);
-  $targetFilePath = $targetDir.$filename;
+  $targetFilePath = $targetDir . $filename;
   $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
   if (!empty($filename)) {
@@ -62,8 +62,8 @@ function upload_thera($path, $file)
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
         return $targetFilePath;
       }
-    } 
-  }else {
+    }
+  } else {
     // return default image
     return $path . $default;
   }
@@ -75,7 +75,7 @@ function upload_certificate($path, $file)
   $default = "beard.png";
   // get the filename
   $filename = basename($file['name']);
-  $targetFilePath = $targetDir.$filename;
+  $targetFilePath = $targetDir . $filename;
   $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
   if (!empty($filename)) {
@@ -86,8 +86,8 @@ function upload_certificate($path, $file)
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
         return $targetFilePath;
       }
-    } 
-  }else {
+    }
+  } else {
     // return default image
     return $path . $default;
   }
@@ -99,71 +99,73 @@ if (isset($_POST['submit'])) {
 
   $license = $_POST['license'];
 
+  $about = mysqli_real_escape_string($conn, $_POST['about']);
+
   $name = validate_input_text($_POST['name']);
   if (empty($name)) {
-      $error[] = "You forgot to enter your Name";
+    $error[] = "You forgot to enter your Name";
   }
 
   $email = validate_input_text($_POST['email']);
   if (empty($email)) {
-      $error[] = "You forgot to enter your Email";
+    $error[] = "You forgot to enter your Email";
   }
 
   $phone = validate_input_text($_POST['phone']);
   if (empty($phone)) {
-      $error[] = "You forgot to enter your phone number";
+    $error[] = "You forgot to enter your phone number";
   }
 
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   if (empty($address)) {
-      $error[] = "You forgot to enter your address";
+    $error[] = "You forgot to enter your address";
   }
 
   $ic = mysqli_real_escape_string($conn, $_POST['ic']);
   if (empty($ic)) {
-      $error[] = "You forgot to enter your ic";
+    $error[] = "You forgot to enter your ic";
   }
 
   $password = validate_input_text($_POST['password']);
   if (empty($password)) {
-      $error[] = "You forgot to enter your password";
+    $error[] = "You forgot to enter your password";
   }
 
   $confirm_pwd = validate_input_text($_POST['confirm_pwd']);
   if (empty($confirm_pwd)) {
-      $error[] = "You forgot to enter your Confirm Password";
+    $error[] = "You forgot to enter your Confirm Password";
   }
 
 
   $file1 = $_FILES['certificate'];
-  $fileCer = upload_certificate('./images/certificate/',$file1);
+  $fileCer = upload_certificate('./images/certificate/', $file1);
 
   $files = $_FILES['profileUpload'];
-  $profileImage = upload_thera('./images/profile/',$files);
+  $profileImage = upload_thera('./images/profile/', $files);
 
 
 
   if (empty($error) && ($password == $confirm_pwd)) {
-      $generateid = uniqid();
-      // register a new user
-      $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
+    $generateid = uniqid();
+    // register a new user
+    $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
-      $sqli = "Select * from therapist where email='$email'"; //username and password same ？
-      $result1 = mysqli_query($conn, $sqli); //sql
+    $sqli = "Select * from therapist where email='$email'"; //username and password same ？
+    $result1 = mysqli_query($conn, $sqli); //sql
 
-      $count = mysqli_num_rows($result1);
+    $count = mysqli_num_rows($result1);
 
-      if ($count == 0) {
-          $sql = "insert into therapist values('$generateid','$name','$email','$phone','$ic','$address','$license','$fileCer','$hashed_pass','$profileImage',NOW())";
-          $result = $conn->query($sql);
+    if ($count == 0) {
+      $sql = "insert into therapist values('$generateid','$name','$about','$email','$phone','$ic','$address','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      $result = $conn->query($sql);
 
-          echo '<script>window.alert("Submit successful...!")</script>';
-          // header('refresh:0.1; url=Home.php');
-      } else {
-          echo '<script>window.alert("This email has already registered...!")</script>';
-      }
+      echo '<script>window.alert("Submit successful...!")</script>';
+      // header('refresh:0.1; url=Home.php');
+    } else {
+      echo '<script>window.alert("This email has already registered...!")</script>';
+    }
   } else {
-      echo '<script>window.alert("Password is not match....!!!!")</script>';
+    echo '<script>window.alert("Password is not match....!!!!")</script>';
   }
 }
 
@@ -271,4 +273,5 @@ if (isset($_POST['submit'])) {
   <?php require_once("footer.php"); ?>
 </footer>
 <?php include("therapistRegistercopy.php") ?>
+
 </html>
