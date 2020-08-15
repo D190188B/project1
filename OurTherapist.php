@@ -20,11 +20,8 @@ session_start();
 
 <head>
     <title>Our Therapist</title>
-    <link rel="stylesheet" type="text/css" href="css/OurTherapist.css">
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
-
-
 <header>
     <?php require_once("header1.php"); ?>
 </header>
@@ -69,8 +66,8 @@ session_start();
                 <div class="col-md-12">
                     <div clas="col-md-12" id="search">
                         <div class="row">
-                            <input type="search" id="searchText" class="form-control mr-sm-2">
-                            <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="Search"><i class="fas fa-search"></i></button>
+                            <input type="search" id="searchText" name="Search" class="form-control mr-sm-2">
+                            <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
             </form>
@@ -79,22 +76,22 @@ session_start();
                 <div class="row">
 
                     <?php
-                    if (isset($_POST['Search'])) {
+                    if (isset($_POST['submit'])) {
                         $keyword = $_POST['Search'];
                     }
 
                     //step:3 for search
                     $search = "";
                     if (isset($_POST['Search'])) {
-                        $search = " and name like '%" . $keyword . "%'"; //（.）把keyword把search
+                        $search =" and name like '%" . $keyword . "%'"; //（.）把keyword把search
                     }
 
-                    $sql = "select * from therapist where license='phone'" . $search; //有where在sql，search sql 不能再有where 换成and
+                    $sql = "select * from therapist where statusID='2'".$search; //有where在sql，search sql 不能再有where 换成and
                     $result = $conn->query($sql); //Define sql, run sql
                     if ($result->num_rows > 0) { //over 1 database(record) so run
                         while ($row = $result->fetch_assoc()) {
                             //display result
-                            $id = $row['id']; //[] inside is follow database 
+                            $id = $row['therapist_id']; //[] inside is follow database 
                             $name = $row['name'];
                             $profile_image = $row['profile_image'];
                     ?>
