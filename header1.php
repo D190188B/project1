@@ -28,11 +28,12 @@ mysqli_set_charset($conn, 'utf8');
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/home.css">
     <link rel="stylesheet" type="text/css" href="css/FAQ.css">
-    <link rel="stylesheet" type="text/css" href="css/service.css">
+    <link rel="stylesheet" type="text/css" href="css/Help.css">
     <link rel="stylesheet" type="text/css" href="css/Therapistinfo.css">
     <link rel="stylesheet" type="text/css" href="css/Profile.css">
     <link rel="stylesheet" type="text/css" href="css/Reviews.css">
     <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
+    <link rel="stylesheet" type="text/css" href="css/OurTherapist.css">
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
