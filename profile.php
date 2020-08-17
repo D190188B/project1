@@ -31,7 +31,7 @@ if (isset($_SESSION['id'])) {
         while ($row = $result->fetch_assoc()) {
             $_SESSION['id'] = $row['id'];
             $_SESSION['name'] = $row['name'];
-            $_SESSION['email']=$row['email'];
+            $_SESSION['email'] = $row['email'];
             $_SESSION['birth'] = $row['birth'];
             $_SESSION['phone'] = $row['phone'];
             $_SESSION['address'] = $row['address'];
@@ -72,31 +72,30 @@ if (isset($_POST['edit'])) {
     $Phone = $_POST['phone'];
     $Address = $_POST['address'];
     $files = $_FILES['profileUpload'];
-    $password =$_POST['password'];
-    $confirm_pwd =$_POST['confirm_pwd'];
+    $password = $_POST['password'];
+    $confirm_pwd = $_POST['confirm_pwd'];
     $profileImage = upload_profile('./images/profile/', $files);
 
 
-    if (($password == $confirm_pwd)){
-    $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
+    if (($password == $confirm_pwd)) {
+        $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "update client set name='$name',birth='$birth',phone='$Phone',address='$Address',password='$hashed_pass',profileImage='$profileImage' where id='$id'";
+        $sql = "update client set name='$name',birth='$birth',phone='$Phone',address='$Address',password='$hashed_pass',profileImage='$profileImage' where id='$id'";
 
-    $result = $conn->query($sql);
+        $result = $conn->query($sql);
 
-    if ($result == true) {
-        $_SESSION['name']=$name;
-        $_SESSION['birth']=$birth;
-        $_SESSION['phone']=$Phone;
-        $_SESSION['address']=$Address;
-        $_SESSION['profileUpload']=$profileImage;
-        echo '<script>window.alert("Edit done")</script>';
-        header('Refresh: 0;');
+        if ($result == true) {
+            $_SESSION['name'] = $name;
+            $_SESSION['birth'] = $birth;
+            $_SESSION['phone'] = $Phone;
+            $_SESSION['address'] = $Address;
+            $_SESSION['profileUpload'] = $profileImage;
+            echo '<script>window.alert("Edit done")</script>';
+            header('Refresh: 0;');
+        }
+    } else {
+        echo '<script>window.alert("Password are not match...!!")</script>';
     }
-}else{
-    echo '<script>window.alert("Password are not match...!!")</script>';
-}
-
 }
 ?>
 
@@ -149,7 +148,7 @@ if (isset($_POST['edit'])) {
 
                                 <p class="card-description">Basic Information</p>
                                 <ul class="about">
-                                <li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Phone:</span><span class="about-item-detail"><?php echo $_SESSION['email'] ?></span></li>
+                                    <li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Phone:</span><span class="about-item-detail"><?php echo $_SESSION['email'] ?></span></li>
                                     <li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Phone:</span><span class="about-item-detail"><?php echo $_SESSION['phone'] ?></span></li>
                                     <li class="about-items"><i class="mdi mdi-map-marker icon-sm "></i><span class="about-item-name">Address:</span><span class="about-item-detail"><?php echo $_SESSION['address'] ?></span> </li>
                                 </ul>
