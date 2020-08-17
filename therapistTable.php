@@ -17,38 +17,39 @@ session_start();
 if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete'];
 
-    $sql = "delete from therapist where therapist_id='$deleteID'";
+    echo $sql = "delete from therapist where therapist_id='$deleteID'";
     $result = $conn->query($sql);
+    
 
     if ($result == true) {
         echo '<script>window.alert("Delete Successful....!!!!")</script>';
     }
 }
 
-if (isset($_POST['select'])) {
+if (isset($_POST['accept'])) {
+    $id = $_POST['accept'];
+    $statusID = 2;
+    echo $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
+    $result = $conn->query($sql);
 
-    if (empty($_REQUEST['current'])) { //no items checked
-    }else {
-        foreach ($_REQUEST['current'] as $id) {
-            //delete the item with the username
-            $status = $_POST['select'];
-            $sql = "update therapist set statusID='$status' where therapist_id='$id'";
-            $result = $conn->query($sql);
-        }
-
-        if (($result == true) && ($status == '2')) {
-            echo '<script>window.alert("Accpet Successful...!")</script>';
-        } else if (($result == true) && ($status == '3')) {
-            echo '<script>window.alert("Reject Successful...!")</script>';
-        } else {
-            echo '<script>window.alert("Something goes wrong...!")</script>';
-        }
+    if($result==true){
+        echo '<script>window.alert("Accept Successful...!")</script>';
+    }else{
+        echo '<script>window.alert("Error...!")</script>';
     }
+}
 
-    
-    // $sql = "update therapist set statusID='$status' where id='$id'";
+if (isset($_POST['reject'])) {
+    $id = $_POST['reject'];
+    $statusID = 3;
+    echo $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
+    $result = $conn->query($sql);
 
-    // $result = $conn->query($sql);
+    if($result==true){
+        echo '<script>window.alert("Reject Successful...!")</script>';
+    }else{
+        echo '<script>window.alert("Error...!")</script>';
+    }
 }
 
 ?>
@@ -111,9 +112,10 @@ if (isset($_POST['select'])) {
                 <table class="table table-striped custab" style="text-align:center;">
                     <thead>
                         <tr>
+                            <th> </th>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>About</th>
+                            <th>Gender</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>IC</th>
@@ -135,7 +137,7 @@ if (isset($_POST['select'])) {
                                 //display result
                                 $id = $row['therapist_id']; //[] inside is follow database 
                                 $name = $row['name'];
-                                $about = $row['about'];
+                                $gender = $row['gender'];
                                 $email = $row['email'];
                                 $phone = $row['phone'];
                                 $ic = $row['ic'];
@@ -148,9 +150,10 @@ if (isset($_POST['select'])) {
                         ?>
 
                                 <tr>
-                                    <td><input type="checkbox" name="current[]" value="<?php echo $id ?>"></td>
+                                    <td><input type="text" name="number" value="<?php echo $email?>" readonly></td>
+                                    <td><?php echo $id ?></td>
                                     <td><?php echo $name ?></td>
-                                    <td><?php echo $about ?></td>
+                                    <td><?php echo $gender ?></td>
                                     <td><?php echo $email ?></td>
                                     <td><?php echo $phone ?></td>
                                     <td><?php echo $ic ?></td>
@@ -158,24 +161,27 @@ if (isset($_POST['select'])) {
                                     <td><?php echo $license ?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
                                     <td><?php echo $created_at ?></td>
+                                    
+
                                     <?php
-                                    if($statusID=='2'){
+                                    if ($statusID == '2') {
                                         echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
-                                    }else if($statusID=='3'){
+                                    } else if ($statusID == '3') {
                                         echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
-                                    }else{
+                                    } else {
                                         echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
                                     }
-                                     ?>
-                                    
+                                    ?>
+
                                     <td class="text-center">
                                         <?php
                                         if ($statusID == '1') {
-                                            echo "<button name=\"select\" type=\"submit\" class=\"btn btn-outline-success btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"2\">Accept</button>";
-                                            echo "<button name=\"select\" type=\"submit\" class=\"btn btn-outline-danger btn-xs\"  onclick=\"return confirm('Are you sure you want to Reject?')\" value=\"3\">Reject</button>";
+                                            echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-outline-success btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$id\">Accept</button>";
+                                            echo "<button name=\"reject\" type=\"submit\" class=\"btn btn-outline-danger btn-xs\"  onclick=\"return confirm('Are you sure you want to Reject?')\" value=\"$id\">Reject</button>";
                                         }
                                         ?>
                                         <button name="delete" type="submit" class="btn btn-danger btn-xs" value="<?php echo $id ?>" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+
                                     </td>
                                 </tr>
                         <?php
