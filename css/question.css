@@ -1,0 +1,96 @@
+#Question {
+    background-color: rgb(255, 255, 255);
+
+}
+
+#Question ul.choices {
+    padding-top: 10px;
+}
+
+#Question li {
+    list-style: none;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    margin-left: 250px;
+}
+
+#Question span {
+    padding-left: 10px;
+}
+
+#Question .container {
+    display: block;
+    padding: 30px 0 30px 0;
+    background-color: rgb(241, 241, 241);
+    margin-top: 30px;
+    width: 100vw;
+    height: auto;
+    border-radius: 20px;
+}
+
+#Question h3 {
+    text-align: center;
+    color: rgba(59, 82, 114);
+    margin-top: 70px;
+}
+
+#Question .container h4.question-text {
+    text-align: center;
+}
+
+
+#Question hr#ans {
+    border: 1px solid black;
+    max-width: 800px;
+}
+
+#Question .container hr {
+    border: 1px solid black;
+}
+
+#Question .container .question-form {
+    font-size: 20px;
+}
+
+#Question .container .question-form input[type='submit'] {
+    margin: 30px 0 0 310px;
+}
+
+#Question p {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#Question p#over {
+
+    margin-left: 10px;
+    font-size: 19px;
+    font-weight: 500;
+    display: none;
+}
+
+#Question .container .question-form input#cancel {
+    margin-left: 20px;
+}
+
+@media screen and (max-width:767px) {
+    #Question .container {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 30px;
+        margin-top: 30px;
+        max-width: 479px;
+    }
+
+    #Question li {
+        list-style: none;
+        padding-bottom: 10px;
+        padding-left: 0;
+        margin-left: 0
+    }
+
+    #Question .container .question-form input[type='submit'] {
+        margin: 30px 0 0 41px;
+    }
+}
