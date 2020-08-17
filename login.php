@@ -62,6 +62,8 @@ function validate_input_email($emailValue)
     return '';
 }
 
+
+
 if (isset($_POST['submit'])) {
     // error variable.
     $error = array();
@@ -162,6 +164,7 @@ if (isset($_POST['login'])) {
                 $passwordHash = $row['password'];
             }
             if (password_verify($password, $passwordHash)) {
+                $_SESSION['id']=$id;
                 $_SESSION['name'] = $name;
                 echo '<script>window.alert("Login Successful...!")</script>';
                 header('refresh: 0.5; url=Home.php');
