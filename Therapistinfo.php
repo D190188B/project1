@@ -15,14 +15,6 @@ if ($conn->connect_error) {
 
 session_start();
 
-if (isset($_POST['logout'])) {
-
-  session_destroy();
-  header('location:Home.php');
-}
-
-
-
 function validate_input_text($textValue)
 {
   if (!empty($textValue)) {
@@ -80,7 +72,7 @@ function upload_certificate($path, $file)
 
   if (!empty($filename)) {
     // allow certain file format
-    $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
+    $allowType = array('docx','doc','pptx', 'pdf','jpg', 'png', 'jpeg');
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
@@ -89,7 +81,7 @@ function upload_certificate($path, $file)
     }
   } else {
     // return default image
-    return $path . $default;
+    return '';
   }
 }
 
@@ -99,14 +91,18 @@ if (isset($_POST['submit'])) {
 
   $license = $_POST['license'];
 
-  $about = mysqli_real_escape_string($conn, $_POST['about']);
+  $gender= $_POST['gender'];
+
+  $age =$_POST['age'];
+
+  // $about = mysqli_real_escape_string($conn, $_POST['about']);
 
   $name = validate_input_text($_POST['name']);
   if (empty($name)) {
     $error[] = "You forgot to enter your Name";
   }
 
-  $email = validate_input_text($_POST['email']);
+  $email = validate_input_email($_POST['email']);
   if (empty($email)) {
     $error[] = "You forgot to enter your Email";
   }
@@ -145,7 +141,7 @@ if (isset($_POST['submit'])) {
 
 
 
-  if (empty($error) && ($password == $confirm_pwd)) {
+  if(empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))){
     $generateid = uniqid();
     // register a new user
     $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
@@ -156,7 +152,7 @@ if (isset($_POST['submit'])) {
     $count = mysqli_num_rows($result1);
 
     if ($count == 0) {
-      $sql = "insert into therapist values('$generateid','$name','$about','$email','$phone','$ic','$address','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      $sql = "insert into therapist values('$generateid','$name','','$gender','$age','$email','$phone','$ic','$address','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
       echo '<script>window.alert("Submit successful...!")</script>';
@@ -165,7 +161,7 @@ if (isset($_POST['submit'])) {
       echo '<script>window.alert("This email has already registered...!")</script>';
     }
   } else {
-    echo '<script>window.alert("Password is not match....!!!!")</script>';
+    echo '<script>window.alert("Password or file are not match...!")</script>';
   }
 }
 
