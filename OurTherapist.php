@@ -94,13 +94,14 @@ session_start();
                             $id = $row['therapist_id']; //[] inside is follow database 
                             $name = $row['name'];
                             $profile_image = $row['profile_image'];
+                            $license = $row['license'];
                     ?>
                             <div class="col-md-4">
                                 <div class="card h-100 border-100">
                                     <div class="card-body">
-                                        <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
+                                        <img src="<?php echo $profile_image?>" alt="" id="therapist1">
                                         <p class="therapistname"><?php echo $name ?></p>
-                                        <h5 class="therapistedu">LCSW</h5>
+                                        <h5 class="therapistedu"><?php echo $license ?></h5>
                                     </div>
                                 </div>
                             </div>
@@ -109,65 +110,6 @@ session_start();
                         } //while
                     } //if
                     ?>
-                    <!-- <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card h-100 border-100">
-                                <div class="card-body">
-                                    <img src="images/therapist1.jpg" alt="" id="therapist1">
-                                    <p class="therapistname">Katie Abajian</p>
-                                    <h5 class="therapistedu">LCSW</h5>
-                                </div>
-                            </div>
-                        </div> -->
                 </div>
             </div>
         </div>
