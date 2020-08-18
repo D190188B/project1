@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
 
     //get question
     $query = "select * from questions where question_number=$next";
-    $result = $conn->query($query) or die($conn->error . __LINE__);
+    $result = $conn->query($query) or  
     $questions = $result->fetch_assoc();
     $total = $next;
 
@@ -101,8 +101,10 @@ if (isset($_POST['cancel'])) {
 }
 
 if (isset($_POST['finish'])) {
-    echo '<script>window.location.assign("Appointment.php")</script>';
+    echo '<script>window.location.assign("showResult.php");</script>';
 }
+
+
 
 $Email = $_SESSION['email'];
 
@@ -117,6 +119,8 @@ if ($result1->num_rows > 0) {
     $_SESSION['generate_id'] = '';
     $_SESSION['user_email'] = '';
 }
+
+$generate = $_SESSION['generate_id'];
 ?>
 
 
