@@ -19,7 +19,7 @@ if (isset($_POST['delete'])) {
 
     echo $sql = "delete from therapist where therapist_id='$deleteID'";
     $result = $conn->query($sql);
-    
+
 
     if ($result == true) {
         echo '<script>window.alert("Delete Successful....!!!!")</script>';
@@ -32,9 +32,9 @@ if (isset($_POST['accept'])) {
     echo $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
     $result = $conn->query($sql);
 
-    if($result==true){
+    if ($result == true) {
         echo '<script>window.alert("Accept Successful...!")</script>';
-    }else{
+    } else {
         echo '<script>window.alert("Error...!")</script>';
     }
 }
@@ -42,12 +42,12 @@ if (isset($_POST['accept'])) {
 if (isset($_POST['reject'])) {
     $id = $_POST['reject'];
     $statusID = 3;
-    echo $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
+    $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
     $result = $conn->query($sql);
 
-    if($result==true){
+    if ($result == true) {
         echo '<script>window.alert("Reject Successful...!")</script>';
-    }else{
+    } else {
         echo '<script>window.alert("Error...!")</script>';
     }
 }
@@ -90,6 +90,7 @@ if (isset($_POST['reject'])) {
         margin-bottom: 10px;
     }
 
+
     /* button.accpet{
         display:none;
         margin-bottom:10px;
@@ -112,7 +113,6 @@ if (isset($_POST['reject'])) {
                 <table class="table table-striped custab" style="text-align:center;">
                     <thead>
                         <tr>
-                            <th> </th>
                             <th>ID</th>
                             <th>Name</th>
                             <th>Gender</th>
@@ -120,7 +120,8 @@ if (isset($_POST['reject'])) {
                             <th>Phone</th>
                             <th>IC</th>
                             <th>Address</th>
-                            <th>License</th>
+                            <th>License Type</th>
+                            <th>Resme</th>
                             <th>Profile_Image</th>
                             <th>Created_Time</th>
                             <th>Status</th>
@@ -137,12 +138,13 @@ if (isset($_POST['reject'])) {
                                 //display result
                                 $id = $row['therapist_id']; //[] inside is follow database 
                                 $name = $row['name'];
-                                $gender = $row['gender'];
                                 $email = $row['email'];
+                                $gender = $row['gender'];
                                 $phone = $row['phone'];
                                 $ic = $row['ic'];
                                 $address = $row['address'];
                                 $license = $row['license'];
+                                $certiFile = $row['certiFile'];
                                 $profile_image = $row['profile_image'];
                                 $statusID = $row['statusID'];
                                 $created_at = $row['created_at'];
@@ -150,7 +152,6 @@ if (isset($_POST['reject'])) {
                         ?>
 
                                 <tr>
-                                    <td><input type="text" name="number" value="<?php echo $email?>" readonly></td>
                                     <td><?php echo $id ?></td>
                                     <td><?php echo $name ?></td>
                                     <td><?php echo $gender ?></td>
@@ -159,9 +160,10 @@ if (isset($_POST['reject'])) {
                                     <td><?php echo $ic ?></td>
                                     <td><?php echo $address ?></td>
                                     <td><?php echo $license ?></td>
+                                    <td><?php echo $certiFile ?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
                                     <td><?php echo $created_at ?></td>
-                                    
+
 
                                     <?php
                                     if ($statusID == '2') {
