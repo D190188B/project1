@@ -72,7 +72,7 @@ function upload_certificate($path, $file)
 
   if (!empty($filename)) {
     // allow certain file format
-    $allowType = array('docx','doc','pptx', 'pdf','jpg', 'png', 'jpeg');
+    $allowType = array('docx', 'doc', 'pptx', 'pdf', 'jpg', 'png', 'jpeg');
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
@@ -88,17 +88,20 @@ function upload_certificate($path, $file)
 if (isset($_POST['submit'])) {
   // error variable.
   $error = array();
-
   $license = $_POST['license'];
+  $gender = $_POST['gender'];
+  $age = $_POST['age'];
 
-  $gender= $_POST['gender'];
-
-  $age =$_POST['age'];
 
   // $about = mysqli_real_escape_string($conn, $_POST['about']);
 
-  $name = validate_input_text($_POST['name']);
-  if (empty($name)) {
+  $firstname = validate_input_text($_POST['firstname']);
+  if (empty($firstname)) {
+    $error[] = "You forgot to enter your Name";
+  }
+
+  $lastname = validate_input_text($_POST['lastName']);
+  if (empty($lastname)) {
     $error[] = "You forgot to enter your Name";
   }
 
@@ -115,6 +118,16 @@ if (isset($_POST['submit'])) {
   $address = mysqli_real_escape_string($conn, $_POST['address']);
   if (empty($address)) {
     $error[] = "You forgot to enter your address";
+  }
+
+  $state = validate_input_text($_POST['state']);
+  if (empty($state)) {
+    $error[] = "You forgot to enter your phone state";
+  }
+
+  $postCode = validate_input_text($_POST['postCode']);
+  if (empty($postCode)) {
+    $error[] = "You forgot to enter your phone postCode";
   }
 
   $ic = mysqli_real_escape_string($conn, $_POST['ic']);
@@ -141,18 +154,18 @@ if (isset($_POST['submit'])) {
 
 
 
-  if(empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))){
+  if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
     $generateid = uniqid();
     // register a new user
     $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
     $sqli = "Select * from therapist where email='$email'"; //username and password same ？
-    $result1 = mysqli_query($conn, $sqli); //sql
+    $result1 = mysqli_query($conn, $sqli) or die($conn->error.__LINE__); //sql
 
     $count = mysqli_num_rows($result1);
 
     if ($count == 0) {
-      $sql = "insert into therapist values('$generateid','$name','','$gender','$age','$email','$phone','$ic','$address','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      $sql = "insert into therapist values('$generateid','$firstname','$lastname','','$gender','$age','$email','$phone','$ic','$address','$state','$postCode','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
       echo '<script>window.alert("Submit successful...!")</script>';
