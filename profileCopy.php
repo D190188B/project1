@@ -92,6 +92,7 @@ function validate_input_email($emailValue)
 
 
 if (isset($_POST['submit'])) {
+
     $nameFirst = validate_input_text($_POST['nameFirst']);
     $nameLast = validate_input_text($_POST['nameLast']);
     $phone = validate_input_text($_POST['phone']);
@@ -99,7 +100,12 @@ if (isset($_POST['submit'])) {
     $state = validate_input_text($_POST['state']);
     $postCode = validate_input_text($_POST['postCode']);
 
-    $sql = "update client set name_first='$nameFirst',name_last='$nameLast',phone='$phone',address='$address',state='$state',post_code='$postCode' where id='$id'";
+
+    $files = $_FILES['uploadProfile'];
+    $profileImage = upload_profile('./images/profile/', $files);
+
+    
+    $sql = "update client set name_first='$nameFirst',name_last='$nameLast',phone='$phone',address='$address',state='$state',post_code='$postCode',profileImage='$profileImage' where id='$id'";
 
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
@@ -110,6 +116,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['address'] = $_POST['address'];
         $_SESSION['state'] = $_POST['state'];
         $_SESSION['post_code'] = $_POST['postCode'];
+        $_SESSION['profileImage']= $profileImage;
     }
 }
 
@@ -130,6 +137,8 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <style>
+        
+
         .side_left {
             margin-bottom: 30px;
         }
@@ -205,14 +214,15 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
 </head>
 <!DOCTYPE html>
 <html lang="en">
+
 <?php require_once("header1.php") ?>
 
 <body>
 
 
 
-    <section id="profile">
-        <div class="container" style="margin-bottom:20px;">
+    <section id="profile_copy">
+        <div class="container" style="margin-bottom:20px;margin-top:70px;">
             <div class="row">
                 <div class="col-md-4" style="border:1px solid rgb(223, 223, 223)">
                     <div class="col-md-12">
@@ -257,10 +267,10 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
 
                             &nbsp;
                             &nbsp;
-                            <form action="profileCopy.php" method="POST" id="save">
-                                <button class="info" form="save" type="submit" name="logout" id="logBtn" onclick="return confirm('Are you sure you want to log out?')">
-                                    <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 23px;padding-top: 8px;float:left"></i>
-                                    <h5 id="logOut" style="float:left;">Log out</h5>
+                            <form action="profileCopy.php" method="POST" id="save" enctype="multipart/form-data">
+                                <button class="info" form="save" type="submit" name="logout" id="logBtn" onclick="return confirm('Are you sure you want to log out?')" style="padding:7px;">
+                                    <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 23px;padding-top: 3px;float:left"></i>
+                                    <h5 id="logOut" style="float:left;padding-left:5px;">Log out</h5>
                                 </button>
                             </form>
                         </div>
@@ -275,7 +285,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                                 <div class="row">
                                     <div class="col-md-5">
                                         <img src="<?php echo $_SESSION['profileImage'] ?>" class="img" style="width:150px;height:150px;border-radius:50%;border:1px solid black" name="user_image" id="user_image">
-                                        <input type="file" name="uploadProfile" id="uploadProfile" form="save">
+                                        <input type="file" name="uploadProfile" id="uploadProfile" form="save" class="form-control-file">
                                         <h6 style="margin-top:20px;" id="changePro">Change profile photo</h6>
                                     </div>
                                     <div class="col-md-7">
@@ -387,7 +397,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
             </div>
         </div>
     </section>
-    <?php include("editModal.php") ?>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
