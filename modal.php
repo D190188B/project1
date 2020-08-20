@@ -71,9 +71,17 @@
             <input type="file" class="form-control-file" name="profileUpload" id="upload-profile" form="reg-form">
           </div>
           <form id="reg-form" method="post" enctype="multipart/form-data">
-            <div class="col">
-              <h4 style="color:rgb(34, 19, 48)">Username</h4>
-              <input type="text" required name="name" id="name" class="form-control" placeholder="username">
+
+            <div class="row" style="margin-top:30px;">
+              <div class="col">
+                <h4 style="color:rgb(34, 19, 48);margin-left: 18px;">First Name</h4>
+                <input type="text" required name="firstname" id="firstname" class="form-control" placeholder="first name" style="max-width: 250px;margin-left: 15px;">
+              </div>
+
+              <div class="col">
+                <h4 style="color:rgb(34, 19, 48)">Last Name</h4>
+                <input type="text" required name="lastName" id="lastName" class="form-control" placeholder="last name" style="max-width: 250px;">
+              </div>
             </div>
 
             <div class="col">
@@ -91,16 +99,14 @@
               <input type="text" required name="address" id="address" class="form-control" placeholder="address">
             </div>
 
-            <div class="col" style="margin-bottom:10px;">
-              <h4 style="color:rgb(34, 19, 48)">Gender</h4>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="male" name="gender" class="custom-control-input" value="Male" required>
-                <label class="custom-control-label" for="male">Male</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="female" name="gender" class="custom-control-input" value="Female" required>
-                <label class="custom-control-label" for="female">Female</label>
-              </div>
+            <div class="col">
+              <h4 style="color:rgb(34, 19, 48)">State</h4>
+              <input type="text" required name="state" id="state" class="form-control" placeholder="state">
+            </div>
+
+            <div class="col">
+              <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
+              <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="post code">
             </div>
 
             <div class="col">
