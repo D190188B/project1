@@ -70,8 +70,13 @@ if (isset($_POST['submit'])) {
   
     $birth = $_POST['birth'];
   
-    $name = validate_input_text($_POST['name']);
-    if (empty($name)) {
+    $firstname = validate_input_text($_POST['firstname']);
+    if (empty($firstname)) {
+      $error[] = "You forgot to enter your Name";
+    }
+
+    $lastname = validate_input_text($_POST['lastName']);
+    if (empty($lastname)) {
       $error[] = "You forgot to enter your Name";
     }
   
@@ -81,16 +86,24 @@ if (isset($_POST['submit'])) {
     }
   
     $phone = validate_input_text($_POST['phone']);
-    if (empty($email)) {
+    if (empty($phone)) {
       $error[] = "You forgot to enter your phone number";
     }
   
     $address = mysqli_real_escape_string($conn, $_POST['address']);
-    if (empty($email)) {
+    if (empty($address)) {
       $error[] = "You forgot to enter your address";
     }
-  
-    $gender = $_POST['gender'];
+
+    $state = validate_input_text($_POST['state']);
+    if (empty($state)) {
+      $error[] = "You forgot to enter your phone state";
+    }
+
+    $postCode = validate_input_text($_POST['postCode']);
+    if (empty($postCode)) {
+      $error[] = "You forgot to enter your phone postCode";
+    }
   
     $password = validate_input_text($_POST['password']);
     if (empty($password)) {
@@ -118,13 +131,11 @@ if (isset($_POST['submit'])) {
       $count = mysqli_num_rows($result1);
   
       if ($count == 0) {
-        $sql = "insert into client values('$generateid','$name','$birth','$phone','$address','$gender','$email','$hashed_pass','$profileImage',NOW())";
+        $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$state','$postCode','$email','$hashed_pass','$profileImage',NOW())";
         $result = $conn->query($sql);
   
         if ($result == true) {
           echo '<script>window.alert("Register successful...!")</script>';
-          header('refresh:0; url=Profile.php');
-          $_SESSION['name'] = $name;
         }
       } else {
         echo '<script>window.alert("This email has already registered...!")</script>';
@@ -160,14 +171,12 @@ if (isset($_POST['login'])) {
             while ($row = $result->fetch_assoc()) {
                 //display result
                 $id = $row['id']; //[] inside is follow database 
-                $name = $row['name'];
                 $passwordHash = $row['password'];
             }
             if (password_verify($password, $passwordHash)) {
                 $_SESSION['id']=$id;
-                $_SESSION['name'] = $name;
                 echo '<script>window.alert("Login Successful...!")</script>';
-                header('refresh: 0.5; url=Home.php');
+                header('refresh: 0; url=Home.php');
                 exit();
             } else {
                 echo '<script>window.alert("Unavariable name or password")</script>';
@@ -267,4 +276,3 @@ if (isset($_POST['login'])) {
 <?php include("modal.php") ?>
 
 </html>
-
