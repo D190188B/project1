@@ -2,6 +2,7 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script type="text/javascript">
+    //change imge
     $(document).ready(function(e) {
 
       let $uploadfile = $('#register .modal .modal-dialog .modal-content .modal-body input[type="file"]');
@@ -9,19 +10,6 @@
       $uploadfile.change(function() {
         readURL(this);
       });
-
-
-      //   $("#reg-form").submit(function(event) {
-      //     let $password = $("#password");
-      //     let $confirm = $("#confirm_pwd");
-      //     let $error = $("#confirm_error");
-      //     if ($password.val() == $confirm.val()) {
-      //       return true;
-      //     } else {
-      //       $error.text("Password not Match");
-      //       event.preventDefault();
-      //     }
-      //   });
     });
 
     function readURL(input) {
@@ -100,13 +88,18 @@
             </div>
 
             <div class="col">
-              <h4 style="color:rgb(34, 19, 48)">State</h4>
-              <input type="text" required name="state" id="state" class="form-control" placeholder="state">
+              <h4 style="color:rgb(34, 19, 48)">City</h4>
+              <input type="text" required name="city" id="city" class="form-control" placeholder="city">
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
               <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="post code">
+            </div>
+
+            <div class="col">
+              <h4 style="color:rgb(34, 19, 48)">State</h4>
+              <input type="text" required name="state" id="state" class="form-control" placeholder="state">
             </div>
 
             <div class="col">
