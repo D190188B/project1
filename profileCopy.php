@@ -21,7 +21,7 @@ if (isset($_POST['logout'])) {
 }
 
 
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['id'])) { //if already login
     $id = $_SESSION['id'];
 
     $sql = "select * from client where id ='$id'"; //id is database name
@@ -36,6 +36,7 @@ if (isset($_SESSION['id'])) {
             $_SESSION['birth'] = $row['birth'];
             $_SESSION['phone'] = $row['phone'];
             $_SESSION['address'] = $row['address'];
+            $_SESSION['city'] = $row['city'];
             $_SESSION['state'] = $row['state'];
             $_SESSION['post_code'] = $row['post_code'];
             $_SESSION['profileImage'] = $row['profileImage'];
@@ -44,6 +45,7 @@ if (isset($_SESSION['id'])) {
 }
 
 
+//check the pathinfo and upload the image
 function upload_profile($path, $file)
 {
     $targetDir = $path;
@@ -68,6 +70,7 @@ function upload_profile($path, $file)
     return $default;
 }
 
+// prevent injection
 function validate_input_text($textValue)
 {
     if (!empty($textValue)) {
@@ -79,6 +82,7 @@ function validate_input_text($textValue)
     return '';
 }
 
+// prevent injection
 function validate_input_email($emailValue)
 {
     if (!empty($emailValue)) {
@@ -91,12 +95,13 @@ function validate_input_email($emailValue)
 }
 
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { //if user edit the information
 
     $nameFirst = validate_input_text($_POST['nameFirst']);
     $nameLast = validate_input_text($_POST['nameLast']);
     $phone = validate_input_text($_POST['phone']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $city = validate_input_text($_POST['city']);
     $state = validate_input_text($_POST['state']);
     $postCode = validate_input_text($_POST['postCode']);
 
@@ -104,8 +109,8 @@ if (isset($_POST['submit'])) {
     $files = $_FILES['uploadProfile'];
     $profileImage = upload_profile('./images/profile/', $files);
 
-    
-    $sql = "update client set name_first='$nameFirst',name_last='$nameLast',phone='$phone',address='$address',state='$state',post_code='$postCode',profileImage='$profileImage' where id='$id'";
+
+    $sql = "update client set name_first='$nameFirst',name_last='$nameLast',phone='$phone',address='$address',city='$city',post_code='$postCode',state='$state',profileImage='$profileImage' where id='$id'";
 
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
@@ -114,12 +119,14 @@ if (isset($_POST['submit'])) {
         $_SESSION['name_last'] = $_POST['nameLast'];
         $_SESSION['phone'] = $_POST['phone'];
         $_SESSION['address'] = $_POST['address'];
+        $_SESSION['city'] = $_POST['city'];
         $_SESSION['state'] = $_POST['state'];
         $_SESSION['post_code'] = $_POST['postCode'];
-        $_SESSION['profileImage']= $profileImage;
+        $_SESSION['profileImage'] = $profileImage;
     }
 }
 
+//show the appointment and therapist
 $email = $_SESSION['email'];
 
 $sqli = "select * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where user_Email='$email'";
@@ -137,8 +144,6 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <style>
-        
-
         .side_left {
             margin-bottom: 30px;
         }
@@ -156,17 +161,17 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
         }
 
         button#logBtn {
-            background-color: darkblue;
+            background:none;
+            color: darkblue;
             border: none;
             padding: 0 10px 0 15px;
             margin: -2px 0 0 -20px;
             border-radius: 10px;
-            color: white;
             transition: ease 0.5s;
         }
 
         button#logBtn:hover {
-            background-color: rgba(59, 82, 114);
+            color: rgba(59, 82, 114);
             transition: ease 0.5s;
         }
 
@@ -190,7 +195,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
             width: 200px;
             margin-top: 5px;
             opacity: 0;
-            display:none;
+            display: none;
         }
 
         #uploadProfile::before {
@@ -206,10 +211,12 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
             visibility: hidden;
         }
 
-        #changePro{
-            display:none;
-            color:blue;
+        #changePro {
+            display: none;
+            color: blue;
         }
+
+        
     </style>
 </head>
 <!DOCTYPE html>
@@ -222,9 +229,9 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
 
 
     <section id="profile_copy">
-        <div class="container" style="margin-bottom:20px;margin-top:70px;">
+        <div class="container" style="margin-bottom:20px;margin-top:70px;border:1px solid rgb(223, 223, 223)">
             <div class="row">
-                <div class="col-md-4" style="border:1px solid rgb(223, 223, 223)">
+                <div class="col-md-4" style="border-right:1px solid rgb(223, 223, 223)">
                     <div class="col-md-12">
                         <h2 style="margin:20px 0 0 20px;"><strong>User Profile</strong></h2>
                     </div>
@@ -239,7 +246,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                             </button>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="col-md-12 side_left">
                         <div class="row">
                             <i class="fa fa-file-text-o" aria-hidden="true" style="font-size:28px;color:silver" id="userAppointment"></i>
@@ -250,7 +257,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                             </button>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="col-md-12 side_left">
                         <div class="row">
                             <i class="fa fa-money" aria-hidden="true" style="font-size:28px;color:silver" id="userPayment"></i>
@@ -261,7 +268,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                             </button>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="col-md-12" style="margin-top: 434px;">
                         <div class="row">
 
@@ -277,7 +284,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                     </div>
 
                 </div>
-                <div class="col-md-8" style="border:1px solid rgb(223, 223, 223)">
+                <div class="col-md-8" style="background-color:rgb(245, 245, 245);">
                     <div class="col-md-12" id="showInfo" name="showInfo">
 
                         <div class="row" style="margin:30px;">
@@ -290,7 +297,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                                     </div>
                                     <div class="col-md-7">
                                         <h4 style="color:black;margin-top:30px;"><?php echo $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] ?></h4>
-                                        <h5 style="color: rgb(160, 160, 160);margin-top:20px;"><?php echo $_SESSION['state'] ?></h5>
+                                        <h5 style="color: rgb(160, 160, 160);margin-top:20px;"><?php echo $_SESSION['city'].",&nbsp;".$_SESSION['state'] ?></h5>
                                     </div>
                                 </div>
                             </div>
@@ -324,13 +331,18 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                             </div>
 
                             <div class="col-md-6" style="margin:20px 0 10px 0;">
-                                <h5 style="color:black">State</h5>
-                                <input type="text" name="state" id="state" value="<?php echo $_SESSION['state'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <h5 style="color:black">City</h5>
+                                <input type="text" name="city" id="city" value="<?php echo $_SESSION['city'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin:20px 0 10px 0;">
                                 <h5 style="color:black">Post Code</h5>
                                 <input type="text" name="postCode" id="postCode" value="<?php echo $_SESSION['post_code'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                            </div>
+
+                            <div class="col-md-6" style="margin:20px 0 10px 0;">
+                                <h5 style="color:black">State</h5>
+                                <input type="text" name="state" id="state" value="<?php echo $_SESSION['state'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
 
@@ -343,7 +355,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
                                 <!-- <button type="button" class="btn" data-toggle="modal" data-target="#editModal" title="Edit" id="editProfile">Change</button> -->
                                 <button class="btn btn-outline-primary" name="edit" id="edit">Edit</button>
                                 <div class="row" style="margin-left:0">
-                                    <button class="btn btn-outline-success" name="submit" id="submit" form="save">Save Changes</button>
+                                    <button class="btn btn-outline-success" name="submit" id="submit" form="save" onclick="return confirm('Are you sure you want to edit?')">Save Changes</button>
                                     <button class="btn btn-outline-danger" name="cancel" id="cancel" style="margin-left:10px;">Cancel</button>
                                 </div>
                             </div>
@@ -397,8 +409,9 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
             </div>
         </div>
     </section>
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
+
 </html>
