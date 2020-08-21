@@ -15,24 +15,50 @@ if ($conn->connect_error) {
 
 
 session_start();
-if (isset($_SESSION['id'])) {
+
+if (isset($_SESSION['id'])) { //if already login
     $id = $_SESSION['id'];
 
     $sql = "select * from client where id ='$id'"; //id is database name
-    $result = $conn->query($sql) or die($conn->error . __LINE__);
+    $result = $conn->query($sql);
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
             $_SESSION['id'] = $row['id'];
-            $_SESSION['name'] = $row['name'];
+            $_SESSION['name_first'] = $row['name_first'];
+            $_SESSION['name_last'] = $row['name_last'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['birth'] = $row['birth'];
             $_SESSION['phone'] = $row['phone'];
             $_SESSION['address'] = $row['address'];
-            $_SESSION['gender'] = $row['gender'];
+            $_SESSION['city'] = $row['city'];
+            $_SESSION['state'] = $row['state'];
+            $_SESSION['post_code'] = $row['post_code'];
             $_SESSION['profileImage'] = $row['profileImage'];
         }
     }
+}
+
+
+if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
+
+    $number = $_POST['number'];
+
+    $generate = $_SESSION['generate_id'];
+
+    $sql = "delete from select_question where generate_id='$generate'";
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+    $sqli = "delete from user_choices where selectID='$generate'";
+    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+
+    echo '<script>window.location.assign("help.php");</script>';
+}
+
+if (isset($_POST['finish'])) { //if done
+    echo '<script>window.location.assign("showResult.php");</script>';
 }
 
 $email = $_SESSION['email'];
@@ -58,18 +84,24 @@ if ($choices->num_rows > 0) {
     while ($row = $choices->fetch_assoc()) {
         $choice1 = $row['choice_ID'];
         $_SESSION['user_email'] = $row['user_email'];
-        if ($choice1 == 3) {
-            $_SESSION['choice_ID'] = $choice1;
-        } else if ($choice1 == 4) {
-            $_SESSION['choice_ID'] = $choice1;
-        } else if ($choice1 == 5) {
-            $_SESSION['choice_ID'] = $choice1;
+        if ($choice1 == 5) {
+            $_SESSION['choice_gender'] = $choice1;
         } else if ($choice1 == 6) {
-            $_SESSION['Therapist'] = $choice1;
+            $_SESSION['choice_gender'] = $choice1;
         } else if ($choice1 == 7) {
-            $_SESSION['Therapist'] = $choice1;
+            $_SESSION['choice_gender'] = $choice1;
         } else if ($choice1 == 8) {
-            $_SESSION['Therapist'] = $choice1;
+            $_SESSION['choice_age'] = $choice1;
+        } else if ($choice1 == 9) {
+            $_SESSION['choice_age'] = $choice1;
+        } else if ($choice1 == 10) {
+            $_SESSION['choice_age'] = $choice1;
+        } else if ($choice1 == 98) {
+            $_SESSION['choice_lan'] = $choice1;
+        }else if ($choice1 == 99) {
+            $_SESSION['choice_lan'] = $choice1;
+        }else if ($choice1 == 100) {
+            $_SESSION['choice_lan'] = $choice1;
         }
     }
 }
@@ -86,92 +118,8 @@ if ($choices->num_rows > 0) {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <style>
-        #showResult {
-            background-color: rgb(255, 255, 255);
+       
 
-        }
-
-
-        #Question span {
-            padding-left: 10px;
-        }
-
-        #showResult .container {
-            display: block;
-            padding: 30px 0 30px 0;
-            background-color: rgb(241, 241, 241);
-            margin-top: 30px;
-            margin-bottom: 30px;
-            width: 100vw;
-            height: auto;
-            border-radius: 20px;
-        }
-
-        #showResult h3 {
-            text-align: center;
-            color: rgba(59, 82, 114);
-            margin-top: 40px;
-        }
-
-        #showResult .container h4.question-text {
-            text-align: center;
-        }
-
-
-        #showResult hr#ans {
-            border: 1px solid black;
-            max-width: 800px;
-        }
-
-        #showResult .container hr {
-            border: 1px solid black;
-        }
-
-        .container .question-form {
-            font-size: 20px;
-        }
-
-        #showResult .col-md-12 .row .col-md-6 {
-            height: 250px;
-        }
-
-        #showResult .col-md-12 .row .col-md-6 img {
-            border-radius: 50%;
-            float: right;
-            margin: 0 80px 0 0;
-            width: 50%;
-            height: 100%;
-        }
-
-        #showResult .col-md-12 .row .col-md-6 p {
-            padding: 35px 0 0 0;
-            font-size: 30px;
-            color: blue;
-            font-weight: 700;
-        }
-
-        #showResult button {
-            text-align: center;
-            margin: 40px 60px 0 0;
-        }
-
-        #showResult {
-            text-align: left !important;
-            margin: 40px 0x 0 0;
-        }
-
-        #showResult #cancel {
-            float: right;
-        }
-
-        #showResult a {
-            text-decoration: none;
-            color:#28a745
-        }
-
-        #showResult a:hover{
-            color: #fff;
-        }
     </style>
 </head>
 <!DOCTYPE html>
@@ -191,18 +139,22 @@ if ($choices->num_rows > 0) {
 
                         <div class="row">
                             <?php
-                            if ((($_SESSION['choice_ID']) == 3) && (($_SESSION['Therapist']) == 6)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
                                         $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
                                         $ic = $row['ic'];
+                                        $age = $row['age'];
                                         $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
                                         $gender = $row['gender'];
                             ?>
                                         <div class="col-md-6">
@@ -211,108 +163,14 @@ if ($choices->num_rows > 0) {
                                         </div>
                                         <div class="col-md-6">
                                             <p>
-                                                <?php echo $name ?>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
                                             </p>
-                                            <h2>LCWS</h2>
-                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
-
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <hr>
-                                        </div>
-
-                                    <?php }
-                                }
-                            } else if ((($_SESSION['choice_ID']) == 3) && (($_SESSION['Therapist']) == 7)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
-                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
-                                if ($run->num_rows > 0) { //over 1 database(record) so run
-                                    while ($row = $run->fetch_assoc()) {
-                                        $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
-                                        $ic = $row['ic'];
-                                        $address = $row['address'];
-                                        $license = $row['license'];
-                                        $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
-                                        $gender = $row['gender'];
-                                    ?>
-                                        <div class="col-md-6">
-                                            <img src="<?php echo $profile_image ?>" alt="image">
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>
-                                                <?php echo $name ?>
-                                            </p>
-                                            <h2>LCWS</h2>
-                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
-
-
-                                        </div>
-                                        <div class="col-md-12">
-                                            <hr>
-                                        </div>
-
-                                    <?php
-                                    }
-                                }
-                            } else if ((($_SESSION['choice_ID']) == 3) && (($_SESSION['Therapist']) == 8)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
-                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
-                                if ($run->num_rows > 0) { //over 1 database(record) so run
-                                    while ($row = $run->fetch_assoc()) {
-                                        $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
-                                        $ic = $row['ic'];
-                                        $address = $row['address'];
-                                        $license = $row['license'];
-                                        $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
-                                        $gender = $row['gender'];
-                                    ?>
-                                        <div class="col-md-6">
-                                            <img src="<?php echo $profile_image ?>" alt="image">
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>
-                                                <?php echo $name ?>
-                                            </p>
-                                            <h2>LCWS</h2>
-                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
-
-                                        </div>
-                                        <div class="col-md-12">
-                                            <hr>
-                                        </div>
-
-                                    <?php }
-                                }
-                            } else if ((($_SESSION['choice_ID']) == 4) && (($_SESSION['Therapist']) == 6)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
-                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
-                                if ($run->num_rows > 0) { //over 1 database(record) so run
-                                    while ($row = $run->fetch_assoc()) {
-                                        $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
-                                        $ic = $row['ic'];
-                                        $address = $row['address'];
-                                        $license = $row['license'];
-                                        $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
-                                        $gender = $row['gender'];
-                                    ?>
-                                        <div class="col-md-6">
-                                            <img src="<?php echo $profile_image ?>" alt="image">
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>
-                                                <?php echo $name ?>
-                                            </p>
-                                            <h2>LCWS</h2>
+                                            <h2><?php echo $license ?></h2>
                                             <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
 
 
@@ -323,32 +181,40 @@ if ($choices->num_rows > 0) {
 
                                     <?php }
                                 }
-                            } else if ((($_SESSION['choice_ID']) == 4) && (($_SESSION['Therapist']) == 7)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
                                         $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
                                         $ic = $row['ic'];
+                                        $age = $row['age'];
                                         $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
                                         $gender = $row['gender'];
-                                    ?>
+                            ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
                                         </div>
                                         <div class="col-md-6">
                                             <p>
-                                                <?php echo $name ?>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
                                             </p>
-                                            <h2>LCWS</h2>
-                                        </div>
-                                        <div class="col-md-12 text-center">
+                                            <h2><?php echo $license ?></h2>
                                             <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
 
                                         </div>
                                         <div class="col-md-12">
@@ -357,38 +223,1055 @@ if ($choices->num_rows > 0) {
 
                                     <?php }
                                 }
-                            } else if ((($_SESSION['choice_ID']) == 4) && (($_SESSION['Therapist']) == 8)) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
                                         $id = $row['therapist_id']; //[] inside is follow database 
-                                        $name = $row['name'];
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
                                         $ic = $row['ic'];
+                                        $age = $row['age'];
                                         $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
-                                        $statusID = $row['statusID'];
                                         $gender = $row['gender'];
-                                    ?>
+                            ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
                                         </div>
                                         <div class="col-md-6">
                                             <p>
-                                                <?php echo $name ?>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
                                             </p>
-                                            <h2>LCWS</h2>
-                                            halo
+                                            <h2><?php echo $license ?></h2>
                                             <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
 
                                         </div>
                                         <div class="col-md-12">
                                             <hr>
                                         </div>
 
-                            <?php }
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                Name: <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                Age: <?php echo $age ?> <br>
+                                                Gender: <?php echo $gender ?> <br>
+                                                License: <?php echo $license ?> <br>
+                                                Address: <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
+                                }
+                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
+                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                                $run = $conn->query($sqli) or die($conn->error . __LINE__);
+                                if ($run->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $run->fetch_assoc()) {
+                                        $id = $row['therapist_id']; //[] inside is follow database 
+                                        $name_first = $row['name_first'];
+                                        $name_last = $row['name_last'];
+                                        $ic = $row['ic'];
+                                        $age = $row['age'];
+                                        $address = $row['address'];
+                                        $therapist_city = $row['therapist_city'];
+                                        $therapist_postCode = $row['therapist_postCode'];
+                                        $therapist_state = $row['therapist_state'];
+                                        $license = $row['license'];
+                                        $profile_image = $row['profile_image'];
+                                        $gender = $row['gender'];
+                            ?>
+                                        <div class="col-md-6">
+                                            <img src="<?php echo $profile_image ?>" alt="image">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <?php echo $name_first . "&nbsp;" . $name_last ?> <br>
+                                                <?php echo $age ?> <br>
+                                                <?php echo $gender ?> <br>
+                                                <?php echo $license ?> <br>
+                                                <?php echo $address . "&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_city . "&nbsp;" . $therapist_state ?><br>
+
+                                            </p>
+                                            <h2><?php echo $license ?></h2>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-outline-success"><a href="Appointment.php?id=<?php echo $id ?>">Make Appointment Now!</a></button>
+
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+
+                                    <?php }
                                 }
                             }
                             ?>
