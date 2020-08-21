@@ -13,6 +13,10 @@
     filter: drop-shadow(1px 1px 22px #7584bb);
 }
 
+#registerThera .col{
+    margin:5px 0 5px 0;
+}
+
 #registerThera #edit-profile{
     position: absolute;
     top: 0;
@@ -109,5 +113,6 @@
 @media screen and (max-width: 414px){
 #registerThera .modal .modal-dialog .modal-content .modal-body .camera-icon {
     left: 157px;
+    color:rgb(245, 245, 245)
 }
 }
