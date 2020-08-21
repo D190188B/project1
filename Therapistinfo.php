@@ -15,6 +15,8 @@ if ($conn->connect_error) {
 
 session_start();
 
+
+// check sql injection
 function validate_input_text($textValue)
 {
   if (!empty($textValue)) {
@@ -26,6 +28,7 @@ function validate_input_text($textValue)
   return '';
 }
 
+//check sql injection
 function validate_input_email($emailValue)
 {
   if (!empty($emailValue)) {
@@ -37,6 +40,8 @@ function validate_input_email($emailValue)
   return '';
 }
 
+
+//upload user image
 function upload_thera($path, $file)
 {
   $targetDir = $path;
@@ -61,6 +66,7 @@ function upload_thera($path, $file)
   }
 }
 
+// upload user's certificate
 function upload_certificate($path, $file)
 {
   $targetDir = $path;
@@ -85,15 +91,13 @@ function upload_certificate($path, $file)
   }
 }
 
+//if submit the registration
 if (isset($_POST['submit'])) {
   // error variable.
   $error = array();
   $license = $_POST['license'];
   $gender = $_POST['gender'];
   $age = $_POST['age'];
-
-
-  // $about = mysqli_real_escape_string($conn, $_POST['about']);
 
   $firstname = validate_input_text($_POST['firstname']);
   if (empty($firstname)) {
@@ -122,12 +126,18 @@ if (isset($_POST['submit'])) {
 
   $state = validate_input_text($_POST['state']);
   if (empty($state)) {
-    $error[] = "You forgot to enter your phone state";
+    $error[] = "You forgot to enter your state";
   }
+
+  $city = validate_input_text($_POST['city']);
+  if (empty($city)) {
+    $error[] = "You forgot to enter your city";
+  }
+
 
   $postCode = validate_input_text($_POST['postCode']);
   if (empty($postCode)) {
-    $error[] = "You forgot to enter your phone postCode";
+    $error[] = "You forgot to enter your postCode";
   }
 
   $ic = mysqli_real_escape_string($conn, $_POST['ic']);
@@ -164,8 +174,9 @@ if (isset($_POST['submit'])) {
 
     $count = mysqli_num_rows($result1);
 
+    // if this email no exist in database
     if ($count == 0) {
-      $sql = "insert into therapist values('$generateid','$firstname','$lastname','','$gender','$age','$email','$phone','$ic','$address','$state','$postCode','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      echo $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
       echo '<script>window.alert("Submit successful...!")</script>';
@@ -182,13 +193,13 @@ if (isset($_POST['submit'])) {
 <!doctype html>
 <html lang="en">
 <title>therapistInformation</title>
-<?php require_once("header1.php"); ?>
+
 
 <head>
   <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
 </head>
 
-
+<?php require_once("header1.php") ?>
 <section id="info">
 
   <body>
