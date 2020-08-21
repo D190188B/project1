@@ -14,28 +14,9 @@ if ($conn->connect_error) {
 
 
 
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
 
-    $sql = "select * from client where id ='$id'"; //id is database name
-    $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-    if ($result->num_rows > 0) { //over 1 database(record) so run
-        while ($row = $result->fetch_assoc()) {
-            $_SESSION['id'] = $row['id'];
-            $_SESSION['name'] = $row['name'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['birth'] = $row['birth'];
-            $_SESSION['phone'] = $row['phone'];
-            $_SESSION['address'] = $row['address'];
-            $_SESSION['gender'] = $row['gender'];
-            $_SESSION['profileImage'] = $row['profileImage'];
-        }
-    }
-}
-
-$email = $_SESSION['email'];
-$sql = "SELECT * FROM select_question WHERE user_email='$email'"; //id is database name
+$email = $_SESSION['email']; //get user email
+$sql = "SELECT * FROM select_question WHERE user_email='$email'"; //get the id from select_question
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -49,13 +30,14 @@ if ($result->num_rows > 0) {
 
 $generateid = $_SESSION['generate_id'];
 
+//get the user choices
 $query = "select * from user_choices where selectID='$generateid'";
 $choices = $conn->query($query) or die($conn->error . __LINE__);
 $choice = $choices->fetch_assoc();
 
 
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id'])) { //get therapist id
     $email = $_SESSION['email'];
     $id = $_GET['id'];
     $sql = "select * from therapist where therapist_id='$id'";
@@ -64,34 +46,38 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $id = $row['therapist_id']; //[] inside is follow database 
-            $name = $row['name'];
+            $name_first = $row['name_first'];
+            $name_last = $row['name_last'];
             $address = $row['address'];
+            $therapist_city = $row['therapist_city'];
+            $therapist_state = $row['therapist_state'];
+            $therapist_postCode = $row['therapist_postCode'];
             $profile_image = $row['profile_image'];
+            $license = $row['license'];
         }
     }
-    
-    
 
-    $sqli ="select * from select_question where user_email='$email'";
+
+
+    $sqli = "select * from select_question where user_email='$email'";
     $run = $conn->query($sqli) or die($conn->error . __LINE__);
-    $result1 = $run->fetch_assoc();  
+    $result1 = $run->fetch_assoc();
 }
 
 
-if (isset($_POST['upload'])) {
+if (isset($_POST['upload'])) { //upload appointment
     $email = $_POST['email'];
     $method = $_POST['method'];
     $time = $_POST['time'];
     $date = $_POST['date'];
     $therapistID = $_POST['therapistID'];
-    
-    $sql ="INSERT INTO `appointment` VALUES('$generateid','$email','$method','$time','$date','$therapistID',NOW())";
+
+    $sql = "INSERT INTO `appointment` VALUES('$generateid','$email','$method','$time','$date','$therapistID',NOW())";
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-    if($result==true){
+    if ($result == true) {
         echo '<script>window.alert("Successful...!");window.location.assign("profile.php")</script>';
     }
-    
 }
 
 ?>
@@ -102,24 +88,6 @@ if (isset($_POST['upload'])) {
 <head>
     <title>Appointment</title>
     <link rel="stylesheet" type="text/css" href="css/appointment.css">
-
-    <style>
-        #appointment .col-md-12 .row img{
-            width: 30%;
-            height: 220px;
-            border-radius: 50%;
-        }
-
-        #appointment .therapist_name{
-            color:white;
-            margin:30px 0 0 80px;
-        }
-
-        #appointment .therapist_license{
-            color:white;
-            margin:90px 0 0 -195px;
-        }
-    </style>
 </head>
 
 
@@ -134,8 +102,8 @@ if (isset($_POST['upload'])) {
             <div class="container">
                 <section class="form pt-5 pb-5">
 
+                    <!-- Appointment Form -->
                     <div class="container">
-
                         <div class="row" style="margin-top:60px;">
 
                             <div class="offset-md-2 col-md-8">
@@ -148,7 +116,7 @@ if (isset($_POST['upload'])) {
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h5 style="color:white">Email</h5>
-                                        <input type="text" name="email" value="<?php echo $_SESSION['email']?>" readonly>
+                                        <input type="text" name="email" value="<?php echo $_SESSION['email'] ?>" readonly>
                                     </div>
 
                                     <div class="col-md-6">
@@ -176,30 +144,35 @@ if (isset($_POST['upload'])) {
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                    <h5 style="color:white">Therapist</h5>
-                                        <div class="row" style="padding:10px;border:1px solid white;">
-                                            <img src="<?php echo $profile_image ?>" alt="img">
-                                            <?php $appointmentID=$result1['generate_id']?>
-                                            <input type="hidden" name="therapistID" value="<?php echo $id?>">
-                                            <h3 class="therapist_name"><?php echo $name?></h3>
-                                            <h3 class="therapist_license">LCWS</h3>
+                                        <h5 style="color:white">Therapist</h5>
+                                        <div class="row" style="padding:20px;border:1px solid white;">
+                                            <div class="col-md-6" align="center">
+                                                <img src="<?php echo $profile_image ?>" alt="img">
+                                                <?php $appointmentID = $result1['generate_id'] ?>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                            <input type="hidden" name="therapistID" value="<?php echo $id ?>">
+                                            <h3 class="therapist_name"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
+                                            <h3 class="therapist_license"><?php echo $license ?></h3>
+                                            </div>
                                         </div>
                                     </div>
 
                                 </div>
 
                                 <div class="row" align=center>
+                                    <!-- Submit Appointment -->
                                     <div class="col-md-12">
                                         <input type="submit" name="upload" value="Submit Appointment" onclick="return confirm('Confirm to submit?')">
                                     </div>
+                                    <!-- End submit -->
                                 </div>
-
-
                             </div>
 
                         </div>
-
                     </div>
+                    <!-- end Appointment Form -->
                 </section>
             </div>
 
