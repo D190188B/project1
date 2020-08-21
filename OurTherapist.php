@@ -66,7 +66,7 @@ session_start();
                 <div class="col-md-12">
                     <div clas="col-md-12" id="search">
                         <div class="row">
-                            <input type="search" id="searchText" name="Search" class="form-control mr-sm-2">
+                            <input type="search" id="searchText" name="Search" class="form-control mr-sm-2" placeholder="Search">
                             <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
@@ -74,7 +74,7 @@ session_start();
 
             <div class="card border-0" style="margin-left: -14px;margin-right:-13px;">
                 <div class="row">
-
+                    <!-- Show therapist -->
                     <?php
                     if (isset($_POST['submit'])) {
                         $keyword = $_POST['Search'];
@@ -83,25 +83,28 @@ session_start();
                     //step:3 for search
                     $search = "";
                     if (isset($_POST['Search'])) {
-                        $search =" and name like '%" . $keyword . "%'"; //（.）把keyword把search
+                        $search = " and name_first like '%" . $keyword . "%' or name_last like '%".$keyword."%'"; //（.）把keyword把search
                     }
 
-                    $sql = "select * from therapist where statusID='2'".$search; //有where在sql，search sql 不能再有where 换成and
+                    $sql = "select * from therapist where statusID='2'" . $search; //有where在sql，search sql 不能再有where 换成and
                     $result = $conn->query($sql); //Define sql, run sql
                     if ($result->num_rows > 0) { //over 1 database(record) so run
                         while ($row = $result->fetch_assoc()) {
                             //display result
                             $id = $row['therapist_id']; //[] inside is follow database 
-                            $name = $row['name'];
+                            $name_first = $row['name_first'];
+                            $name_last = $row['name_last'];
                             $profile_image = $row['profile_image'];
                             $license = $row['license'];
                     ?>
                             <div class="col-md-4">
                                 <div class="card h-100 border-100">
                                     <div class="card-body">
-                                        <img src="<?php echo $profile_image?>" alt="" id="therapist1">
-                                        <p class="therapistname"><?php echo $name ?></p>
-                                        <h5 class="therapistedu"><?php echo $license ?></h5>
+                                        <a href="therapistDetail.php?id=<?php echo $id ?>">
+                                            <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
+                                            <h3 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
+                                            <h5 class="therapistedu"><?php echo $license ?></h5>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -110,6 +113,7 @@ session_start();
                         } //while
                     } //if
                     ?>
+                    <!-- End -->
                 </div>
             </div>
         </div>
