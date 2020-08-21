@@ -9,20 +9,9 @@
                 readURL(this);
             });
 
-
-            //   $("#reg-form").submit(function(event) {
-            //     let $password = $("#password");
-            //     let $confirm = $("#confirm_pwd");
-            //     let $error = $("#confirm_error");
-            //     if ($password.val() == $confirm.val()) {
-            //       return true;
-            //     } else {
-            //       $error.text("Password not Match");
-            //       event.preventDefault();
-            //     }
-            //   });
         });
 
+        //change the image
         function readURL(input) {
             if (input.files && input.files[0]) {
                 let reader = new FileReader();
@@ -76,9 +65,16 @@
                             <textarea required name="about" id="about" cols="100" rows="5"></textarea>
                         </div> -->
 
-                        <div class="col">
-                            <h4 style="color:rgb(34, 19, 48)">Name</h4>
-                            <input type="text" required name="name" id="name" class="form-control" placeholder="name">
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col">
+                                <h4 style="color:rgb(34, 19, 48);margin-left: 18px;">First Name</h4>
+                                <input type="text" required name="firstname" id="firstname" class="form-control" placeholder="first name" style="max-width: 250px;margin-left: 15px;">
+                            </div>
+
+                            <div class="col">
+                                <h4 style="color:rgb(34, 19, 48)">Last Name</h4>
+                                <input type="text" required name="lastName" id="lastName" class="form-control" placeholder="last name" style="max-width: 250px;">
+                            </div>
                         </div>
 
                         <div class="col" style="margin-bottom:10px;">
@@ -154,8 +150,23 @@
                         </div>
 
                         <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">City</h4>
+                            <input type="text" required name="city" id="city" class="form-control" placeholder="city">
+                        </div>
+
+                        <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
+                            <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="post code">
+                        </div>
+
+                        <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">State</h4>
+                            <input type="text" required name="state" id="state" class="form-control" placeholder="state">
+                        </div>
+
+                        <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">License Type</h4>
-                            <select id="license" name="license" class="form-control" require>
+                            <select id="license" name="license" class="form-control" required>
                                 <option value="Clinical Social Worker">Clinical Social Worker</option>
                                 <option value="Marriage & Family Therapist">Marriage & Family Therapist</option>
                                 <option value="Mental Health Counselor">Mental Health Counselor</option>
