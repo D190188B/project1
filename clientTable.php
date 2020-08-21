@@ -76,7 +76,6 @@ if (isset($_POST['delete'])) {
                             <th>Brith</th>
                             <th>Phone</th>
                             <th>Address</th>
-                            <th>Gender</th>
                             <th>Email</th>
                             <th>Profile_Image</th>
                             <th>Created_Time</th>
@@ -92,11 +91,14 @@ if (isset($_POST['delete'])) {
                             while ($row = $result->fetch_assoc()) {
                                 //display result
                                 $id = $row['id']; //[] inside is follow database 
-                                $name = $row['name'];
+                                $name_first = $row['name_first'];
+                                $name_last = $row['name_last'];
                                 $birth = $row['birth'];
                                 $phone = $row['phone'];
                                 $address = $row['address'];
-                                $gender = $row['gender'];
+                                $city = $row['city'];
+                                $post_code = $row['post_code'];
+                                $state = $row['state'];
                                 $email = $row['email'];
                                 $profile_image = $row['profileImage'];
                                 $created_at = $row['create_time'];
@@ -105,12 +107,11 @@ if (isset($_POST['delete'])) {
 
                                 <tr>
                                     <td><?php echo $id ?></td>
-                                    <td><?php echo $name ?></td>
+                                    <td><?php echo $name_first."&nbsp;".$name_last ?></td>
                                     <td><?php echo $birth ?></td>
                                     <td><?php echo $phone ?></td>
-                                    <td><?php echo $address ?></td>
-                                    <td><?php echo $gender ?></td>
-                                    <td><?php echo $email ?></td>
+                                    <td><?php echo $address.",&nbsp;".$post_code."&nbsp;".$city.",&nbsp;".$state ?></td>
+                                    <td><?php echo $email?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
                                     <td><?php echo $created_at ?></td>
                                     <td class="text-center">
