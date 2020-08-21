@@ -7,6 +7,7 @@
         var appo = document.getElementById("userAppointment");
         var pay = document.getElementById("userPayment");
 
+        //change icon color
         icon.style.color="black";
         appo.style.color="silver";
         pay.style.color="silver";
@@ -110,6 +111,7 @@
     let h =document.querySelector('#birth');
     let i =document.querySelector('#changePro');
     let j =document.querySelector('#uploadProfile');
+    let k =document.querySelector('#city');
     let edit = document.querySelector('#editPlace');
     let btnSubmit = document.querySelector('#submit');
     let btnCancel = document.querySelector('#cancel');
@@ -156,12 +158,20 @@
         g.style.background="white";
         g.style.border="1px solid black";
 
+        k.removeAttribute('readonly');
+        k.setAttribute("form","save");
+        k.style.background="white";
+        k.style.border="1px solid black";
+        
+
+        //show the input file
         i.style.display="block";
         j.style.display="block";
     });
 
 
 
+    //if user click cancel botton, page will back to beginning screen
     btnCancel.addEventListener('click',()=>{
         btnEdit.style.display="block";
         btnSubmit.style.display="none";
@@ -196,6 +206,11 @@
         g.removeAttribute("form");
         g.style.background="rgb(231, 231, 231)";
         g.style.border="none";
+
+        k.setAttribute('readonly',true);
+        k.removeAttribute("form");
+        k.style.background="rgb(231, 231, 231)";
+        k.style.border="none";
         
 
         i.style.display="none";
@@ -205,6 +220,7 @@
 
     
     
+    // change image
     $(document).ready(function(e) {
       let $uploadfile = $('#uploadProfile');
       $uploadfile.change(function() {
@@ -221,4 +237,3 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
-    
