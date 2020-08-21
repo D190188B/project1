@@ -99,10 +99,10 @@ session_start();
         </a>
       </div>
 
+      
       <div class="content">
         <div class="arti">
           <div class="arti-contentWhole1">
-
             <div class="arti-contentLeft">
               <h2><strong>Our Therapists</strong></h2>
               <img src="images/therapist1.jpg">
@@ -174,5 +174,3 @@ session_start();
 
 
 </html>
-
-  
