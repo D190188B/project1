@@ -15,6 +15,8 @@ if ($conn->connect_error) {
 
 mysqli_set_charset($conn, 'utf8');
 
+
+//check the pathinfo and upload the file
 function upload_profile($path, $file)
 {
     $targetDir = $path;
@@ -40,6 +42,8 @@ function upload_profile($path, $file)
 }
 
 session_start();
+
+//prevent injection
 function validate_input_text($textValue)
 {
     if (!empty($textValue)) {
@@ -51,6 +55,7 @@ function validate_input_text($textValue)
     return '';
 }
 
+//prevent injection
 function validate_input_email($emailValue)
 {
     if (!empty($emailValue)) {
@@ -64,90 +69,95 @@ function validate_input_email($emailValue)
 
 
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { //if user register an account
     // error variable.
     $error = array();
-  
+
     $birth = $_POST['birth'];
-  
+
     $firstname = validate_input_text($_POST['firstname']);
     if (empty($firstname)) {
-      $error[] = "You forgot to enter your Name";
+        $error[] = "You forgot to enter your Name";
     }
 
     $lastname = validate_input_text($_POST['lastName']);
     if (empty($lastname)) {
-      $error[] = "You forgot to enter your Name";
+        $error[] = "You forgot to enter your Name";
     }
-  
+
     $email = validate_input_text($_POST['email']);
     if (empty($email)) {
-      $error[] = "You forgot to enter your Email";
+        $error[] = "You forgot to enter your Email";
     }
-  
+
     $phone = validate_input_text($_POST['phone']);
     if (empty($phone)) {
-      $error[] = "You forgot to enter your phone number";
+        $error[] = "You forgot to enter your phone number";
     }
-  
+
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     if (empty($address)) {
-      $error[] = "You forgot to enter your address";
+        $error[] = "You forgot to enter your address";
+    }
+
+    $city = validate_input_text($_POST['city']);
+    if (empty($city)) {
+        $error[] = "You forgot to enter your city";
     }
 
     $state = validate_input_text($_POST['state']);
     if (empty($state)) {
-      $error[] = "You forgot to enter your phone state";
+        $error[] = "You forgot to enter your state";
     }
 
     $postCode = validate_input_text($_POST['postCode']);
     if (empty($postCode)) {
-      $error[] = "You forgot to enter your phone postCode";
+        $error[] = "You forgot to enter your post code";
     }
-  
+
     $password = validate_input_text($_POST['password']);
     if (empty($password)) {
-      $error[] = "You forgot to enter your password";
+        $error[] = "You forgot to enter your password";
     }
-  
+
     $confirm_pwd = validate_input_text($_POST['confirm_pwd']);
     if (empty($confirm_pwd)) {
-      $error[] = "You forgot to enter your Confirm Password";
+        $error[] = "You forgot to enter your Confirm Password";
     }
-  
-  
+
+
     $files = $_FILES['profileUpload'];
     $profileImage = upload_profile('./images/profile/', $files);
-  
-  
+
+
     if (empty($error) && ($password == $confirm_pwd)) {
-      $generateid = uniqid();
-      // register a new user
-      $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
-  
-      $sqli = "Select * from client where email='$email'"; //username and password same ？
-      $result1 = mysqli_query($conn, $sqli); //sql
-  
-      $count = mysqli_num_rows($result1);
-  
-      if ($count == 0) {
-        $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$state','$postCode','$email','$hashed_pass','$profileImage',NOW())";
-        $result = $conn->query($sql);
-  
-        if ($result == true) {
-          echo '<script>window.alert("Register successful...!")</script>';
+        $generateid = uniqid();
+        // register a new user
+        $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
+
+        $sqli = "Select * from client where email='$email'"; //username and password same ？
+        $result1 = mysqli_query($conn, $sqli); //sql
+
+        $count = mysqli_num_rows($result1);
+
+        if ($count == 0) {
+            $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$city','$postCode','$state','$email','$hashed_pass','$profileImage',NOW())";
+            $result = $conn->query($sql);
+
+            if ($result == true) {
+                echo '<script>window.alert("Register successful...!")</script>';
+            }
+        } else {
+            echo '<script>window.alert("This email has already registered...!")</script>';
         }
-      } else {
-        echo '<script>window.alert("This email has already registered...!")</script>';
-      }
     } else {
-      echo '<script>window.alert("Password is not match....!!!!")</script>';
+        echo '<script>window.alert("Password is not match....!!!!")</script>';
     }
-  }
+}
 
 
 
-if (isset($_POST['login'])) {
+if (isset($_POST['login'])) { //if user login
     $error = array();
 
     $email = validate_input_email($_POST['email']);
@@ -174,8 +184,7 @@ if (isset($_POST['login'])) {
                 $passwordHash = $row['password'];
             }
             if (password_verify($password, $passwordHash)) {
-                $_SESSION['id']=$id;
-                echo '<script>window.alert("Login Successful...!")</script>';
+                $_SESSION['id'] = $id;
                 header('refresh: 0; url=Home.php');
                 exit();
             } else {
@@ -192,21 +201,23 @@ if (isset($_POST['login'])) {
 
 <head>
     <style>
-        #login-form{
-            color:rgba(37,74,118);
+        #login-form {
+            color: rgba(37, 74, 118);
         }
+
         .container {
             margin-top: -50px;
             border-style: solid;
-            border-radius:20px;
-            border-color: rgba(37,74,118);
-            background-color: rgba(210,232,243);
+            border-radius: 20px;
+            border-color: rgba(37, 74, 118);
+            background-color: rgba(210, 232, 243);
         }
 
-        #login-form .upload-profile-image img#Client{
+        #login-form .upload-profile-image img#Client {
             background-color: yellow;
         }
-/* 
+
+        /* 
         .container .row{
             background-color: rgba(207,235,239);
         } */
