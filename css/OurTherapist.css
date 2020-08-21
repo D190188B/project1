@@ -9,7 +9,7 @@
 #ourtherapist p { margin: 0 0 20px; line-height: 1.7; }
 #ourtherapist p:last-child { margin: 0px; }
 #ourtherapist a { text-decoration: none; color: #8d8f90; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; transition: all 0.3s; }
-#ourtherapist a:focus, a:hover { text-decoration: none; color: #f85759; }
+#ourtherapist a:focus, a:hover { text-decoration: none;}
 
 
 
@@ -38,17 +38,18 @@
 
 #ourtherapist .card-body{
     text-align: center;
+    padding:10px !important;
 }
 
 #ourtherapist img#therapist1{
     border-radius:50%;
-    width:200px;
-    height:200px;
+    width: 140px;
+    height: 140px;
 }
 
-#ourtherapist .container .row p.therapistname{
+#ourtherapist .container .row h3.therapistname{
     padding:18px 0 0 0;
-    font-size: 20px;
+    color: rgba(46,78,117);
 }
 
 #ourtherapist .container .row h5.therapistedu{
