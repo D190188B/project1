@@ -13,27 +13,26 @@ if ($conn->connect_error) {
 }
 
 
+$generateID = uniqid();
 
 session_start();
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
 
+//if user get started the question
+if (isset($_GET['id'])) {
+
+    $id = $_GET['id'];
     $sql = "select * from client where id ='$id'"; //id is database name
-    $result = $conn->query($sql);
+    $result = $conn->query($sql) or die($conn->error . __LINE__);;
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
-            $_SESSION['id'] = $row['id'];
-            $_SESSION['name'] = $row['name'];
             $_SESSION['email'] = $row['email'];
-            $_SESSION['birth'] = $row['birth'];
-            $_SESSION['phone'] = $row['phone'];
-            $_SESSION['address'] = $row['address'];
-            $_SESSION['gender'] = $row['gender'];
-            $_SESSION['profileImage'] = $row['profileImage'];
         }
     }
+    $sqli = "insert into select_question values('$generateID','" . $_SESSION['email'] . "')";
+    $run=$conn->query($sqli) or die($conn->error . __LINE__);
 }
+
 //question number
 $number = (int)1;
 //get questions
@@ -51,8 +50,7 @@ $query = "select * from choices where question_number=$number";
 $choices = $conn->query($query) or die($conn->error . __LINE__);
 
 
-if (isset($_POST['submit'])) {
-
+if (isset($_POST['submit'])) { //if user submit the choices, go to the next question until finish
     $number = $_POST['number'];
     $choice = $_POST['choice'];
     $email = $_POST['email'];
@@ -62,9 +60,9 @@ if (isset($_POST['submit'])) {
 
     $next = ++$number;
 
-    //get question
+    //get the next question
     $query = "select * from questions where question_number=$next";
-    $result = $conn->query($query) or  
+    $result = $conn->query($query) or die($conn->error . __LINE__);
     $questions = $result->fetch_assoc();
     $total = $next;
 
@@ -76,12 +74,12 @@ if (isset($_POST['submit'])) {
     }
 
 
-    //get choices
+    //get the next choices
     $query1 = "select * from choices where question_number=$next";
     $choices = $conn->query($query1) or die($conn->error . __LINE__);
 }
 
-if (isset($_POST['cancel'])) {
+if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
 
     $number = $_POST['number'];
 
@@ -95,17 +93,22 @@ if (isset($_POST['cancel'])) {
         $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
     }
 
-    if ($result == true) {
-        echo '<script>window.alert("Cancel Successful..!");window.location.assign("help.php");</script>';
-    }
+    echo '<script>window.location.assign("help.php");</script>';
 }
 
-if (isset($_POST['finish'])) {
+if (isset($_POST['finish'])) { //if done
+    $number = $_POST['number'];
+    $choice = $_POST['choice'];
+    $email = $_POST['email'];
+    $generate = $_SESSION['generate_id'];
+    $query2 = "insert into user_choices values('','$generate','$choice','$email')";
+    $results = $conn->query($query2) or die($conn->error . __LINE__);
     echo '<script>window.location.assign("showResult.php");</script>';
 }
 
 
 
+//get the id from select_question
 $Email = $_SESSION['email'];
 
 $sql = "SELECT * FROM `select_question` WHERE user_email='$Email'";
@@ -145,28 +148,36 @@ $generate = $_SESSION['generate_id'];
 
         <h3>Answer the questions and get matched a suitable therapist!</h3>
         <hr id="ans">
-        <p><?php echo $total ?>/26</p>
+        <!-- Total question -->
         <div class="container">
             <div class="question-form">
                 <form action="question.php" method="post">
                     <p id="over">Over the past 2 weeks, how often have you bothered by any of the following problems: </p>
+                    <!-- Show the question -->
                     <h4 class="question-text"><strong><?php echo $questions['question_text'] ?></strong></h4>
                     <hr>
                     <ul class="choices">
+                        <!-- If the choices belongs to this question -->
                         <?php while ($row = $choices->fetch_assoc()) : ?>
                             <li><input type="radio" required name="choice" id="choice" value="<?php echo $row['choice_id'] ?>" checked><strong><span><?php echo $row['text'] ?></span></strong></li>
                         <?php endwhile; ?>
                     </ul>
 
-                    <?php if ($number <= 25) {
+                    <!-- If question haven't finish -->
+                    <?php if ($number <= 30) {
                         echo "<input type=\"submit\" value=\"Next\" name=\"submit\" class=\"btn btn-outline-success\">";
                     } else {
+                        // If done
                         echo "<input type=\"submit\" value=\"Finish\" name=\"finish\" class=\"btn btn-outline-success\">";
                     }
                     ?>
+                    <!-- If cancel -->
                     <input type="submit" value="Cancel" name="cancel" id="cancel" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel?')">
+                    <!-- Current question number -->
                     <input type="hidden" name="number" value="<?php echo $number ?>">
+                    <!-- Current id -->
                     <input name="big_id" type="hidden" value="<?php echo $_SESSION['generate_id'] ?>">
+                    <!-- current user email -->
                     <input name="email" type="hidden" value="<?php echo $_SESSION['email'] ?>">
                 </form>
 
