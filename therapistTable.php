@@ -14,42 +14,29 @@ if ($conn->connect_error) {
 
 session_start();
 
+// if delete
 if (isset($_POST['delete'])) {
-    $deleteID = $_POST['delete'];
+    $deleteID = $_POST['delete']; //id
 
-    echo $sql = "delete from therapist where therapist_id='$deleteID'";
+    $sql = "delete from therapist where therapist_id='$deleteID'"; //delete where therapist_id == this.id
     $result = $conn->query($sql);
-
-
-    if ($result == true) {
-        echo '<script>window.alert("Delete Successful....!!!!")</script>';
-    }
 }
 
+//if accept
 if (isset($_POST['accept'])) {
-    $id = $_POST['accept'];
+    $id = $_POST['accept'];//id
     $statusID = 2;
-    echo $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
+    $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=2 where therapist_id == this.id
     $result = $conn->query($sql);
-
-    if ($result == true) {
-        echo '<script>window.alert("Accept Successful...!")</script>';
-    } else {
-        echo '<script>window.alert("Error...!")</script>';
-    }
 }
 
-if (isset($_POST['reject'])) {
-    $id = $_POST['reject'];
-    $statusID = 3;
-    $sql = "update therapist set statusID='$statusID' where therapist_id='$id'";
-    $result = $conn->query($sql);
 
-    if ($result == true) {
-        echo '<script>window.alert("Reject Successful...!")</script>';
-    } else {
-        echo '<script>window.alert("Error...!")</script>';
-    }
+//if reject
+if (isset($_POST['reject'])) {
+    $id = $_POST['reject']; //id
+    $statusID = 3;
+    $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=3 where therapist_id == this.id
+    $result = $conn->query($sql);
 }
 
 ?>
@@ -90,16 +77,6 @@ if (isset($_POST['reject'])) {
         margin-bottom: 10px;
     }
 
-
-    /* button.accpet{
-        display:none;
-        margin-bottom:10px;
-    }
-
-    button.reject{
-        display:none;
-        margin-bottom:10px;
-    } */
 </style>
 
 <body>
@@ -137,14 +114,15 @@ if (isset($_POST['reject'])) {
                             while ($row = $result->fetch_assoc()) {
                                 //display result
                                 $id = $row['therapist_id']; //[] inside is follow database 
-                                $name = $row['name'];
+                                $name_first = $row['name_first'];
+                                $name_last = $row['name_last'];
                                 $email = $row['email'];
                                 $gender = $row['gender'];
                                 $phone = $row['phone'];
                                 $ic = $row['ic'];
                                 $address = $row['address'];
                                 $license = $row['license'];
-                                $certiFile = $row['certiFile'];
+                                $resume = $row['resume'];
                                 $profile_image = $row['profile_image'];
                                 $statusID = $row['statusID'];
                                 $created_at = $row['created_at'];
@@ -153,14 +131,14 @@ if (isset($_POST['reject'])) {
 
                                 <tr>
                                     <td><?php echo $id ?></td>
-                                    <td><?php echo $name ?></td>
+                                    <td><?php echo $name_first."&nbsp;".$name_last ?></td>
                                     <td><?php echo $gender ?></td>
                                     <td><?php echo $email ?></td>
                                     <td><?php echo $phone ?></td>
                                     <td><?php echo $ic ?></td>
                                     <td><?php echo $address ?></td>
                                     <td><?php echo $license ?></td>
-                                    <td><?php echo $certiFile ?></td>
+                                    <td><?php echo $resume ?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
                                     <td><?php echo $created_at ?></td>
 
