@@ -87,7 +87,7 @@ session_start();
                     }
 
                     $sql = "select * from therapist where statusID='2'" . $search; //有where在sql，search sql 不能再有where 换成and
-                    $result = $conn->query($sql); //Define sql, run sql
+                    $result = $conn->query($sql) or die($conn->error.__LINE__); //Define sql, run sql
                     if ($result->num_rows > 0) { //over 1 database(record) so run
                         while ($row = $result->fetch_assoc()) {
                             //display result
@@ -98,15 +98,15 @@ session_start();
                             $license = $row['license'];
                     ?>
                             <div class="col-md-4">
+                            <a href="therapistDetail.php?id=<?php echo $id ?>">
                                 <div class="card h-100 border-100">
                                     <div class="card-body">
-                                        <a href="therapistDetail.php?id=<?php echo $id ?>">
                                             <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
                                             <h3 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
-                                            <h5 class="therapistedu"><?php echo $license ?></h5>
-                                        </a>
+                                            <h5 class="therapistedu"><?php echo $license ?></h5>   
                                     </div>
                                 </div>
+                                </a>
                             </div>
 
                     <?php
