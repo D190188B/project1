@@ -89,13 +89,25 @@
                             </div>
                         </div>
 
+                        <div class="col" style="margin-bottom:10px;">
+                            <h4 style="color:rgb(34, 19, 48)">Language</h4>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="Malay" name="Malay" class="custom-control-input" value="Malay">
+                                <label class="custom-control-label" for="Malay">Malay</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="English" name="English" class="custom-control-input" value="English">
+                                <label class="custom-control-label" for="English">English</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="Mandarin" name="Mandarin" class="custom-control-input" value="Mandarin">
+                                <label class="custom-control-label" for="Mandarin">Mandarin</label>
+                            </div>
+                        </div>
+
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Age</h4>
                             <select id="age" name="age" class="form-control" required>
-                                <option value="22">22</option>
-                                <option value="23">23</option>
-                                <option value="24">24</option>
-                                <option value="25">25</option>
                                 <option value="26">26</option>
                                 <option value="27">27</option>
                                 <option value="28">28</option>
@@ -211,5 +223,5 @@
                 </div>
             </div>
         </div>
-
-        <section>
+    </div>
+    <section>
