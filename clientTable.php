@@ -18,7 +18,7 @@ if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete'];
 
     $sql="delete from client where id='$deleteID'";
-    $result= $conn->query($sql);
+    $result= $conn->query($sql) or die($conn->error.__LINE__);
 
     if($result==true){
         echo '<script>window.alert("Delete Successful....!!!!")</script>';
@@ -85,7 +85,7 @@ if (isset($_POST['delete'])) {
                     <tbody>
                         <?php
                         $sql = "select * from client"; //id is database name
-                        $result = $conn->query($sql);
+                        $result = $conn->query($sql) or die($conn->error.__LINE__);
 
                         if ($result->num_rows > 0) { //over 1 database(record) so run
                             while ($row = $result->fetch_assoc()) {
