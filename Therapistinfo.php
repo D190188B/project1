@@ -93,7 +93,41 @@ function upload_certificate($path, $file)
 
 //if submit the registration
 if (isset($_POST['submit'])) {
-  // error variable.
+  $generateid = uniqid();
+
+
+
+  if ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Chinese']))) {
+    echo '<script>window.alert("Please checked at least one language")</script>';
+  } else {
+    $lan = "insert into language values('$generateid','','','')";
+    $run = $conn->query($lan) or die($conn->error . __LINE__);
+    
+    if (empty($_REQUEST['Malay'])) {
+      $updateLan = "update language set Malay='No' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    } else {
+      $updateLan = "update language set Malay='Yes' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    }
+
+    if (empty($_REQUEST['English'])) {
+      $updateLan = "update language set English='No' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    } else {
+      $updateLan = "update language set English='Yes' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    }
+
+    if (empty($_REQUEST['Mandarin'])) {
+      $updateLan = "update language set Mandarin='No' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    } else {
+      $updateLan = "update language set Mandarin='Yes' where thera_ID='$generateid'";
+      $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
+    }
+  }
+
   $error = array();
   $license = $_POST['license'];
   $gender = $_POST['gender'];
@@ -165,27 +199,25 @@ if (isset($_POST['submit'])) {
 
 
   if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
-    $generateid = uniqid();
     // register a new user
     $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
     $sqli = "Select * from therapist where email='$email'"; //username and password same ？
-    $result1 = mysqli_query($conn, $sqli) or die($conn->error.__LINE__); //sql
+    $result1 = mysqli_query($conn, $sqli) or die($conn->error . __LINE__); //sql
 
     $count = mysqli_num_rows($result1);
 
     // if this email no exist in database
     if ($count == 0) {
-      echo $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
       echo '<script>window.alert("Submit successful...!")</script>';
-      // header('refresh:0.1; url=Home.php');
     } else {
       echo '<script>window.alert("This email has already registered...!")</script>';
     }
   } else {
-    echo '<script>window.alert("Password or file are not match...!")</script>';
+    echo '<script>window.alert("Error while registration, please check your input again!")</script>';
   }
 }
 
