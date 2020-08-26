@@ -51,8 +51,8 @@ $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                         <div class="row">
                             <?php while ($row = $result->fetch_assoc()) : ?>
-                                <div class="col-sm-3 col-xs-6" id="depression">
-                                    <a href="question.php?id=<?php echo $_SESSION['id'] ?>" name="insert">
+                                <div class="col-sm-3 col-xs-6" id="<?php echo $row['name'] ?>">
+                                    <a href="question.php?id=<?php echo $row['id'] ?>" name="insert">
                                         <div class="serviceName">
                                             <span><?php echo $row['name'] ?></span>
                                         </div>
