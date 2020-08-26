@@ -42,7 +42,6 @@ if (isset($_SESSION['id'])) { //if already login
 
 if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
 
-    $number = $_POST['number'];
 
     $generate = $_SESSION['generate_id'];
 
@@ -57,9 +56,6 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
     echo '<script>window.location.assign("help.php");</script>';
 }
 
-if (isset($_POST['finish'])) { //if done
-    echo '<script>window.location.assign("showResult.php");</script>';
-}
 
 $email = $_SESSION['email'];
 $sql = "SELECT * FROM select_question WHERE user_email='$email'"; //id is database name
@@ -98,9 +94,9 @@ if ($choices->num_rows > 0) {
             $_SESSION['choice_age'] = $choice1;
         } else if ($choice1 == 98) {
             $_SESSION['choice_lan'] = $choice1;
-        }else if ($choice1 == 99) {
+        } else if ($choice1 == 99) {
             $_SESSION['choice_lan'] = $choice1;
-        }else if ($choice1 == 100) {
+        } else if ($choice1 == 100) {
             $_SESSION['choice_lan'] = $choice1;
         }
     }
@@ -118,7 +114,7 @@ if ($choices->num_rows > 0) {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <style>
-       
+
 
     </style>
 </head>
@@ -139,8 +135,8 @@ if ($choices->num_rows > 0) {
 
                         <div class="row">
                             <?php
-                            if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
+                            if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age<=44 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -180,9 +176,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age<=44 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -198,7 +205,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -222,9 +229,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age<=44 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -240,7 +258,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -264,9 +282,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age>=45 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -282,7 +311,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -306,9 +335,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -324,7 +364,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -348,9 +388,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age>=45 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -366,7 +417,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -390,9 +441,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -408,7 +470,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -432,9 +494,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age>=45 and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -450,7 +523,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -474,9 +547,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==98))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 98))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and English='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -492,7 +576,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -516,9 +600,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age<=44 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -534,7 +629,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -558,9 +653,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age<=44 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -576,7 +682,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -600,9 +706,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age<=44 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -618,7 +735,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -642,9 +759,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age<=44 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -660,7 +788,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -684,9 +812,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age<=44 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -702,7 +841,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -726,9 +865,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age<=44";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 8) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age<=44 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -744,7 +894,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -768,9 +918,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age>=45 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -786,7 +947,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -810,9 +971,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and age>=45 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -828,7 +1000,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -852,9 +1024,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age>=45 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -870,7 +1053,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -894,9 +1077,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and age>=45 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -912,7 +1106,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -936,9 +1130,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age>=45 and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -954,7 +1159,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -978,9 +1183,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and age>=45";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 9) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and age>=45 and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -996,7 +1212,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1020,9 +1236,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1038,7 +1265,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1062,9 +1289,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Male'";
+                            } else if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Male' and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1080,7 +1318,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1104,9 +1342,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1122,7 +1371,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1146,9 +1395,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2' and gender='Female'";
+                            } else if ((($_SESSION['choice_gender']) == 6) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and gender='Female' and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1164,7 +1424,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1188,9 +1448,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==99))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 99))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and Malay='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1206,7 +1477,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1230,9 +1501,20 @@ if ($choices->num_rows > 0) {
                                         </div>
 
                                     <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
-                            }else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan']==100))) {
-                                $sqli = "SELECT * FROM `therapist` where statusID='2'";
+                            } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 100))) {
+                                $sqli = "SELECT * FROM `therapist` LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where statusID='2' and Mandarin='Yes'";
                                 $run = $conn->query($sqli) or die($conn->error . __LINE__);
                                 if ($run->num_rows > 0) { //over 1 database(record) so run
                                     while ($row = $run->fetch_assoc()) {
@@ -1248,7 +1530,7 @@ if ($choices->num_rows > 0) {
                                         $license = $row['license'];
                                         $profile_image = $row['profile_image'];
                                         $gender = $row['gender'];
-                            ?>
+                                    ?>
                                         <div class="col-md-6">
                                             <img src="<?php echo $profile_image ?>" alt="image">
 
@@ -1271,7 +1553,18 @@ if ($choices->num_rows > 0) {
                                             <hr>
                                         </div>
 
-                                    <?php }
+                            <?php }
+                                } else {
+                                    $generate = $_SESSION['generate_id'];
+
+                                    $sql = "delete from select_question where generate_id='$generate'";
+                                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+
+                                    $sqli = "delete from user_choices where selectID='$generate'";
+                                    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+                                    echo '<script>window.alert("No result,Please try again!");window.location.assign("help.php")</script>';
                                 }
                             }
                             ?>
