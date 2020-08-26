@@ -19,15 +19,15 @@ if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete']; //id
 
     $sql = "delete from therapist where therapist_id='$deleteID'"; //delete where therapist_id == this.id
-    $result = $conn->query($sql);
+    $result = $conn->query($sql) or die($conn->error.__LINE__);
 }
 
 //if accept
 if (isset($_POST['accept'])) {
-    $id = $_POST['accept'];//id
+    $id = $_POST['accept']; //id
     $statusID = 2;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=2 where therapist_id == this.id
-    $result = $conn->query($sql);
+    $result = $conn->query($sql) or die($conn->error.__LINE__);
 }
 
 
@@ -36,7 +36,7 @@ if (isset($_POST['reject'])) {
     $id = $_POST['reject']; //id
     $statusID = 3;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=3 where therapist_id == this.id
-    $result = $conn->query($sql);
+    $result = $conn->query($sql) or die($conn->error.__LINE__);
 }
 
 ?>
@@ -66,6 +66,7 @@ if (isset($_POST['reject'])) {
         margin: 5% 0;
         box-shadow: 3px 3px 2px #ccc;
         transition: 0.5s;
+        text-align:center;
     }
 
     .custab:hover {
@@ -76,7 +77,6 @@ if (isset($_POST['reject'])) {
     button.btn {
         margin-bottom: 10px;
     }
-
 </style>
 
 <body>
@@ -86,19 +86,20 @@ if (isset($_POST['reject'])) {
                 <a href="Admin.php">
                     <h4 style="padding-top:20px;">Back</h4>
                 </a>
-                <h4 style="padding-top:20px;padding-left:420px;">Therapists Table</h4>
-                <table class="table table-striped custab" style="text-align:center;">
+                <h4 style="padding-top:20px;padding-left:650px;">Therapists Table</h4>
+                <table class="table table-striped custab">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
                             <th>Gender</th>
+                            <th>Age</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>IC</th>
                             <th>Address</th>
                             <th>License Type</th>
-                            <th>Resme</th>
+                            <th>Resume</th>
                             <th>Profile_Image</th>
                             <th>Created_Time</th>
                             <th>Status</th>
@@ -118,9 +119,13 @@ if (isset($_POST['reject'])) {
                                 $name_last = $row['name_last'];
                                 $email = $row['email'];
                                 $gender = $row['gender'];
+                                $age = $row['age'];
                                 $phone = $row['phone'];
                                 $ic = $row['ic'];
                                 $address = $row['address'];
+                                $therapist_city = $row['therapist_city'];
+                                $therapist_postCode = $row['therapist_postCode'];
+                                $therapist_state = $row['therapist_state'];
                                 $license = $row['license'];
                                 $resume = $row['resume'];
                                 $profile_image = $row['profile_image'];
@@ -130,13 +135,14 @@ if (isset($_POST['reject'])) {
                         ?>
 
                                 <tr>
-                                    <td><?php echo $id ?></td>
+                                <td><?php echo $id ?></td>
                                     <td><?php echo $name_first."&nbsp;".$name_last ?></td>
                                     <td><?php echo $gender ?></td>
+                                    <td><?php echo $age ?></td>
                                     <td><?php echo $email ?></td>
                                     <td><?php echo $phone ?></td>
                                     <td><?php echo $ic ?></td>
-                                    <td><?php echo $address ?></td>
+                                    <td><?php echo $address.",&nbsp;".$therapist_postCode."&nbsp;".$therapist_state ?></td>
                                     <td><?php echo $license ?></td>
                                     <td><?php echo $resume ?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
@@ -160,7 +166,10 @@ if (isset($_POST['reject'])) {
                                             echo "<button name=\"reject\" type=\"submit\" class=\"btn btn-outline-danger btn-xs\"  onclick=\"return confirm('Are you sure you want to Reject?')\" value=\"$id\">Reject</button>";
                                         }
                                         ?>
+
                                         <button name="delete" type="submit" class="btn btn-danger btn-xs" value="<?php echo $id ?>" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+
+
 
                                     </td>
                                 </tr>
