@@ -113,6 +113,8 @@
 @media screen and (max-width: 414px){
 #registerThera .modal .modal-dialog .modal-content .modal-body .camera-icon {
     left: 157px;
-    color:rgb(245, 245, 245)
+    color:rgb(245, 245, 245);
+    
 }
+
 }
