@@ -209,7 +209,7 @@
                         </div>
 
                         <div class="col" style="margin-top:20px;">
-                            <input type="checkbox" style="margin-left:10px;margin-top:7px;" name="agreement" style="padding-left:30px;" class="form-check-input" required>
+                            <input type="checkbox" style="margin-left:10px;margin-top:7px;" name="agreement" style="padding-left:30px;" class="custom-control-input" required>
                             <label for="agreement" style="padding-left:39px;padding-bottom:5px;" class="form-check-label font-ubuntu text-black-50">I agree <a href="#">term, conditions, and policy </a>(*) </label>
                         </div>
 
