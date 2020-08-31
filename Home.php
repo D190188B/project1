@@ -22,33 +22,7 @@ session_start();
   <title>Home</title>
 
   <style>
-    .carousel-item {
-      height: 650px;
-    }
-
-    .carousel-item img {
-      height: 650px;
-    }
-
-    @media screen and (max-width:767px) {
-      .carousel-item {
-        height: 300px;
-      }
-
-      .carousel-item img {
-        height: 300px;
-      }
-    }
-
-    @media screen and (max-width:414px) {
-        .carousel-item {
-          height: 250px;
-        }
-
-        .carousel-item img {
-          height: 250px;
-        }
-      }
+ 
   </style>
 </head>
 
@@ -60,7 +34,7 @@ session_start();
 <body>
   <section id="home">
     <div class="container">
-      <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="margin-top:60px;">
+      <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="margin-top:55px;">
         <ol class="carousel-indicators">
           <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
           <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
@@ -99,7 +73,7 @@ session_start();
         </a>
       </div>
 
-      
+
       <div class="content">
         <div class="arti">
           <div class="arti-contentWhole1">
