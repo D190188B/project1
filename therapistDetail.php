@@ -12,6 +12,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+session_start();
+
 //if get therapist id
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -20,6 +22,7 @@ if (isset($_GET['id'])) {
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
+            $_SESSION['work_theraID'] = $row['therapist_id'];
             $_SESSION['name_first'] = $row['name_first'];
             $_SESSION['name_last'] = $row['name_last'];
             $_SESSION['about'] = $row['about'];
@@ -40,6 +43,13 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+
+    #submit{
+        margin-top:10px;
+    }
+    </style>
 </head>
 
 
@@ -62,6 +72,8 @@ if (isset($_GET['id'])) {
                         <h4 class="paraTop">
                             Gender:<?php echo $_SESSION['gender'] ?>
                         </h4>
+
+                        <a href="question.php?work_id=<?php echo $_SESSION['work_theraID'] ?>"><button type="submit" name="submit" id="submit" class="btn btn-outline-danger">Work with me!</button></a>
                         <hr>
                     </div>
 
