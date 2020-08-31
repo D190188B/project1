@@ -1,105 +1,3 @@
-
-    function show1() { //show Client Profile
-        var i = document.getElementById("user");
-        var y = document.getElementById("appointment");
-        var p = document.getElementById("payment");
-        var icon = document.getElementById("userIcon");
-        var appo = document.getElementById("userAppointment");
-        var pay = document.getElementById("userPayment");
-
-        //change icon color
-        icon.style.color="black";
-        appo.style.color="silver";
-        pay.style.color="silver";
-
-        i.style.borderBottom = "1px solid black";
-        i.style.borderRadius = "1px";
-        i.style.color="black";
-
-        y.style.borderBottom = "none";
-        y.style.borderRadius = "none";
-        y.style.color="silver"
-
-        p.style.borderBottom = "none";
-        p.style.borderRadius = "none";
-        p.style.color="silver";
-
-        var t = document.getElementById("showInfo");
-        var a = document.getElementById("showAppointment");
-        var b = document.getElementById("showPayment");
-
-        t.style.display = "block";
-        a.style.display = "none";
-        b.style.display = "none";
-    }
-
-    function show2() { // show Client Appointment History
-        var i = document.getElementById("user");
-        var y = document.getElementById("appointment");
-        var p = document.getElementById("payment");
-        var icon = document.getElementById("userIcon");
-        var appo = document.getElementById("userAppointment");
-        var pay = document.getElementById("userPayment");
-
-        icon.style.color="silver";
-        appo.style.color="black";
-        pay.style.color="silver";
-
-        i.style.borderBottom = "none";
-        i.style.borderRadius = "none";
-        i.style.color="silver"
-
-        y.style.borderBottom = "1px solid black";
-        y.style.borderRadius = "1px";
-        y.style.color="black";
-
-        p.style.borderBottom = "none";
-        p.style.borderRadius = "none";
-        p.style.color="silver";
-
-        var t = document.getElementById("showInfo");
-        var a = document.getElementById("showAppointment");
-        var b = document.getElementById("showPayment");
-
-        t.style.display = "none";
-        a.style.display = "block";
-        b.style.display = "none";
-    }
-
-    function show3() { //show Client Payment list
-        var i = document.getElementById("user");
-        var y = document.getElementById("appointment");
-        var p = document.getElementById("payment");
-        var icon = document.getElementById("userIcon");
-        var appo = document.getElementById("userAppointment");
-        var pay = document.getElementById("userPayment");
-
-        icon.style.color="silver";
-        appo.style.color="silver";
-        pay.style.color="black";
-
-        i.style.borderBottom = "none";
-        i.style.borderRadius = "none";
-        i.style.color="silver";
-
-        y.style.borderBottom = "none";
-        y.style.borderRadius = "none";
-        y.style.color="silver";
-
-        p.style.borderBottom = "1px solid black";
-        p.style.borderRadius = "1px";
-        p.style.color="black";
-
-        var t = document.getElementById("showInfo");
-        var a = document.getElementById("showAppointment");
-        var b = document.getElementById("showPayment");
-
-        t.style.display = "none";
-        a.style.display = "none";
-        b.style.display = "block";
-    }
-
-
     let btnEdit = document.querySelector('#edit');
     let a =document.querySelector('#nameFirst');
     let b =document.querySelector('#nameLast');
@@ -112,10 +10,101 @@
     let i =document.querySelector('#changePro');
     let j =document.querySelector('#uploadProfile');
     let k =document.querySelector('#city');
-    let edit = document.querySelector('#editPlace');
     let btnSubmit = document.querySelector('#submit');
-    let btnCancel = document.querySelector('#cancel');
 
+    let infoBtn = document.querySelector('#infoBtn');
+    let infoIcon = document.querySelector('#user_icon');
+    let info_h4 = document.querySelector('#user_h4');
+
+    let appointmentBtn = document.querySelector('#appointmentBtn');
+    let appointmentIcon = document.querySelector('#appointment_icon');
+    let appointment_h4 = document.querySelector('#appointment_h4');
+
+    let paymentBtn = document.querySelector('#paymentBtn');
+    let paymentIcon = document.querySelector('#payment_icon');
+    let payment_h4 = document.querySelector('#payment_h4');
+
+    let settingBtn = document.querySelector('#settingBtn');
+    let settingIcon = document.querySelector('#setting_icon');
+    let setting_h4 = document.querySelector('#setting_h4');
+    let camera_icon = document.querySelector('#camera_icon');
+
+    let showInfoPage = document.querySelector('#showInfo');
+    let showAppointmentPage = document.querySelector('#showAppointment');
+    let showPaymentPage = document.querySelector('#showPayment');
+  
+    infoBtn.addEventListener('click' , ()=>{
+
+      infoIcon.style.color="black";
+      info_h4.style.color="black";
+      showInfoPage.style.display="block";
+
+      appointmentIcon.style.color="silver";
+      appointment_h4.style.color="silver";
+      showAppointmentPage.style.display="none";
+
+      paymentIcon.style.color="silver";
+      payment_h4.style.color="silver";
+      showPayment.style.display="none";
+
+      settingIcon.style.color="silver";
+      setting_h4.style.color="silver";
+      });
+      
+    appointmentBtn.addEventListener('click', ()=>{
+
+      infoIcon.style.color="silver";
+      info_h4.style.color="silver";
+      showInfoPage.style.display="none";
+
+      appointmentIcon.style.color="black";
+      appointment_h4.style.color="black";
+      showAppointmentPage.style.display="block";
+
+      paymentIcon.style.color="silver";
+      payment_h4.style.color="silver";
+      showPaymentPage.style.display="none";
+
+      settingIcon.style.color="silver";
+      setting_h4.style.color="silver";
+
+      });
+      
+    paymentBtn.addEventListener('click', ()=>{
+
+      infoIcon.style.color="silver";
+      info_h4.style.color="silver";
+      showInfoPage.style.display="none";
+
+      appointmentIcon.style.color="silver";
+      appointment_h4.style.color="silver";
+      showAppointmentPage.style.display="none";
+
+      paymentIcon.style.color="black";
+      payment_h4.style.color="black";
+      showPaymentPage.style.display="block";
+
+      settingIcon.style.color="silver";
+      setting_h4.style.color="silver";
+
+      });
+      
+    settingBtn.addEventListener('click', ()=>{
+
+      infoIcon.style.color="silver";
+      info_h4.style.color="silver";
+
+      appointmentIcon.style.color="silver";
+      appointment_h4.style.color="silver";
+
+      paymentIcon.style.color="silver";
+      payment_h4.style.color="silver";
+
+      settingIcon.style.color="black";
+      setting_h4.style.color="black";
+      
+      });
+    
 
     //Edit
     btnEdit.addEventListener('click',()=>{
@@ -124,7 +113,6 @@
         //hide the edit button
         btnEdit.style.display="none";
         btnSubmit.style.display="block";
-        btnCancel.style.display="block";
 
         //remove all the readonly
         a.removeAttribute('readonly');
@@ -134,7 +122,7 @@
         
 
         b.removeAttribute('readonly');
-        b.setAttribute("form",("save"))
+        b.setAttribute("form","save")
         b.style.background="white";
         b.style.border="1px solid black";
 
@@ -167,55 +155,82 @@
         //show the input file
         i.style.display="block";
         j.style.display="block";
+        camera_icon.style.display="block";
     });
 
+    let profile_Second = document.querySelector('#profile_iconSecond');
+        let profileIcon_Second = document.querySelector('#profile_iconSecond');
+
+        let appointment_Second = document.querySelector('#UserAppointmentSecond');
+        let appointmentIcon_Second = document.querySelector('#appointment_iconSecond');
+
+        let payment_Second = document.querySelector('#UserPaymentSecond');
+        let paymentIcon_Second = document.querySelector('#payment_iconSecond');
+
+        let setting_Second = document.querySelector('#UserSettingSecond');
+        let settingIcon_Second = document.querySelector('#setting_iconSecond');
 
 
-    //if user click cancel botton, page will back to beginning screen
-    btnCancel.addEventListener('click',()=>{
-        btnEdit.style.display="block";
-        btnSubmit.style.display="none";
-        btnCancel.style.display="none";
 
-        a.setAttribute('readonly',true);
-        a.removeAttribute("form");
-        a.style.background="rgb(231, 231, 231)";
-        a.style.border="none";
+        profile_Second.addEventListener('click', () => {
+            profileIcon_Second.style.color = "black";
 
-        b.setAttribute('readonly',true);
-        b.removeAttribute("form");
-        b.style.background="rgb(231, 231, 231)";
-        b.style.border="none";
 
-        d.setAttribute('readonly',true);
-        d.removeAttribute("form");
-        d.style.background="rgb(231, 231, 231)";
-        d.style.border="none";
+            appointmentIcon_Second.style.color = "white";
 
-        e.setAttribute('readonly',true);
-        e.removeAttribute("form");
-        e.style.background="rgb(231, 231, 231)";
-        e.style.border="none";
+            paymentIcon_Second.style.color = "white";
 
-        f.setAttribute('readonly',true);
-        f.removeAttribute("form");
-        f.style.background="rgb(231, 231, 231)";
-        f.style.border="none";
+            settingIcon_Second.style.color = "white";
 
-        g.setAttribute('readonly',true);
-        g.removeAttribute("form");
-        g.style.background="rgb(231, 231, 231)";
-        g.style.border="none";
+            showInfoPage.style.display = "block";
+            showAppointmentPage.style.display = "none";
+            showPaymentPage.style.display = "none";
+        });
 
-        k.setAttribute('readonly',true);
-        k.removeAttribute("form");
-        k.style.background="rgb(231, 231, 231)";
-        k.style.border="none";
-        
+        appointment_Second.addEventListener('click', () => {
+            profileIcon_Second.style.color = "white";
 
-        i.style.display="none";
-        j.style.display="none";
-    });
+
+            appointmentIcon_Second.style.color = "black";
+
+            paymentIcon_Second.style.color = "white";
+
+            settingIcon_Second.style.color = "white";
+
+            showInfoPage.style.display = "none";
+            showAppointmentPage.style.display = "block";
+            showPaymentPage.style.display = "none";
+        });
+
+        payment_Second.addEventListener('click', () => {
+            profileIcon_Second.style.color = "white";
+
+
+            appointmentIcon_Second.style.color = "white";
+
+            paymentIcon_Second.style.color = "black";
+
+            settingIcon_Second.style.color = "white";
+
+            showInfoPage.style.display = "none";
+            showAppointmentPage.style.display = "none";
+            showPaymentPage.style.display = "block";
+        });
+
+        setting_Second.addEventListener('click', () => {
+            profileIcon_Second.style.color = "white";
+
+
+            appointmentIcon_Second.style.color = "white";
+
+            paymentIcon_Second.style.color = "white";
+
+            settingIcon_Second.style.color = "black";
+
+            showInfoPage.style.display = "none";
+            showAppointmentPage.style.display = "none";
+            showPaymentPage.style.display = "none";
+        });
 
 
     
@@ -233,6 +248,9 @@
         let reader = new FileReader();
         reader.onload = function(e) {
           $("#user_image").attr('src', e.target.result);
+          $("#camera_icon").css({
+            display: "none"
+        });
         }
         reader.readAsDataURL(input.files[0]);
       }
