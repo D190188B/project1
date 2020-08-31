@@ -19,7 +19,7 @@ if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete']; //id
 
     $sql = "delete from therapist where therapist_id='$deleteID'"; //delete where therapist_id == this.id
-    $result = $conn->query($sql) or die($conn->error.__LINE__);
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
 }
 
 //if accept
@@ -27,7 +27,7 @@ if (isset($_POST['accept'])) {
     $id = $_POST['accept']; //id
     $statusID = 2;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=2 where therapist_id == this.id
-    $result = $conn->query($sql) or die($conn->error.__LINE__);
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
 }
 
 
@@ -36,7 +36,7 @@ if (isset($_POST['reject'])) {
     $id = $_POST['reject']; //id
     $statusID = 3;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=3 where therapist_id == this.id
-    $result = $conn->query($sql) or die($conn->error.__LINE__);
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
 }
 
 ?>
@@ -66,7 +66,7 @@ if (isset($_POST['reject'])) {
         margin: 5% 0;
         box-shadow: 3px 3px 2px #ccc;
         transition: 0.5s;
-        text-align:center;
+        text-align: center;
     }
 
     .custab:hover {
@@ -77,6 +77,7 @@ if (isset($_POST['reject'])) {
     button.btn {
         margin-bottom: 10px;
     }
+
 </style>
 
 <body>
@@ -108,8 +109,8 @@ if (isset($_POST['reject'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "SELECT * FROM therapist LEFT JOIN therastatus on therapist.statusID=therastatus.id"; //id is database name
-                        $result = $conn->query($sql);
+                        $sql = "SELECT * FROM therapist LEFT JOIN therastatus on therapist.statusID=therastatus.id ORDER BY created_at DESC"; //id is database name
+                        $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                         if ($result->num_rows > 0) { //over 1 database(record) so run
                             while ($row = $result->fetch_assoc()) {
@@ -132,21 +133,24 @@ if (isset($_POST['reject'])) {
                                 $statusID = $row['statusID'];
                                 $created_at = $row['created_at'];
                                 $status = $row['status'];
+
+                                $user_time1 = strtotime($row['created_at']);
+                                $user_time2 = date("Y-m-d h:i a", $user_time1);
                         ?>
 
                                 <tr>
-                                <td><?php echo $id ?></td>
-                                    <td><?php echo $name_first."&nbsp;".$name_last ?></td>
+                                    <td><?php echo $id ?></td>
+                                    <td><?php echo $name_first . "&nbsp;" . $name_last ?></td>
                                     <td><?php echo $gender ?></td>
                                     <td><?php echo $age ?></td>
                                     <td><?php echo $email ?></td>
                                     <td><?php echo $phone ?></td>
                                     <td><?php echo $ic ?></td>
-                                    <td><?php echo $address.",&nbsp;".$therapist_postCode."&nbsp;".$therapist_state ?></td>
+                                    <td><?php echo $address . ",&nbsp;" . $therapist_postCode . "&nbsp;" . $therapist_state ?></td>
                                     <td><?php echo $license ?></td>
                                     <td><?php echo $resume ?></td>
                                     <td><img src="<?php echo $profile_image ?>" alt="image" style="width:150px;height:150px;border-radius:50%;"></td>
-                                    <td><?php echo $created_at ?></td>
+                                    <td><?php echo $user_time2 ?></td>
 
 
                                     <?php
