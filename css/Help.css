@@ -52,6 +52,7 @@
 
 #help .inside{
     margin-left:30px;
+    margin-top: 40px;
 }
 
 #help .img-responsive {
@@ -88,10 +89,6 @@
     margin-bottom: 35px;
     background:white;
     text-align:center;
-}
-
-#help .inside {
-    margin-top: 40px;
 }
 
 #help h2,
