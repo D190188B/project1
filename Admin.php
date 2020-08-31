@@ -14,6 +14,25 @@ if ($conn->connect_error) {
 
 
 session_start();
+
+if(isset($_SESSION['thera_id'])){
+	$id = $_SESSION['thera_id'];
+	$sql ="SELECT * from therapist where therapist_id='$id'";
+	$result = $conn->query($sql) or die($conn->error.__LINE__);
+	
+	if ($result->num_rows > 0) { //over 1 database(record) so run
+        while ($row = $result->fetch_assoc()) {
+            $_SESSION['name_first'] = $row['name_first'];
+            $_SESSION['name_last'] = $row['name_last'];
+            $_SESSION['about'] = $row['about'];
+            $_SESSION['age'] = $row['age'];
+            $_SESSION['license'] = $row['license'];
+            $_SESSION['profile_image'] = $row['profile_image'];
+            $_SESSION['gender'] = $row['gender'];
+        }
+    }
+
+}
 ?>
 
 <!doctype html>
@@ -44,7 +63,7 @@ session_start();
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="page-caption">
-								<h1 class="page-title">Welcome Admin</h1>
+								<h1 class="page-title">Welcome <?php echo $_SESSION['name_first']."&nbsp;".$_SESSION['name_last']?></h1>
 							</div>
 						</div>
 					</div>
@@ -73,23 +92,29 @@ session_start();
 						<div class="col-md-12">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-12 col-md-3">
-										<a href="#" class="btn btn-danger btn-lg w-75 h-100" role="button">
+									<div class="col-xs-12 col-md-3 my-5">
+										<a href="appointmentTable.php" class="btn btn-danger btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-list-alt"></span><br />Appointment</a>
 									</div>
 
-									<div class="col-xs-12 col-md-3">
+									<div class="col-xs-12 col-md-3 my-5">
 										<a href="#" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-signal"></span> <br />Reports</a>
 									</div>
 
 
-									<div class="col-xs-12 col-md-3">
+									<div class="col-xs-12 col-md-3 my-5">
 										<a href="#" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-comment"></span> <br />Reviews</a>
 									</div>
 
-									<div class="col-xs-12 col-md-3">
+									<div class="col-xs-12 col-md-3 my-5">
+										<a href="#" class="btn btn-info btn-lg w-75 h-100" role="button">
+											<span class="glyphicon glyphicon-user"></span> <br />Feedbacks</a>
+
+									</div>
+
+									<div class="col-xs-12 col-md-3 my-5">
 										<a href="clientTable.php" class="btn btn-success btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-user"></span> <br />Client</a>
 									</div>
@@ -100,7 +125,6 @@ session_start();
 
 									</div>
 
-									<br>
 								</div>
 
 							</div>
