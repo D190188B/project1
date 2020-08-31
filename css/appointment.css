@@ -9,7 +9,6 @@
 #appointment .row select{
     border: none;
     width: 100%;
-    padding: 10px;
     margin-bottom: 10px;
     outline: none;
 }
@@ -25,7 +24,6 @@
 #appointment input[type="text"] {
     border: none;
     width: 100%;
-    padding: 10px;
     margin-bottom: 10px;
     outline: none;
 }
