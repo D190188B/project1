@@ -130,19 +130,19 @@ if (isset($_POST['submit'])) { //if user register an account
     $profileImage = upload_profile('./images/profile/', $files);
 
 
-    if (empty($error) && ($password == $confirm_pwd)) {
+    if (empty($error) && ($password == $confirm_pwd)){
         $generateid = uniqid();
         // register a new user
         $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
         $sqli = "Select * from client where email='$email'"; //username and password same ？
-        $result1 = mysqli_query($conn, $sqli); //sql
+        $result1 = mysqli_query($conn, $sqli) or die($conn->error.__LINE__); //sql
 
         $count = mysqli_num_rows($result1);
 
         if ($count == 0) {
             $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$city','$postCode','$state','$email','$hashed_pass','$profileImage',NOW())";
-            $result = $conn->query($sql);
+            $result = $conn->query($sql) or die($conn->error.__LINE__);
 
             if ($result == true) {
                 echo '<script>window.alert("Register successful...!")</script>';
@@ -174,7 +174,7 @@ if (isset($_POST['login'])) { //if user login
     if (empty($error)) {
         // sql query
         $sql = "select * from client where email='$email'"; //username and password same ？
-        $result = $conn->query($sql);
+        $result = $conn->query($sql) or die($conn->error.__LINE__);
 
 
         if ($result->num_rows > 0) { //over 1 database(record) so run
@@ -201,32 +201,6 @@ if (isset($_POST['login'])) { //if user login
 
 <head>
     <style>
-        #login-form {
-            color: rgba(37, 74, 118);
-        }
-
-        .container {
-            margin-top: -50px;
-            border-style: solid;
-            border-radius: 20px;
-            border-color: rgba(37, 74, 118);
-            background-color: rgba(210, 232, 243);
-        }
-
-        #login-form .upload-profile-image img#Client {
-            background-color: yellow;
-        }
-
-        /* 
-        .container .row{
-            background-color: rgba(207,235,239);
-        } */
-
-        @media screen and (max-width:767px) {
-            #login-form .container {
-                margin-top: 30px;
-            }
-        }
     </style>
 </head>
 <header>
@@ -255,7 +229,7 @@ if (isset($_POST['login'])) { //if user login
                             <div class="form-row my-4">
                                 <div class="col">
                                     <h4>Email</h4>
-                                    <input type="email" required name="email" id="email" class="form-control">
+                                    <input type="email" required name="email" id="email" class="form-control" value="<?php if(isset($_POST['login'])){echo $_POST['email'];} ?>">
                                 </div>
                             </div>
 
