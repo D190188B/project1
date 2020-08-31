@@ -194,7 +194,7 @@ if (isset($_POST['submit'])) {
   $fileCer = upload_certificate('./images/certificate/', $file1);
 
   $files = $_FILES['profileUpload'];
-  $profileImage = upload_thera('./images/profile/', $files);
+  $profileImage = upload_thera('./images/therapists/', $files);
 
 
 
