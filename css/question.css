@@ -152,19 +152,6 @@
     float: right;
 }
 
-#showResult a{
-    cursor:pointer;
-    color: #28a745 !important;
-}
-
-#showResult a:hover{
-    text-decoration:none;
-    color:white !important;
-}
-
-#showResult a:focus{
-    outline:none;
-}
 
 @media screen and (max-width:767px) {
     #Question .container {
