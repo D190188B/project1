@@ -49,7 +49,7 @@ $result = $conn->query($sqli) or die($conn->error . __LINE__);
 function upload_thera($path, $file)
 {
     $targetDir = $path;
-    $default = $_SESSION['profileImage'];
+    $default = $_SESSION['thera_profile_image'];
 
     // get the filename
     $filename = basename($file['name']);
@@ -164,7 +164,16 @@ if (isset($_POST['submit'])) {
             $_SESSION['thera_postCode'] = $_POST['postCode'];
             $_SESSION['thera_profile_image'] = $profileImage;
 
-            header('refresh: 0; url=theraProfile.php');
+            header('refresh: 0.5; url=theraProfile.php');
+            echo '<style type="text/css"> 
+            .edit-success{
+                display:block !important;            
+            }</style>';
+        } else {
+            echo '<style type="text/css"> 
+        .edit-fail{
+            display:block !important;            
+        }</style>';
         }
     }
 }
@@ -221,6 +230,10 @@ if (isset($_POST['accept'])) {
     $statusID = 2;
     $sql = "update appointment set appointment_status='$statusID' where appointment_id='$id'"; //set status=2 where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result == true) {
+        header('refresh: 0; url=theraProfile.php');
+    }
 }
 
 
@@ -230,6 +243,10 @@ if (isset($_POST['reject'])) {
     $statusID = 3;
     $sql = "update appointment set appointment_status='$statusID' where appointment_id='$id'"; //set status=3 where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result == true) {
+        header('refresh: 0; url=theraProfile.php');
+    }
 }
 ?>
 
@@ -249,6 +266,15 @@ if (isset($_POST['reject'])) {
 
 <body>
     <section id="thera_profile">
+        <div class="alert alert-success alert-dismissible fade show text-center edit-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Edit Successful</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center edit-fail">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Edit Fail, Please Try Again!</strong>
+        </div>
 
         <div class="container">
             <div class="row">
