@@ -92,15 +92,6 @@
     padding-bottom: 38px;
 }
 
-#regthera-form input[type='text'],
-#regthera-form input[type='date'],
-#regthera-form input[type='email'],
-#regthera-form input[type='password'],
-#regthera-form input[type='tel']{
-    outline: none;
-    box-shadow: none;
-}
-
 #regthera-form select{
     border: none;
     border-radius: unset;
