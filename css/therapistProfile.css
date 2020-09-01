@@ -236,6 +236,16 @@
     display: none;
 }
 
+#thera_profile .edit-success {
+    margin-top: -4px !important;
+    display: none;
+}
+
+#thera_profile .edit-fail {
+    margin-top: -4px !important;
+    display: none;
+}
+
 @media screen and (max-width:414px) {
     #thera_profile .hand {
         display: block;
@@ -355,9 +365,10 @@
 
 
 #theraLogin-form {
-    padding: 10% 0;
+    color: rgba(37, 74, 118);
     background-color: rgba(155, 190, 222);
     background-size: cover;
+    padding-top:10px;
 }
 
 #theraLogin-form h1.login-title {
@@ -409,13 +420,6 @@
 }
 
 
-#theraLogin-form input[type='text'],
-#theraLogin-form input[type='email'],
-#theraLogin-form input[type='password'] {
-    outline: none;
-    box-shadow: none;
-}
-
 #theraLogin-form button#register:hover {
     text-decoration: underline;
     color: blue;
@@ -425,13 +429,8 @@
     margin-bottom: 3px;
 }
 
-#theraLogin-form {
-    color: rgba(37, 74, 118);
-}
-
 #theraLogin-form .container {
     max-width: 800px !important;
-    margin-top: -90px;
     border-style: solid;
     border-radius: 20px;
     border-color: rgba(37, 74, 118);
@@ -446,4 +445,24 @@
     #theraLogin-form .container {
         margin-top: 30px;
     }
+}
+
+#theraLogin-form .unavailable {
+    display: none;
+    margin-top: -10px;
+    margin-bottom: 0px;
+}
+
+
+
+#theraLogin-form .wrong-password {
+    margin-top: -10px;
+    margin-bottom: 0px;
+    display: none;
+}
+
+#theraLogin-form .error {
+    margin-top: -10px;
+    margin-bottom: 0px;
+    display: none;
 }
