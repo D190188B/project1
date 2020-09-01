@@ -153,7 +153,16 @@ if (isset($_POST['submit'])) { //if user edit the information
             $_SESSION['post_code'] = $_POST['postCode'];
             $_SESSION['profileImage'] = $profileImage;
 
-            header('refresh: 0; url=profileCopy.php');
+            header('refresh: 0.5; url=profileCopy.php');
+            echo '<style type="text/css"> 
+            .edit-success{
+                display:block !important;            
+            }</style>';
+        } else {
+            echo '<style type="text/css"> 
+        .edit-fail{
+            display:block !important;            
+        }</style>';
         }
     }
 }
@@ -193,6 +202,16 @@ $appointmentNum = 0;
 
 <body>
     <section id="profile_copy">
+        <div class="alert alert-success alert-dismissible fade show text-center edit-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Edit Successful!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center edit-fail">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Edit Fail, Please Try Again!</strong>
+        </div>
+
         <div class="container whole">
             <div class="row">
                 <div class="col-md-4 main">
