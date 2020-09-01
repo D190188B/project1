@@ -58,69 +58,94 @@
             <small class="form-text text-black-50" style="text-align:center;padding-right:10px;">Choose Image</small>
             <input type="file" class="form-control-file" name="profileUpload" id="upload-profile" form="reg-form">
           </div>
-          <form id="reg-form" method="post" enctype="multipart/form-data">
+
+          <form id="reg-form" method="POST" enctype="multipart/form-data" class="need-validation" novalidate>
 
             <div class="row" style="margin-top:30px;">
               <div class="col">
                 <h4 style="color:rgb(34, 19, 48);margin-left: 18px;">First Name</h4>
                 <input type="text" required name="firstname" id="firstname" class="form-control" placeholder="first name" style="max-width: 250px;margin-left: 15px;">
+                <div class="valid-feedback" style="margin-left:15px;">Valid.</div>
+                <div class="invalid-feedback" style="margin-left:15px;">Please fill out this field.</div>
               </div>
 
               <div class="col">
                 <h4 style="color:rgb(34, 19, 48)">Last Name</h4>
                 <input type="text" required name="lastName" id="lastName" class="form-control" placeholder="last name" style="max-width: 250px;">
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
               </div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Birthday</h4>
               <input type="date" required name="birth" id="birth" class="form-control">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Phone</h4>
               <input type="tel" required name="phone" id="phone" class="form-control" placeholder="010-1234567" pattern="[0-9]{3}-[0-9]{7}">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please follow properly.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Address</h4>
               <input type="text" required name="address" id="address" class="form-control" placeholder="address">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">City</h4>
               <input type="text" required name="city" id="city" class="form-control" placeholder="city">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
               <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="post code">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">State</h4>
               <input type="text" required name="state" id="state" class="form-control" placeholder="state">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Email</h4>
-              <input type="email" required name="email" id="email" class="form-control" placeholder="email">
+              <input type="email" required name="reEmail" id="reEmail" class="form-control" placeholder="email">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Password</h4>
-              <input type="password" required name="password" id="password" class="form-control" placeholder="password">
+              <input type="password" required name="rePassword" id="rePassword" class="form-control" placeholder="password">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
             </div>
 
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Confirm Password</h4>
               <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control" placeholder="confirm password">
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Please fill out this field.</div>
               <small id="confirm_error" class="text-danger"></small>
             </div>
 
             <div class="col" style="margin-top:20px;">
-              <input type="checkbox" style="margin-left:10px;margin-top:7px;" name="agreement" style="padding-left:30px;" class="form-check-input" required>
-              <label for="agreement" style="padding-left:20px;padding-bottom:5px;;" class="form-check-label font-ubuntu text-black-50">I agree <a href="#">term, conditions, and policy </a>(*) </label>
+              <input type="checkbox" style="margin-left:10px;margin-top:3px;" name="agreement" style="padding-left:30px;" class="form-check-input" required>
+              <label for="agreement" style="padding-left: 40px;padding-bottom:5px;" class="form-check-label font-ubuntu text-black-50">I agree <a href="#">term, conditions, and policy </a>(*) </label>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">Check this checkbox to continue.</div>
             </div>
 
 
@@ -133,5 +158,25 @@
         </div>
       </div>
     </div>
-
-    <section>
+  </div>
+  <script>
+    // Disable form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Get the forms we want to add validation styles to
+        var forms = document.getElementsByClassName('need-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() == false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+</section>
