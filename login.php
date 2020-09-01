@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) { //if user register an account
         $error[] = "You forgot to enter your Name";
     }
 
-    $email = validate_input_text($_POST['email']);
+    $email = validate_input_text($_POST['reEmail']);
     if (empty($email)) {
         $error[] = "You forgot to enter your Email";
     }
@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) { //if user register an account
         $error[] = "You forgot to enter your post code";
     }
 
-    $password = validate_input_text($_POST['password']);
+    $password = validate_input_text($_POST['rePassword']);
     if (empty($password)) {
         $error[] = "You forgot to enter your password";
     }
@@ -130,28 +130,37 @@ if (isset($_POST['submit'])) { //if user register an account
     $profileImage = upload_profile('./images/profile/', $files);
 
 
-    if (empty($error) && ($password == $confirm_pwd)){
+    if (empty($error) && ($password == $confirm_pwd)) {
         $generateid = uniqid();
         // register a new user
         $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
         $sqli = "Select * from client where email='$email'"; //username and password same ？
-        $result1 = mysqli_query($conn, $sqli) or die($conn->error.__LINE__); //sql
+        $result1 = mysqli_query($conn, $sqli) or die($conn->error . __LINE__); //sql
 
         $count = mysqli_num_rows($result1);
 
         if ($count == 0) {
             $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$city','$postCode','$state','$email','$hashed_pass','$profileImage',NOW())";
-            $result = $conn->query($sql) or die($conn->error.__LINE__);
+            $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
-                echo '<script>window.alert("Register successful...!")</script>';
+                echo '<style type="text/css"> 
+            .register-success{
+                display:block !important;            
+            }</style>';
             }
         } else {
-            echo '<script>window.alert("This email has already registered...!")</script>';
+            echo '<style type="text/css"> 
+            .already-registered{
+                display:block !important;            
+            }</style>';
         }
     } else {
-        echo '<script>window.alert("Password is not match....!!!!")</script>';
+        echo '<style type="text/css"> 
+        .password-notmatch{
+                display:block !important;            
+            }</style>';
     }
 }
 
@@ -174,7 +183,7 @@ if (isset($_POST['login'])) { //if user login
     if (empty($error)) {
         // sql query
         $sql = "select * from client where email='$email'"; //username and password same ？
-        $result = $conn->query($sql) or die($conn->error.__LINE__);
+        $result = $conn->query($sql) or die($conn->error . __LINE__);
 
 
         if ($result->num_rows > 0) { //over 1 database(record) so run
@@ -185,14 +194,25 @@ if (isset($_POST['login'])) { //if user login
             }
             if (password_verify($password, $passwordHash)) {
                 $_SESSION['id'] = $id;
-                header('refresh: 0; url=Home.php');
+                echo '<script>window.location.assign("Home.php");</script>';
                 exit();
             } else {
-                echo '<script>window.alert("Unavariable name or password")</script>';
+                echo '<style type="text/css"> 
+            .wrong-password{
+                display:block !important;            
+            }</style>';
             }
+        } else {
+            echo '<style type="text/css"> 
+        .unavailable{
+            display:block !important;            
+        }</style>';
         }
     } else {
-        echo '<script>window.alert（"Please Fill out email and password to login!"）</script>';
+        echo '<style type="text/css"> 
+    .error{
+        display:block !important;            
+    }</style>';
     }
 }
 ?>
@@ -200,8 +220,9 @@ if (isset($_POST['login'])) { //if user login
 <html lang="en">
 
 <head>
-    <style>
-    </style>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <header>
     <?php require_once("header1.php"); ?>
@@ -210,6 +231,40 @@ if (isset($_POST['login'])) { //if user login
 
 <body>
     <section id="login-form">
+        <div class="alert alert-success alert-dismissible fade show text-center register-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Register Successful!</strong> You can Login Now!
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center register-fail">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Register Fail, Please Try Again!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Error while Login, Please Try Again!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center unavailable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Unavailable Email or Password, Please Try Again!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center wrong-password">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Wrong Password..!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center password-notmatch">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Password are not Match, Please Register Again! ..!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center already-registered">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>This Email Has Already Registered, Please Use another Email...!</strong>
+        </div>
 
         <div class="container">
             <div class="row m-0">
@@ -224,12 +279,16 @@ if (isset($_POST['login'])) { //if user login
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <form action="login.php" method="post" enctype="multipart/form-data" id="log-form">
+                        <form action="login.php" method="post" enctype="multipart/form-data" id="log-form" class="needs-validation" novalidate>
 
                             <div class="form-row my-4">
                                 <div class="col">
                                     <h4>Email</h4>
-                                    <input type="email" required name="email" id="email" class="form-control" value="<?php if(isset($_POST['login'])){echo $_POST['email'];} ?>">
+                                    <input type="email" required name="email" id="email" class="form-control" value="<?php if (isset($_POST['login'])) {
+                                                                                                                            echo $_POST['email'];
+                                                                                                                        } ?>">
+                                    <div class="valid-feedback">Valid.</div>
+                                    <div class="invalid-feedback">Please fill out this field.</div>
                                 </div>
                             </div>
 
@@ -237,6 +296,8 @@ if (isset($_POST['login'])) { //if user login
                                 <div class="col">
                                     <h4>Password</h4>
                                     <input type="password" required name="password" id="password" class="form-control">
+                                    <div class="valid-feedback">Valid.</div>
+                                    <div class="invalid-feedback">Please fill out this field.</div>
                                 </div>
                             </div>
 
@@ -257,6 +318,26 @@ if (isset($_POST['login'])) { //if user login
             </div>
         </div>
     </section>
+    <script>
+        // Disable form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Get the forms we want to add validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() == false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </body>
 <?php include("modal.php") ?>
 
