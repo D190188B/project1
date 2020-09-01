@@ -52,7 +52,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="regthera-form" method="post" enctype="multipart/form-data">
+                    <form id="regthera-form" method="post" enctype="multipart/form-data" class="should-validation" novalidate>
                         <div class="inverse">
                             <img class="camera-icon" src="images/camera-solid.svg" alt="camera">
                             <img src="images/profile/beard.png" style="width: 200px; height: 200px;margin-bottom:10px;opacity: 20%;" class="img rounded-circle" alt="profile" id="image">
@@ -69,11 +69,15 @@
                             <div class="col">
                                 <h4 style="color:rgb(34, 19, 48);margin-left: 18px;">First Name</h4>
                                 <input type="text" required name="firstname" id="firstname" class="form-control" placeholder="first name" style="max-width: 250px;margin-left: 15px;">
+                                <div class="valid-feedback" style="margin-left: 15px;">Valid.</div>
+                                <div class="invalid-feedback" style="margin-left: 15px;">Please fill out this field.</div>
                             </div>
 
                             <div class="col">
                                 <h4 style="color:rgb(34, 19, 48)">Last Name</h4>
                                 <input type="text" required name="lastName" id="lastName" class="form-control" placeholder="last name" style="max-width: 250px;">
+                                <div class="valid-feedback">Valid.</div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
 
@@ -87,6 +91,8 @@
                                 <input type="radio" id="female" name="gender" class="custom-control-input" value="Female" required>
                                 <label class="custom-control-label" for="female">Female</label>
                             </div>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col" style="margin-bottom:10px;">
@@ -107,7 +113,7 @@
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Age</h4>
-                            <select id="age" name="age" class="form-control" required>
+                            <select id="age" name="age" class="form-control">
                                 <option value="26">26</option>
                                 <option value="27">27</option>
                                 <option value="28">28</option>
@@ -149,36 +155,48 @@
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Phone</h4>
                             <input type="tel" required name="phone" id="phone" class="form-control" placeholder="010-1234567" pattern="[0-9]{3}-[0-9]{7}">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">IC</h4>
                             <input type="tel" required name="ic" id="ic" class="form-control" placeholder="000123-01-1234" pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Address</h4>
                             <input type="text" required name="address" id="address" class="form-control" placeholder="address">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">City</h4>
                             <input type="text" required name="city" id="city" class="form-control" placeholder="city">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
                             <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="post code">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">State</h4>
                             <input type="text" required name="state" id="state" class="form-control" placeholder="state">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">License Type</h4>
-                            <select id="license" name="license" class="form-control" required>
+                            <select id="license" name="license" class="form-control">
                                 <option value="Clinical Social Worker">Clinical Social Worker</option>
                                 <option value="Marriage & Family Therapist">Marriage & Family Therapist</option>
                                 <option value="Mental Health Counselor">Mental Health Counselor</option>
@@ -190,27 +208,36 @@
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Resume(include your certificate photo)</h4>
                             <input type="file" required name="certificate" id="certificate" class="form-control">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Email</h4>
                             <input type="email" required name="email" id="email" class="form-control" placeholder="email">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Password</h4>
                             <input type="password" required name="password" id="password" class="form-control" placeholder="password">
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Confirm Password</h4>
                             <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control" placeholder="confirm password">
-                            <small id="confirm_error" class="text-danger"></small>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col" style="margin-top:20px;">
-                            <input type="checkbox" style="margin-left:10px;margin-top:7px;" name="agreement" style="padding-left:30px;" class="custom-control-input" required>
-                            <label for="agreement" style="padding-left:39px;padding-bottom:5px;" class="form-check-label font-ubuntu text-black-50">I agree <a href="#">term, conditions, and policy </a>(*) </label>
+                            <input type="checkbox" style="margin-left:10px;margin-top:7px;" name="agreement" style="padding-left:30px;" class="form-check-input" required>
+                            <label for="agreement" style="padding-left: 40px;padding-bottom:5px;" class="form-check-label font-ubuntu text-black-50">I agree <a href="#">term, conditions, and policy </a>(*) </label>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Check this checkbox to continue.</div>
                         </div>
 
 
@@ -224,4 +251,23 @@
             </div>
         </div>
     </div>
+    <script stype="text/javascript">
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Get the forms we want to add validation styles to
+                var forms = document.getElementsByClassName('should-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() == false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
     <section>
