@@ -9,8 +9,7 @@
     font: normal 500 16px var(--font-ubuntu);
 }
 
-#login-form,
-#register1 {
+#login-form{
     padding: 10% 0;
     background-color: rgba(155, 190, 222);
     background-size: cover;
@@ -19,13 +18,6 @@
 
 
 
-#register1 .upload-profile-image {
-    position: relative;
-    width: 10%;
-    margin-left: auto;
-    margin-right: auto;
-    transition: filter .8s ease;
-}
 
 #register .modal .modal-dialog .modal-content .modal-body .inverse {
     position: relative;
@@ -35,8 +27,7 @@
     transition: filter .8s ease;
 }
 
-#register .modal .modal-dialog .modal-content .modal-body .inverse:hover,
-#register1 .upload-profile-image:hover {
+#register .modal .modal-dialog .modal-content .modal-body .inverse:hover{
     filter: drop-shadow(1px 1px 22px #7584bb);
 }
 
@@ -59,34 +50,6 @@
     opacity: 0;
 }
 
-#register1 .container {
-    margin-top: -50px;
-}
-
-#register1 .container .row {
-    border-style: solid;
-    border-radius: 20px;
-    background-image: linear-gradient(95.2deg, rgba(173, 252, 234, 1) 26.8%, rgba(192, 229, 246, 1) 64%);
-    box-shadow: 1px 1px 22px #7584bb;
-}
-
-#register1 input[type="submit"] {
-    transition: ease 0.5s;
-    background-color: blue;
-    border-width: 0;
-    width: 120px;
-    height: 40px;
-    border-radius: 20px;
-    color: white;
-    border-color: white;
-    outline: none;
-}
-
-#register1 input[type="submit"]:hover {
-    transition: ease 0.5s;
-    background-color: rgb(100, 100, 255);
-
-}
 
 #login-form h1.login-title {
     padding-top: 30px;
@@ -114,7 +77,7 @@
     color: rgba(37, 74, 118);
 }
 
-.container {
+#login-form .container {
     margin-top: -50px;
     border-style: solid;
     border-radius: 20px;
@@ -161,15 +124,6 @@
 
 }
 
-/* #register is the section id="regiter" */
-
-
-#register1 .upload-profile-image .camera-icon {
-    position: absolute;
-    top: 70px;
-    width: 60px !important;
-    filter: invert(30%) !important;
-}
 
 #register .modal .modal-dialog .modal-content .modal-body .camera-icon {
     position: absolute;
@@ -180,12 +134,51 @@
 }
 
 
-#register1 .upload-profile-image:hover .camera-icon {
+#register .modal .modal-dialog .modal-content .modal-body .inverse:hover .camera-icon {
     filter: invert(100%) !important;
 }
 
-#register .modal .modal-dialog .modal-content .modal-body .inverse:hover .camera-icon {
-    filter: invert(100%) !important;
+.register-success {
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+.register-fail {
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+
+.unavailable {
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+.already-registered {
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+.wrong-password {
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+.error{
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
+}
+
+.password-notmatch{
+    margin-bottom: 50px !important;
+    margin-top: -78px !important;
+    display: none;
 }
 
 
@@ -228,16 +221,6 @@
 
 }
 
-#reg-form input[type='text'],
-#reg-form input[type='email'],
-#reg-form input[type='date'],
-#reg-form input[type='password'],
-#log-form input[type='text'],
-#log-form input[type='email'],
-#log-form input[type='password'] {
-    outline: none;
-    box-shadow: none;
-}
 
 #log-form button#register:hover {
     text-decoration: underline;
