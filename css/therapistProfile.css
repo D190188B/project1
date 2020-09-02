@@ -95,8 +95,7 @@
     background: none;
     color: darkblue;
     border: none;
-    padding: 0 10px 0 15px;
-    margin: -2px 0 0 -20px;
+    margin: 56px 0 0 -15px;
     border-radius: 10px;
     transition: ease 0.5s;
 }
@@ -127,6 +126,8 @@
     overflow-x: scroll;
     height: 515px;
 }
+
+
 
 
 #thera_profile h4#profile_h4 {
@@ -246,6 +247,37 @@
     display: none;
 }
 
+#thera_profile #change {
+    margin-top: 10px;
+}
+
+#thera_profile #password_oldPlace {
+    display: none;
+}
+
+#thera_profile #password_newPlace {
+    display: none;
+}
+
+#thera_profile #password_confPlace {
+    display: none;
+}
+
+#thera_profile .Password_fail {
+    margin-top: -4px !important;
+    display: none;
+}
+
+#thera_profile .change-success {
+    margin-top: -4px !important;
+    display: none;
+}
+
+#thera_profile #password_feedback {
+    color: red;
+    display: none;
+}
+
 @media screen and (max-width:414px) {
     #thera_profile .hand {
         display: block;
@@ -324,7 +356,7 @@
         margin-left: 20px;
         float: left;
         border-right: 1px solid black;
-        padding: 5px 30px 5px 0;
+        padding: 5px 20px 5px 10px;
         cursor: pointer;
         position: relative;
     }
@@ -347,9 +379,9 @@
     #thera_profile #appointmentSecond_number {
         position: absolute;
         z-index: 1;
-        right: 5px;
+        right: 6px;
         top: 16px;
-        width: 35px;
+        width: 25px;
     }
 
     #thera_profile #uploadProfile {
@@ -358,6 +390,17 @@
 
     #thera_profile #uploadProfile::before {
         height: 175px;
+    }
+
+    #thera_profile #logout_iconSecond {
+        font-size: 50px;
+        color: rgba(48, 83, 125);
+    }
+
+    #thera_profile #UserLogoutSecond {
+        float: left;
+        padding: 5px 10px 5px 17px;
+        cursor: pointer;
     }
 }
 
@@ -394,7 +437,7 @@
 }
 
 
-@media screen and (max-width:767px) {
+@media screen and (max-width:414px) {
 
     #theraLogin-form .container {
         margin-top: 30px;
@@ -441,7 +484,7 @@
     background-color: yellow;
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width:414px) {
     #theraLogin-form .container {
         margin-top: 30px;
     }
