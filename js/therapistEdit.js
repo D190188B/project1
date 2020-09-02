@@ -10,14 +10,9 @@
         let reportIcon = document.querySelector('#report_icon');
         let report_h4 = document.querySelector('#report_h4');
 
-        let settingBtn = document.querySelector('#theraSetting');
-        let settingIcon = document.querySelector('#setting_icon');
-        let setting_h4 = document.querySelector('#setting_h4');
-
         let profilePage = document.querySelector('#Profile');
         let appointmentPage = document.querySelector('#Appointment');
         let reportPage = document.querySelector('#Report');
-        let settingPage = document.querySelector('#Setting');
 
 
         let btnEdit = document.querySelector('#edit');
@@ -48,13 +43,11 @@
             reportIcon.style.color = "white";
             report_h4.style.color = "white";
 
-            settingIcon.style.color = "white";
-            setting_h4.style.color = "white";
 
             profilePage.style.display = "block";
             appointmentPage.style.display = "none";
             reportPage.style.display = "none";
-            settingPage.style.display = "none";
+
         });
 
 
@@ -73,13 +66,11 @@
             report_h4.style.color = "white";
 
 
-            settingIcon.style.color = "white";
-            setting_h4.style.color = "white";
 
             profilePage.style.display = "none";
             appointmentPage.style.display = "block";
             reportPage.style.display = "none";
-            settingPage.style.display = "none";
+
         });
 
 
@@ -97,36 +88,16 @@
             reportIcon.style.color = "black";
             report_h4.style.color = "black";
 
-            settingIcon.style.color = "white";
-            setting_h4.style.color = "white";
+
 
             profilePage.style.display = "none";
             appointmentPage.style.display = "none";
             reportPage.style.display = "block";
-            settingPage.style.display = "none";
+
         });
 
 
-        settingBtn.addEventListener('click', () => {
-
-            profileIcon.style.color = "white";
-            profile_h4.style.color = "white";
-
-            appointmentIcon.style.color = "white";
-            appointment_h4.style.color = "white";
-
-            reportIcon.style.color = "white";
-            report_h4.style.color = "white";
-
-            settingIcon.style.color = "black";
-            setting_h4.style.color = "black";
-
-            profilePage.style.display = "none";
-            appointmentPage.style.display = "none";
-            reportPage.style.display = "none";
-            settingPage.style.display = "block";
-        });
-
+       
 
         btnEdit.addEventListener('click', () => {
             a.removeAttribute('readonly');
@@ -189,8 +160,6 @@
         let report_Second = document.querySelector('#UserReportSecond');
         let reportIcon_Second = document.querySelector('#report_iconSecond');
 
-        let setting_Second = document.querySelector('#UserSettingSecond');
-        let settingIcon_Second = document.querySelector('#setting_iconSecond');
 
 
 
@@ -202,12 +171,11 @@
 
             reportIcon_Second.style.color = "white";
 
-            settingIcon_Second.style.color = "white";
 
             profilePage.style.display = "block";
             appointmentPage.style.display = "none";
             reportPage.style.display = "none";
-            settingPage.style.display = "none";
+
         });
 
         appointment_Second.addEventListener('click', () => {
@@ -218,12 +186,12 @@
 
             reportIcon_Second.style.color = "white";
 
-            settingIcon_Second.style.color = "white";
+
 
             profilePage.style.display = "none";
             appointmentPage.style.display = "block";
             reportPage.style.display = "none";
-            settingPage.style.display = "none";
+
         });
 
         report_Second.addEventListener('click', () => {
@@ -234,28 +202,39 @@
 
             reportIcon_Second.style.color = "black";
 
-            settingIcon_Second.style.color = "white";
+
 
             profilePage.style.display = "none";
             appointmentPage.style.display = "none";
             reportPage.style.display = "block";
-            settingPage.style.display = "none";
+
         });
 
-        setting_Second.addEventListener('click', () => {
-            profileIcon_Second.style.color = "white";
+        let changeBtn = document.querySelector('#change_password');
+        let password_oldPlace = document.querySelector('#password_oldPlace');
+        let password_newPlace = document.querySelector('#password_newPlace');
+        let password_confPlace = document.querySelector('#password_confPlace');
 
+        changeBtn.addEventListener('click',()=>{
+          changeBtn.style.display="none";
+          password_oldPlace.style.display="block";
+          password_newPlace.style.display="block";
+          password_confPlace.style.display="block";
+          
+        });
 
-            appointmentIcon_Second.style.color = "white";
+        let password_feedback = document.querySelector('#password_feedback');
+        let newPassword= document.querySelector('#password_new');
+        let confPassword=document.querySelector('#password_confirm');
+        let save_change = document.querySelector('#change');
+        save_change.addEventListener('click',()=>{
+          var getNewPassword= newPassword.value;
+          var getConfPassword = confPassword.value;
 
-            reportIcon_Second.style.color = "white";
-
-            settingIcon_Second.style.color = "black";
-
-            profilePage.style.display = "none";
-            appointmentPage.style.display = "none";
-            reportPage.style.display = "none";
-            settingPage.style.display = "block";
+          if(getNewPassword != getConfPassword){
+            password_feedback.style.display="block";
+            event.preventDefault();
+          }
         });
 
 
