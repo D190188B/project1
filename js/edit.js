@@ -24,9 +24,6 @@
     let paymentIcon = document.querySelector('#payment_icon');
     let payment_h4 = document.querySelector('#payment_h4');
 
-    let settingBtn = document.querySelector('#settingBtn');
-    let settingIcon = document.querySelector('#setting_icon');
-    let setting_h4 = document.querySelector('#setting_h4');
     let camera_icon = document.querySelector('#camera_icon');
 
     let showInfoPage = document.querySelector('#showInfo');
@@ -47,8 +44,6 @@
       payment_h4.style.color="silver";
       showPayment.style.display="none";
 
-      settingIcon.style.color="silver";
-      setting_h4.style.color="silver";
       });
       
     appointmentBtn.addEventListener('click', ()=>{
@@ -65,8 +60,7 @@
       payment_h4.style.color="silver";
       showPaymentPage.style.display="none";
 
-      settingIcon.style.color="silver";
-      setting_h4.style.color="silver";
+
 
       });
       
@@ -84,28 +78,11 @@
       payment_h4.style.color="black";
       showPaymentPage.style.display="block";
 
-      settingIcon.style.color="silver";
-      setting_h4.style.color="silver";
+
 
       });
       
-    settingBtn.addEventListener('click', ()=>{
-
-      infoIcon.style.color="silver";
-      info_h4.style.color="silver";
-
-      appointmentIcon.style.color="silver";
-      appointment_h4.style.color="silver";
-
-      paymentIcon.style.color="silver";
-      payment_h4.style.color="silver";
-
-      settingIcon.style.color="black";
-      setting_h4.style.color="black";
-      
-      });
     
-
     //Edit
     btnEdit.addEventListener('click',()=>{
         //create button
@@ -167,10 +144,6 @@
         let payment_Second = document.querySelector('#UserPaymentSecond');
         let paymentIcon_Second = document.querySelector('#payment_iconSecond');
 
-        let setting_Second = document.querySelector('#UserSettingSecond');
-        let settingIcon_Second = document.querySelector('#setting_iconSecond');
-
-
 
         profile_Second.addEventListener('click', () => {
             profileIcon_Second.style.color = "black";
@@ -179,8 +152,6 @@
             appointmentIcon_Second.style.color = "white";
 
             paymentIcon_Second.style.color = "white";
-
-            settingIcon_Second.style.color = "white";
 
             showInfoPage.style.display = "block";
             showAppointmentPage.style.display = "none";
@@ -195,8 +166,6 @@
 
             paymentIcon_Second.style.color = "white";
 
-            settingIcon_Second.style.color = "white";
-
             showInfoPage.style.display = "none";
             showAppointmentPage.style.display = "block";
             showPaymentPage.style.display = "none";
@@ -210,26 +179,37 @@
 
             paymentIcon_Second.style.color = "black";
 
-            settingIcon_Second.style.color = "white";
-
             showInfoPage.style.display = "none";
             showAppointmentPage.style.display = "none";
             showPaymentPage.style.display = "block";
         });
 
-        setting_Second.addEventListener('click', () => {
-            profileIcon_Second.style.color = "white";
 
+        let changeBtn = document.querySelector('#change_password');
+        let password_oldPlace = document.querySelector('#password_oldPlace');
+        let password_newPlace = document.querySelector('#password_newPlace');
+        let password_confPlace = document.querySelector('#password_confPlace');
 
-            appointmentIcon_Second.style.color = "white";
+        changeBtn.addEventListener('click',()=>{
+          changeBtn.style.display="none";
+          password_oldPlace.style.display="block";
+          password_newPlace.style.display="block";
+          password_confPlace.style.display="block";
+          
+        });
 
-            paymentIcon_Second.style.color = "white";
+        let password_feedback = document.querySelector('#password_feedback');
+        let newPassword= document.querySelector('#password_new');
+        let confPassword=document.querySelector('#password_confirm');
+        let save_change = document.querySelector('#change');
+        save_change.addEventListener('click',()=>{
+          var getNewPassword= newPassword.value;
+          var getConfPassword = confPassword.value;
 
-            settingIcon_Second.style.color = "black";
-
-            showInfoPage.style.display = "none";
-            showAppointmentPage.style.display = "none";
-            showPaymentPage.style.display = "none";
+          if(getNewPassword != getConfPassword){
+            password_feedback.style.display="block";
+            event.preventDefault();
+          }
         });
 
 
