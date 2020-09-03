@@ -1,20 +1,3 @@
-<?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-mysqli_set_charset($conn, 'utf8');
-?>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,13 +65,14 @@ mysqli_set_charset($conn, 'utf8');
                 <li class="nav-item active">
                     <a class="nav-link" href="Therapistinfo.php" style="color:white">Therapist Job</a>
                 </li>
+                <form action="sessionTop.php" method="POST" id="getLogout"></form>
                 <?php
                 if (isset($_SESSION['id'])) {
                     echo " <li class=\"nav-item active\" id=\"DropDown\"><div class=\"dropdown\">
                         <button onclick=\"myFunction()\" class=\"dropbtn\">" . $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] . "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-down\"></i><i class=\"fa fa-arrow-up\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-up\"></i></button>
                         <div id=\"myDropdown\" class=\"dropdown-content\">
                           <a href=\"profileCopy.php\">Profile</a>
-                          <button type=\"submit\" id=\"logout\" name=\"logout\" onclick=\"return confirm('Are you sure you want to Log out?')\" form=\"Home\">Log out<i class=\"fa fa-sign-out\" aria-hidden=\"true\" id=\"logout_iconSecond\" style=\"margin-left:10px;font-size:20px;\"></i></button>
+                          <button type=\"submit\" id=\"logout\" name=\"logout\" onclick=\"return confirm('Are you sure you want to Log out?')\" form=\"getLogout\">Log out<i class=\"fa fa-sign-out\" aria-hidden=\"true\" id=\"logout_iconSecond\" style=\"margin-left:10px;font-size:20px;\"></i></button>
                         </div>
                       </div></li>";
                 } else {
@@ -104,37 +88,7 @@ mysqli_set_charset($conn, 'utf8');
 
     </nav>
 </header>
-<script>
-    /* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
 
-    let arrowup = document.querySelector("#arrow-up");
-    let arrowdown = document.querySelector('#arrow-down');
-    var status = true;
-
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-
-        arrowup.style.display = "inline-block";
-        arrowdown.style.display = "none";
-    }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
-
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-            arrowup.style.display = "none";
-            arrowdown.style.display = "inline-block";
-        }
-    }
-</script>
+<script src="js/main.js" type="text/javascript"></script>
 
 </html>
