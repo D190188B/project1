@@ -59,7 +59,7 @@
             <input type="file" class="form-control-file" name="profileUpload" id="upload-profile" form="reg-form">
           </div>
 
-          <form id="reg-form" method="POST" enctype="multipart/form-data" class="need-validation" novalidate>
+          <form id="reg-form" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 
             <div class="row" style="margin-top:30px;">
               <div class="col">
