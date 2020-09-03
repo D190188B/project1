@@ -1,32 +1,3 @@
-<head>
-  <link rel="stylesheet" type="text/css" href="css/Profile.css">
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script type="text/javascript">
-    $(document).ready(function(e) {
-
-      let $uploadfile = $('#edit .modal .modal-dialog .modal-content .modal-body input[type="file"]');
-
-      $uploadfile.change(function() {
-        readURL(this);
-      });
-    });
-
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-          $("#edit .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
-          $("#edit .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
-            display: "none"
-          });
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-  </script>
-</head>
-
 <section id="edit">
   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -45,9 +16,16 @@
             <input type="file" class="form-control-file" name="profileUpload" id="edit-profile" form="edit-form">
           </div>
           <form id="edit-form" method="post" enctype="multipart/form-data">
-            <div class="col">
-              <h4>Username</h4>
-              <input type="text" required name="username" id="username" class="form-control" value="<?php echo $_SESSION['name'] ?>">
+            <div class="row" style="margin-top:30px;">
+              <div class="col">
+                <h4 style="color:rgb(34, 19, 48);margin-left: 18px;">First Name</h4>
+                <input type="text" required name="name" id="name" class="form-control" placeholder="username" style="max-width: 250px;margin-left: 15px;">
+              </div>
+
+              <div class="col">
+                <h4 style="color:rgb(34, 19, 48)">Last Name</h4>
+                <input type="text" required name="lastName" id="lastName" class="form-control" placeholder="username" style="max-width: 250px;">
+              </div>
             </div>
 
             <div class="col">
@@ -63,6 +41,16 @@
             <div class="col" style="margin-bottom:10px;">
               <h4>Address</h4>
               <input type="text" required name="address" id="address" class="form-control" placeholder="address" value="<?php echo $_SESSION['address'] ?>">
+            </div>
+
+            <div class="col" style="margin-bottom:10px;">
+              <h4 style="color:rgb(34, 19, 48)">State</h4>
+              <input type="text" required name="state" id="state" class="form-control" placeholder="address">
+            </div>
+
+            <div class="col" style="margin-bottom:10px;">
+              <h4 style="color:rgb(34, 19, 48)">Post Code</h4>
+              <input type="text" required name="postCode" id="postCode" class="form-control" placeholder="address">
             </div>
 
             <div class="col">
@@ -86,5 +74,28 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      $(document).ready(function(e) {
+
+        let $uploadfile = $('#edit .modal .modal-dialog .modal-content .modal-body input[type="file"]');
+
+        $uploadfile.change(function() {
+          readURL(this);
+        });
+      });
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          let reader = new FileReader();
+          reader.onload = function(e) {
+            $("#edit .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
+            $("#edit .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
+              display: "none"
+            });
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
 
     <section>
