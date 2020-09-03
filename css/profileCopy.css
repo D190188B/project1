@@ -199,6 +199,39 @@
 }
 
 
+#profile_copy #change {
+    margin-top: 10px;
+}
+
+#profile_copy #password_oldPlace {
+    display: none;
+}
+
+#profile_copy #password_newPlace {
+    display: none;
+}
+
+#profile_copy #password_confPlace {
+    display: none;
+}
+
+
+#profile_copy #password_feedback {
+    color: red;
+    display: none;
+}
+
+#profile_copy .Password_fail {
+    margin-top: -4px !important;
+    display: none;
+}
+
+#profile_copy .change-success {
+    margin-top: -4px !important;
+    display: none;
+}
+
+
 @media screen and (max-width:414px) {
     #profile_copy .AllInfo .col-md-6 {
         padding-left: 0;
@@ -287,23 +320,23 @@
     #profile_copy .UserIcon {
         float: left;
         border-right: 1px solid black;
-        padding: 5px 25px 5px 12px;
+        margin-left: 21px;
+        padding: 5px 49px 5px 12px;
         cursor: pointer;
     }
 
     #profile_copy .UserAppointment {
-        margin-left: 20px;
+        margin-left: 54px;
         float: left;
         border-right: 1px solid black;
-        padding: 5px 40px 5px 13px;
+        padding: 5px 50px 5px 0px;
         cursor: pointer;
         position: relative;
     }
 
     #profile_copy .UserPayment {
-        margin-left: 25px;
+        margin-left: 38px;
         float: left;
-        border-right: 1px solid black;
         padding: 5px 26px 5px 0;
         cursor: pointer;
     }
@@ -390,15 +423,6 @@
         display: none;
     }
 
-    #profile_copy .Password_fail {
-        margin-top: -4px !important;
-        display: none;
-    }
-
-    #profile_copy .change-success {
-        margin-top: -4px !important;
-        display: none;
-    }
 
     #profile_copy #password_feedback {
         color: red;
@@ -412,11 +436,6 @@
 
     #profile_copy .change-success {
         margin-top: -4px !important;
-        display: none;
-    }
-
-    #profile_copy #password_feedback {
-        color: red;
         display: none;
     }
 
