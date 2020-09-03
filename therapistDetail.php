@@ -1,18 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-session_start();
+include ("sessionTop.php");
 
 //if get therapist id
 if (isset($_GET['id'])) {
@@ -23,13 +10,13 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
             $_SESSION['work_theraID'] = $row['therapist_id'];
-            $_SESSION['name_first'] = $row['name_first'];
-            $_SESSION['name_last'] = $row['name_last'];
-            $_SESSION['about'] = $row['about'];
-            $_SESSION['age'] = $row['age'];
-            $_SESSION['license'] = $row['license'];
-            $_SESSION['profile_image'] = $row['profile_image'];
-            $_SESSION['gender'] = $row['gender'];
+            $_SESSION['therapist_name_first'] = $row['name_first'];
+            $_SESSION['therapist_name_last'] = $row['name_last'];
+            $_SESSION['therapist_about'] = $row['about'];
+            $_SESSION['therapist_age'] = $row['age'];
+            $_SESSION['therapist_license'] = $row['license'];
+            $_SESSION['therapist_profile_image'] = $row['profile_image'];
+            $_SESSION['therapist_gender'] = $row['gender'];
         }
     }
 }
@@ -42,7 +29,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Therapist Detail</title>
 
     <style>
 
@@ -52,9 +39,9 @@ if (isset($_GET['id'])) {
     </style>
 </head>
 
-
-<?php require_once("header1.php") ?>
-
+<header>
+    <?php include("header1.php") ?>
+</header>
 <body>
 
     <section id="theraDetail">
@@ -63,14 +50,14 @@ if (isset($_GET['id'])) {
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 text-center" id="theraTop">
-                        <img src="<?php echo $_SESSION['profile_image'] ?>" alt="image" id="image" name="image">
-                        <h3 class="theraName"><?php echo $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] ?></h3>
-                        <h4 id="theraLic"><?php echo $_SESSION['license'] ?></h4>
+                        <img src="<?php echo $_SESSION['therapist_profile_image'] ?>" alt="image" id="image" name="image">
+                        <h3 class="theraName"><?php echo $_SESSION['therapist_name_first'] . "&nbsp;" . $_SESSION['therapist_name_last'] ?></h3>
+                        <h4 id="theraLic"><?php echo $_SESSION['therapist_license'] ?></h4>
                         <h4 class="paraTop">
-                            Age: <?php echo $_SESSION['age'] ?>
+                            Age: <?php echo $_SESSION['therapist_age'] ?>
                         </h4>
                         <h4 class="paraTop">
-                            Gender:<?php echo $_SESSION['gender'] ?>
+                            Gender:<?php echo $_SESSION['therapist_gender'] ?>
                         </h4>
 
                         <a href="question.php?work_id=<?php echo $_SESSION['work_theraID'] ?>"><button type="submit" name="submit" id="submit" class="btn btn-outline-danger">Work with me!</button></a>
@@ -82,7 +69,7 @@ if (isset($_GET['id'])) {
                     <div class="col-md-12" id="theraAbout">
                         <h3 class="theraAbout">ABOUT ME</h3>
                         <p class="para">
-                            <?php echo $_SESSION['about'] ?>
+                            <?php echo $_SESSION['therapist_about'] ?>
                         </p>
                         <hr>
                     </div>
