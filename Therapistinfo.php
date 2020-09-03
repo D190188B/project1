@@ -1,21 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-
-session_start();
-
-
+include ("sessionTop.php");
 // check sql injection
 function validate_input_text($textValue)
 {
@@ -102,7 +86,7 @@ if (isset($_POST['submit'])) {
   } else {
     $lan = "insert into language values('$generateid','','','')";
     $run = $conn->query($lan) or die($conn->error . __LINE__);
-    
+
     if (empty($_REQUEST['Malay'])) {
       $updateLan = "update language set Malay='No' where thera_ID='$generateid'";
       $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
@@ -212,27 +196,52 @@ if (isset($_POST['submit'])) {
       $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
-      echo '<script>window.alert("Submit successful...!")</script>';
+      echo '<style type="text/css"> 
+      #info .register-success{
+          display:block !important;            
+      }</style>';
     } else {
-      echo '<script>window.alert("This email has already registered...!")</script>';
+      echo '<style type="text/css"> 
+      #info .already-registered{
+          display:block !important;            
+      }</style>';
     }
   } else {
-    echo '<script>window.alert("Error while registration, please check your input again!")</script>';
+    echo '<style type="text/css"> 
+    #info .password-notmatch{
+          display:block !important;            
+      }</style>';
   }
 }
 
 ?>
 <!doctype html>
 <html lang="en">
-<title>therapistInformation</title>
-
 
 <head>
+  <title>therapistInformation</title>
   <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
-</head>
 
-<?php require_once("header1.php") ?>
+</head>
+<header>
+  <?php require_once("header1.php") ?>
+</header>
 <section id="info">
+
+  <div class="alert alert-danger alert-dismissible fade show text-center password-notmatch">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Password are not Match, Please Register Again! ..!</strong>
+  </div>
+
+  <div class="alert alert-success alert-dismissible fade show text-center register-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Register Successful!</strong> You can Login Now!
+  </div>
+
+  <div class="alert alert-danger alert-dismissible fade show text-center already-registered">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>This Email Has Already Registered, Please Use another Email...!</strong>
+  </div>
 
   <body>
     <br />
