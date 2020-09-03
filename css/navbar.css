@@ -95,6 +95,10 @@ button[type="submit"]:focus {
   #header1 a.navbar-brand{
     padding-left:0;
   }
+
+  #header1 ul.navbar-nav{
+    margin-right:0;
+  }
 }
 
 /* .navbar-nav .nav-item button:hover {
