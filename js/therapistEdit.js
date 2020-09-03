@@ -223,6 +223,8 @@
           
         });
 
+
+
         let password_feedback = document.querySelector('#password_feedback');
         let newPassword= document.querySelector('#password_new');
         let confPassword=document.querySelector('#password_confirm');
@@ -237,7 +239,7 @@
           }
         });
 
-
+        
             // change image
     $(document).ready(function(e) {
         let $uploadfile = $('#uploadProfile');
