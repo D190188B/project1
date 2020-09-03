@@ -1,16 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-session_start();
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include ("sessionTop.php");
 
 $email = $_SESSION['email']; //get user email
 $sql = "SELECT * FROM select_question WHERE user_email='$email'"; //get the id from select_question
@@ -107,7 +96,10 @@ if (isset($_POST['upload'])) { //upload appointment
     $date = $_POST['date'];
     $therapistID = $_POST['therapistID'];
 
-    $sql = "INSERT INTO `appointment` VALUES('$generateid','$email','$method','$time','$date','$therapistID',1,1,NOW())";
+    $user_time1 = strtotime($time);
+    $user_time2 = date("h:i a", $user_time1);
+
+    $sql = "INSERT INTO `appointment` VALUES('$generateid','$email','$method','$user_time2','$date','$therapistID',1,1,NOW())";
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result == true) {
@@ -121,6 +113,8 @@ if (isset($_POST['upload'])) { //upload appointment
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment</title>
     <link rel="stylesheet" type="text/css" href="css/appointment.css">
 </head>
