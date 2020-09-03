@@ -19,6 +19,8 @@ session_start();
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Therapist</title>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
@@ -62,67 +64,73 @@ session_start();
                     </div>
                 </div>
             </div>
-            <form action="OurTherapist.php" method="POST">
-                <div class="col-md-12">
-                    <div clas="col-md-12" id="search">
-                        <div class="row">
-                            <input type="search" id="searchText" name="Search" class="form-control mr-sm-2" placeholder="Search">
-                            <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="submit"><i class="fas fa-search"></i></button>
-                        </div>
+
+            <div class="col-md-12">
+                <div clas="col-md-12" id="search">
+                    <div class="row">
+                        <input type="search" id="searchText" name="Search" class="form-control mr-sm-2" placeholder="Search">
+                        <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="submit"><i class="fas fa-search"></i></button>
                     </div>
-            </form>
+                </div>
 
-            <div class="card border-0" style="margin-left: -14px;margin-right:-13px;">
-                <div class="row">
-                    <!-- Show therapist -->
-                    <?php
-                    if (isset($_POST['submit'])) {
-                        $keyword = $_POST['Search'];
-                    }
 
-                    //step:3 for search
-                    $search = "";
-                    if (isset($_POST['Search'])) {
-                        $search = " and name_first like '%" . $keyword . "%' or name_last like '%".$keyword."%'"; //（.）把keyword把search
-                    }
-
-                    $sql = "select * from therapist where statusID='2'" . $search; //有where在sql，search sql 不能再有where 换成and
-                    $result = $conn->query($sql) or die($conn->error.__LINE__); //Define sql, run sql
-                    if ($result->num_rows > 0) { //over 1 database(record) so run
-                        while ($row = $result->fetch_assoc()) {
-                            //display result
-                            $id = $row['therapist_id']; //[] inside is follow database 
-                            $name_first = $row['name_first'];
-                            $name_last = $row['name_last'];
-                            $profile_image = $row['profile_image'];
-                            $license = $row['license'];
-                    ?>
-                            <div class="col-md-4">
-                            <a href="therapistDetail.php?id=<?php echo $id ?>">
-                                <div class="card h-100 border-100">
-                                    <div class="card-body">
-                                            <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
-                                            <h3 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
-                                            <h5 class="therapistedu"><?php echo $license ?></h5>   
-                                    </div>
+                <div class="card border-0" style="margin-left: -14px;margin-right:-13px;">
+                    <div class="row" id="results">
+                        <?php
+                        $sql = "select * from therapist where statusID='2'"; //有where在sql，search sql 不能再有where 换成and
+                        $result = $conn->query($sql) or die($conn->error . __LINE__); //Define sql, run sql
+                        if ($result->num_rows > 0) { //over 1 database(record) so run
+                            while ($row = $result->fetch_assoc()) {
+                                //display result
+                                $id = $row['therapist_id']; //[] inside is follow database 
+                                $name_first = $row['name_first'];
+                                $name_last = $row['name_last'];
+                                $profile_image = $row['profile_image'];
+                                $license = $row['license'];
+                        ?>
+                                <div class="col-md-4">
+                                    <a href="therapistDetail.php?id=<?php echo $id ?>">
+                                        <div class="card h-100 border-100">
+                                            <div class="card-body">
+                                                <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
+                                                <h3 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
+                                                <h5 class="therapistedu"><?php echo $license ?></h5>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                                </a>
-                            </div>
 
-                    <?php
-                        } //while
-                    } //if
-                    ?>
-                    <!-- End -->
+                        <?php
+                            } //while
+                        } //if
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </body>
 </section>
 <!-- Team -->
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#searchbtn').click(function() {
+            var txt = $('#searchText').val();
+            $.ajax({
+                url: "insert.php",
+                method: "post",
+                data: {
+                    search: txt
+                },
+                dataType: "text",
+                success: function(data) {
+                    $('#results').html(data);
+                }
+            });
 
+        });
+    });
+</script>
 
 
 <footer>
