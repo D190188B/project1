@@ -13,25 +13,29 @@ if ($conn->connect_error) {
 }
 
 session_start();
+
+if (isset($_POST['logout'])) {
+  session_destroy();
+  header('refresh: 0; url=Home.php');
+}
 ?>
 
 <!doctype html>
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-
-  <style>
- 
-  </style>
 </head>
 
 <header>
-  <?php require_once("header1.php"); ?>
+  <?php include ("header1.php"); ?>
 </header>
 
 
 <body>
+  <form action="Home.php" method="POST" id="Home" enctype="multipart/form-data"></form>
   <section id="home">
     <div class="container">
       <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="margin-top:55px;">
@@ -87,7 +91,7 @@ session_start();
             <div class="arti-contentRight">
               <p>Counselors in BetterHelp are licensed, trained, experienced, and accredited psychologists (PhD / PsyD), marriage and family therapists (MFT), clinical social workers (LCSW), or licensed professional counselors (LPC). All of them have a Masters Degree or a Doctorate Degree in their field. They have been qualified and certified by their state professional board after successfully completing the necessary education, exams, training and practice. While their experience, expertise and background vary, they all possess at least 3 years and 1,000 hours of hands-on experience. <br></p>
 
-              <button class="btn" type="submit"><a href="#">Meet Our Therapists</a></button>
+              <button class="btn" type="submit"><a href="OurTherapist.php">Meet Our Therapists</a></button>
             </div>
 
           </div>
@@ -110,7 +114,7 @@ session_start();
                 When you need someone to talk to, we're here to listen and help you feel better.<br>
               </p>
 
-              <button class="btn1" type="submit"><a href="#">Make Appointment Now!</a></button>
+              <button class="btn1" type="submit"><a href="question.php?id=1">Get Started</a></button>
             </div>
 
 
@@ -131,7 +135,7 @@ session_start();
                 Discover your personal growth path and learn new coping skills to grow stronger each day.<br><br>
                 Each step on your path is a simple self help activity, designed to help you feel better.<br>
 
-                <button class="btn2"><a href="#">Self Test</a></button>
+                <button class="btn2"><a href="question.php?id=1">Get Started</a></button>
               </p>
 
             </div>
