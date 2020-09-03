@@ -1,18 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-session_start();
+include ("sessionTop.php");
 
 if (isset($_SESSION['id'])) { //if already login
     $id = $_SESSION['id'];
@@ -694,7 +681,6 @@ if ($getTodayNum->num_rows > 0) {
         </div>
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
 
