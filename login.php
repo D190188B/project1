@@ -1,19 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-
-mysqli_set_charset($conn, 'utf8');
+include ("sessionTop.php");
 
 
 //check the pathinfo and upload the file
@@ -41,7 +27,6 @@ function upload_profile($path, $file)
     return $path . $default;
 }
 
-session_start();
 
 //prevent injection
 function validate_input_text($textValue)
@@ -190,10 +175,14 @@ if (isset($_POST['login'])) { //if user login
             while ($row = $result->fetch_assoc()) {
                 //display result
                 $id = $row['id']; //[] inside is follow database 
+                $name_first= $row['name_first'];
+                $name_last = $row['name_last'];
                 $passwordHash = $row['password'];
             }
             if (password_verify($password, $passwordHash)) {
                 $_SESSION['id'] = $id;
+                $_SESSION['name_first'] = $name_first;
+                $_SESSION['name_last'] = $name_last;
                 echo '<script>window.location.assign("Home.php");</script>';
                 exit();
             } else {
@@ -318,7 +307,7 @@ if (isset($_POST['login'])) { //if user login
             </div>
         </div>
     </section>
-    <script>
+    <script type="text/javascript">
         // Disable form submissions if there are invalid fields
         (function() {
             'use strict';
