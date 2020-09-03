@@ -1,34 +1,4 @@
 <head>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(document).ready(function(e) {
-
-            let $uploadfile = $('#registerThera .modal .modal-dialog .modal-content .modal-body input[type="file"]');
-
-            $uploadfile.change(function() {
-                readURL(this);
-            });
-
-        });
-
-        //change the image
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
-                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .img").css({
-                        opacity: "100%"
-                    });
-                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
-                        display: "none"
-                    });
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
     <style>
         #register img {
             margin-left: 283px
@@ -251,7 +221,7 @@
             </div>
         </div>
     </div>
-    <script stype="text/javascript">
+    <script type="text/javascript">
         (function() {
             'use strict';
             window.addEventListener('load', function() {
@@ -269,5 +239,32 @@
                 });
             }, false);
         })();
+
+        $(document).ready(function(e) {
+
+            let $uploadfile = $('#registerThera .modal .modal-dialog .modal-content .modal-body input[type="file"]');
+
+            $uploadfile.change(function() {
+                readURL(this);
+            });
+
+        });
+
+        //change the image
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
+                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .img").css({
+                        opacity: "100%"
+                    });
+                    $("#registerThera .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
+                        display: "none"
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
     <section>
