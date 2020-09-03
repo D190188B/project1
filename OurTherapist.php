@@ -129,6 +129,23 @@ session_start();
             });
 
         });
+
+
+        $('#searchText').change(function() {
+            var txt = $('#searchText').val();
+            $.ajax({
+                url: "insert.php",
+                method: "post",
+                data: {
+                    search: txt
+                },
+                dataType: "text",
+                success: function(data) {
+                    $('#results').html(data);
+                }
+            });
+
+        });
     });
 </script>
 
