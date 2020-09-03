@@ -14,13 +14,6 @@ if ($conn->connect_error) {
 
 session_start();
 
-if (isset($_POST['logout'])) {
-
-    session_destroy();
-    header('location:Home.php');
-}
-
-
 if (isset($_SESSION['id'])) { //if already login
     $id = $_SESSION['id'];
 
@@ -258,11 +251,6 @@ if ($getTodayNum->num_rows > 0) {
     }
 }
 
-if (isset($_POST['sub_logout'])) {
-    session_destroy();
-    header('location:Home.php');
-}
-
 ?>
 
 
@@ -347,27 +335,12 @@ if (isset($_POST['sub_logout'])) {
                         </div>
                     </div>
                     <hr>
-                    <div class="col-md-12 side_left">
-                        <div class="row">
-                            <i class="fa fa-cog" aria-hidden="true" id="setting_icon"></i>
-                            &nbsp;
-                            &nbsp;
-                            <button class="info" name="settingBtn" id="settingBtn">
-                                <h4 id="setting_h4">Setting</h4>
-                            </button>
-                        </div>
-                    </div>
-                    <hr>
                     <div class="col-md-12" style="margin-top: 85px;">
                         <div class="row">
 
                             &nbsp;
                             &nbsp;
                             <form action="profileCopy.php" method="POST" id="save" enctype="multipart/form-data">
-                                <button class="info" form="save" type="submit" name="logout" id="logBtn" onclick="return confirm('Are you sure you want to log out?')" style="padding:7px;">
-                                    <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 23px;padding-top: 3px;float:left"></i>
-                                    <h5 id="logOut" style="float:left;padding-left:5px;">Log out</h5>
-                                </button>
                             </form>
                         </div>
                     </div>
@@ -605,6 +578,7 @@ if (isset($_POST['sub_logout'])) {
                                                     } ?>
 
                                                     <td>
+                                                        <!-- If before due date -->
                                                         <?php if ($user_time4 < $date) {
                                                             echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                         }
@@ -669,7 +643,7 @@ if (isset($_POST['sub_logout'])) {
                                                     } ?>
 
                                                     <td>
-                                                        <?php if (($user_time4 < $date)) {
+                                                        <?php if (($user_time4 > $date)) {
                                                             echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                         }
                                                         ?>
@@ -682,7 +656,7 @@ if (isset($_POST['sub_logout'])) {
                         </div>
                     </div>
 
-                    <div class="col-md-12" id="showPayment" name="showPayment" style="margin-top:20px;">
+                    <div class="col-md-12" id="showPayment" name="showPayment" style="margin-top:20px;height: 535px;">
                         <!-- <div class="row">
                             <div class="col-md-12" style="margin-bottom:10px;">
 
@@ -708,14 +682,11 @@ if (isset($_POST['sub_logout'])) {
                         <div class="UserAppointment" id="UserAppointmentSecond">
                             <i class="fa fa-calendar" aria-hidden="true" id="appointment_iconSecond"></i>
                             <?php if ($appointmentNum != 0) {
-                                echo "<span class=\"badge badge-danger\" style=\"padding:7px;font-size:20px;\" id=\"appointmentSecond_number\">$appointmentNum</span>";
+                                echo "<span class=\"badge badge-danger\" style=\"padding:7px;font-size:20px;margin-right:9px;\" id=\"appointmentSecond_number\">$appointmentNum</span>";
                             } ?>
                         </div>
                         <div class="UserPayment" id="UserPaymentSecond">
                             <i class="fa fa-money" aria-hidden="true" id="payment_iconSecond"></i>
-                        </div>
-                        <div class="UserLogout" id="UserLogoutSecond">
-                            <button style="background:none;border:0;" type="submmit" name="sub_logout" form="save" onclick="return confirm('Are you sure you want to Log out?')"><i class="fa fa-sign-out" aria-hidden="true" id="logout_iconSecond"></i></button>
                         </div>
                     </div>
                 </div>
