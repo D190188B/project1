@@ -1,3 +1,3 @@
 # project1
 ------------------------------------------------------------------------------------------------
-This project was developed by 2 IT19-B students
+This project was developed by the IT19-B students
