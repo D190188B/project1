@@ -7,18 +7,15 @@
 }
 
 #appointment .row select{
-    border: none;
     width: 100%;
     margin-bottom: 10px;
     outline: none;
 }
 
 #appointment input[type="time"]{
-    border: none;
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    outline: none;
 }
 
 #appointment input[type="text"] {
@@ -28,16 +25,6 @@
     outline: none;
 }
 
-#appointment input[type="date"]{
-	border: none;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-#appointment input[type="date"]:focus {
-    outline: none;
-}
 
 #appointment textarea {
     border: none;
@@ -48,24 +35,16 @@
 }
 
 #appointment input[type="submit"] {
-    border: none;
-    border-radius:20px;
-    color: rgb(0, 0, 255);
-    padding: 10px 40px;
-    background-color: #fff;
-    font-weight: 600;
-    margin-top:20px;
-    margin-right:20px;
-    transition: filter .8s ease;
+    background-color: darkblue;
+    border-width: 0;
+    padding: 7px 12px;
+    transition: ease 0.5s;
+    color: white  
 }
 
-
-#appointment input[type="submit"]:focus {
-    outline: none;
-}
-
-#appointment input[type="submit"]:hover {
-    filter: drop-shadow(1px 1px 22px #7582bb);
+#appointment input[type='submit']:hover {
+    background-color: rgba(59,82,114);
+    transition: ease 0.5s;
 }
 
 #appointment .text {
