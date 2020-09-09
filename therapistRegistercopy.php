@@ -1,4 +1,4 @@
-<head>
+
     <style>
         #register img {
             margin-left: 283px
@@ -177,7 +177,7 @@
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Resume(include your certificate photo)</h4>
-                            <input type="file" required name="certificate" id="certificate" class="form-control">
+                            <input type="file" required name="certificate" id="certificate" class="form-control-file">
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -192,13 +192,15 @@
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Password</h4>
                             <input type="password" required name="password" id="password" class="form-control" placeholder="password">
+                            <span id="password_length">Password length must over 6 digits</span>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Confirm Password</h4>
-                            <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control" placeholder="confirm password">
+                            <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control-file" placeholder="confirm password">
+                            <span id="password_same">Password are not same!</span>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -233,6 +235,28 @@
                         if (form.checkValidity() == false) {
                             event.preventDefault();
                             event.stopPropagation();
+                        }
+
+                        if (($('#password').val() != '') && ($('#password').val().length <= 6)) {
+                            $('#password_length').css({
+                                display: "block"
+                            });
+                            event.preventDefault();
+                        } else {
+                            $('#password_length').css({
+                                display: "none"
+                            });
+                        }
+
+                        if ($('#password').val() != $('#confirm_pwd').val()) {
+                            $('#password_same').css({
+                                display: "block"
+                            });
+                            event.preventDefault();
+                        } else {
+                            $('#password_same').css({
+                                display: "none"
+                            });
                         }
                         form.classList.add('was-validated');
                     }, false);
