@@ -278,6 +278,21 @@
     display: none;
 }
 
+#thera_profile #password_empty1 {
+    color: red;
+    display: none;
+}
+
+#thera_profile #password_empty2 {
+    color: red;
+    display: none;
+}
+
+#thera_profile #password_empty3 {
+    color: red;
+    display: none;
+}
+
 @media screen and (max-width:414px) {
     #thera_profile .hand {
         display: block;
