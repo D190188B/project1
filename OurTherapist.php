@@ -1,5 +1,5 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 ?>
 
 <!doctype html>
@@ -55,8 +55,10 @@ include ("sessionTop.php");
             <div class="col-md-12">
                 <div clas="col-md-12" id="search">
                     <div class="row">
-                        <input type="search" id="searchText" name="Search" class="form-control mr-sm-2" placeholder="Search">
-                        <button class="btn my-2 my-sm-12" type="submit" id="searchbtn" name="submit"><i class="fas fa-search"></i></button>
+                        <div class="form-group w-100">
+                            <label for="Search" id="searchWord"><h2>Search</h2></label>
+                            <input type="search" id="searchText" name="Search" class="form-control" placeholder="Search">
+                        </div>
                     </div>
                 </div>
 
@@ -75,12 +77,12 @@ include ("sessionTop.php");
                                 $profile_image = $row['profile_image'];
                                 $license = $row['license'];
                         ?>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <a href="therapistDetail.php?id=<?php echo $id ?>">
-                                        <div class="card h-100 border-100">
+                                        <div class="card h-100 border-0">
                                             <div class="card-body">
                                                 <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
-                                                <h3 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h3>
+                                                <h4 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h4>
                                                 <h5 class="therapistedu"><?php echo $license ?></h5>
                                             </div>
                                         </div>
@@ -107,7 +109,7 @@ include ("sessionTop.php");
                 url: "insert.php",
                 method: "post",
                 data: {
-                    search: txt
+                    search: txt,
                 },
                 dataType: "text",
                 success: function(data) {
@@ -118,7 +120,7 @@ include ("sessionTop.php");
         });
 
 
-        $('#searchText').change(function() {
+        $('#searchText').keyup(function() {
             var txt = $('#searchText').val();
             $.ajax({
                 url: "insert.php",
