@@ -1,79 +1,30 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 
-if (isset($_SESSION['id'])) { //if already login
-    $id = $_SESSION['id'];
+if (isset($_SESSION['client_id'])) { //if already login
+    $id = $_SESSION['client_id'];
 
     $sql = "select * from client where id ='$id'"; //id is database name
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
-            $_SESSION['id'] = $row['id'];
-            $_SESSION['name_first'] = $row['name_first'];
-            $_SESSION['name_last'] = $row['name_last'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['birth'] = $row['birth'];
-            $_SESSION['phone'] = $row['phone'];
-            $_SESSION['address'] = $row['address'];
-            $_SESSION['city'] = $row['city'];
-            $_SESSION['state'] = $row['state'];
-            $_SESSION['post_code'] = $row['post_code'];
-            $_SESSION['profileImage'] = $row['profileImage'];
+            $_SESSION['client_id'] = $row['id'];
+            $_SESSION['client_name_first'] = $row['name_first'];
+            $_SESSION['client_name_last'] = $row['name_last'];
+            $_SESSION['client_email'] = $row['email'];
+            $_SESSION['client_birth'] = $row['birth'];
+            $_SESSION['client_phone'] = $row['phone'];
+            $_SESSION['client_address'] = $row['address'];
+            $_SESSION['client_city'] = $row['city'];
+            $_SESSION['client_state'] = $row['state'];
+            $_SESSION['client_post_code'] = $row['post_code'];
+            $_SESSION['client_profileImage'] = $row['profileImage'];
         }
     }
+} else {
+    echo '<script>window.alert("You must login first!");window.location.assign("login.php")</script>';
 }
-
-
-//check the pathinfo and upload the image
-function upload_profile($path, $file)
-{
-    $targetDir = $path;
-    $default = $_SESSION['profileImage'];
-
-    // get the filename
-    $filename = basename($file['name']);
-    $targetFilePath = $targetDir . $filename;
-    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-    if (!empty($filename)) {
-        // allow certain file format
-        $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
-        if (in_array($fileType, $allowType)) {
-            // upload file to the server
-            if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-                return $targetFilePath;
-            }
-        }
-    }
-    // return default image
-    return $default;
-}
-
-// prevent injection
-function validate_input_text($textValue)
-{
-    if (!empty($textValue)) {
-        $trim_text = trim($textValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_STRING);
-        return $sanitize_str;
-    }
-    return '';
-}
-
-// prevent injection
-function validate_input_email($emailValue)
-{
-    if (!empty($emailValue)) {
-        $trim_text = trim($emailValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_EMAIL);
-        return $sanitize_str;
-    }
-    return '';
-}
-
 
 if (isset($_POST['submit'])) { //if user edit the information
 
@@ -124,14 +75,14 @@ if (isset($_POST['submit'])) { //if user edit the information
         $result = $conn->query($sql) or die($conn->error . __LINE__);
 
         if ($result == true) {
-            $_SESSION['name_first'] = $_POST['nameFirst'];
-            $_SESSION['name_last'] = $_POST['nameLast'];
-            $_SESSION['phone'] = $_POST['phone'];
-            $_SESSION['address'] = $_POST['address'];
-            $_SESSION['city'] = $_POST['city'];
-            $_SESSION['state'] = $_POST['state'];
-            $_SESSION['post_code'] = $_POST['postCode'];
-            $_SESSION['profileImage'] = $profileImage;
+            $_SESSION['client_name_first'] = $_POST['nameFirst'];
+            $_SESSION['client_name_last'] = $_POST['nameLast'];
+            $_SESSION['client_phone'] = $_POST['phone'];
+            $_SESSION['client_address'] = $_POST['address'];
+            $_SESSION['client_city'] = $_POST['city'];
+            $_SESSION['client_state'] = $_POST['state'];
+            $_SESSION['client_post_code'] = $_POST['postCode'];
+            $_SESSION['client_profileImage'] = $profileImage;
 
             header('refresh: 0.5; url=profileCopy.php');
             echo '<style type="text/css"> 
@@ -148,7 +99,7 @@ if (isset($_POST['submit'])) { //if user edit the information
 }
 
 if (isset($_POST['change'])) {
-    $id = $_SESSION['id'];
+    $id = $_SESSION['client_id'];
     $current_Password = $_POST['password_old'];
     $new_Password = $_POST['password_new'];
 
@@ -189,22 +140,21 @@ if (isset($_POST['cancel'])) {
         header('refresh: 0; url=profileCopy.php');
     }
 }
-date_default_timezone_set('Singapore');
 $date = date("Y-m-d");
 
 //show the appointment and therapist
-$email = $_SESSION['email'];
+$email = $_SESSION['client_email'];
 
 
 //display all the appointment
-$sqli = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where user_Email='$email' ORDER BY created_TIME DESC";
+$sqli = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' ORDER BY created_TIME DESC";
 //display all the appointment
 $result = $conn->query($sqli) or die($conn->error . __LINE__);
 
 
 
 //get waiting list
-$wait = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where user_Email='$email' and appointment_status='1' ORDER BY created_TIME DESC";
+$wait = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and appointment_status='1' ORDER BY created_TIME DESC";
 
 //get waiting list
 $getWait = $conn->query($wait) or die($conn->error . __LINE__);
@@ -213,7 +163,7 @@ $getBeNum = $conn->query($wait) or die($conn->error . __LINE__);
 
 
 //get today list
-$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where user_Email='$email' and user_date ='$date' and appointment_status='2' ORDER BY created_TIME DESC";
+$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and user_date ='$date' and appointment_status='2' or appointment_status='5' ORDER BY created_TIME DESC";
 //get today list
 $results = $conn->query($mysql) or die($conn->error . __LINE__);
 //get today number
@@ -341,13 +291,13 @@ if ($getTodayNum->num_rows > 0) {
                                 <div class="row">
                                     <div class="col-md-5">
                                         <img class="camera-icon" src="images/camera-solid.svg" alt="camera" id="camera_icon">
-                                        <img src="<?php echo $_SESSION['profileImage'] ?>" class="img" style="width:150px;height:150px;border-radius:50%;border:1px solid black" name="user_image" id="user_image">
+                                        <img src="<?php echo $_SESSION['client_profileImage'] ?>" class="img" style="width:150px;height:150px;border-radius:50%;border:1px solid black" name="user_image" id="user_image">
                                         <input type="file" name="uploadProfile" id="uploadProfile" form="save" class="form-control-file">
                                         <h6 style="margin-top:20px;" id="changePro">Change profile photo</h6>
                                     </div>
                                     <div class="col-md-7">
-                                        <h4 style="color:black;margin-top:30px;"><?php echo $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] ?></h4>
-                                        <h5 style="color: rgb(160, 160, 160);margin-top:20px;"><?php echo $_SESSION['city'] . ",&nbsp;" . $_SESSION['state'] ?></h5>
+                                        <h4 style="color:black;margin-top:30px;"><?php echo $_SESSION['client_name_first'] . "&nbsp;" . $_SESSION['client_name_last'] ?></h4>
+                                        <h5 style="color: rgb(160, 160, 160);margin-top:20px;"><?php echo $_SESSION['client_city'] . ",&nbsp;" . $_SESSION['client_state'] ?></h5>
                                     </div>
                                 </div>
                             </div>
@@ -357,56 +307,54 @@ if ($getTodayNum->num_rows > 0) {
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">First Name</h5>
-                                <input type="text" class="form-control" name="nameFirst" id="nameFirst" value="<?php echo $_SESSION['name_first'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="nameFirst" id="nameFirst" value="<?php echo $_SESSION['client_name_first'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">Last Name</h5>
-                                <input type="text" class="form-control" name="nameLast" id="nameLast" value="<?php echo $_SESSION['name_last'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="nameLast" id="nameLast" value="<?php echo $_SESSION['client_name_last'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">Email</h5>
-                                <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['email'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="email" id="email" value="<?php echo $_SESSION['client_email'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">Phone Number</h5>
-                                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $_SESSION['phone'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $_SESSION['client_phone'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-12" style="margin-bottom:20px;">
                                 <h5 style="color:black">Address</h5>
-                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $_SESSION['address'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:82%;" readonly>
+                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $_SESSION['client_address'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:82%;" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">City</h5>
-                                <input type="text" class="form-control" name="city" id="city" value="<?php echo $_SESSION['city'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="city" id="city" value="<?php echo $_SESSION['client_city'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">Post Code</h5>
-                                <input type="text" class="form-control" name="postCode" id="postCode" value="<?php echo $_SESSION['post_code'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="postCode" id="postCode" value="<?php echo $_SESSION['client_post_code'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">State</h5>
-                                <input type="text" class="form-control" name="state" id="state" value="<?php echo $_SESSION['state'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="state" id="state" value="<?php echo $_SESSION['client_state'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
 
                             <div class="col-md-6" style="margin-bottom:20px;">
                                 <h5 style="color:black">Birth</h5>
-                                <input type="text" class="form-control" name="birth" id="birth" value="<?php echo $_SESSION['birth'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
+                                <input type="text" class="form-control" name="birth" id="birth" value="<?php echo $_SESSION['client_birth'] ?>" style="border:none;outline:none;background-color:rgb(231, 231, 231);border-radius:5px;padding:5px 10px;width:inherit" readonly>
                             </div>
 
                             <div class="col-md-12 edit" id="editPlace">
                                 <button class="btn btn-outline-primary" name="edit" id="edit">Edit</button>
+                                <button class="btn btn-outline-success" name="submit" id="submit" form="save" onclick="return confirm('Are you sure you want to edit?')">Save Changes</button>
                                 <button name="change_password" id="change_password" class="btn btn-outline-primary">Change Password</button>
-                                <div class="row" style="margin-left:0">
-                                    <button class="btn btn-outline-success" name="submit" id="submit" form="save" onclick="return confirm('Are you sure you want to edit?')">Save Changes</button>
-                                </div>
                             </div>
 
                             <div class="col-md-12" style="margin-bottom:20px;">
@@ -452,15 +400,16 @@ if ($getTodayNum->num_rows > 0) {
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div id="today" class="container tab-pane active">
+                                <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
                                             <th>Appointment_ID</th>
-                                            <th>Client Email</th>
+                                            <th>Therapist</th>
                                             <th>Consultation method</th>
                                             <th>Appointment</th>
                                             <th>Status</th>
-                                            <th>Action</th>
+                                            <th>Action<br></th>
                                         </tr>
                                     </thead>
 
@@ -470,12 +419,19 @@ if ($getTodayNum->num_rows > 0) {
                                             while ($row = $results->fetch_assoc()) {
                                                 //display result
                                                 $appointment_id = $row['appointment_id'];
+                                                $therapist_nameFirst = $row['name_first'];
+                                                $therapist_nameLast = $row['name_last'];
                                                 $user_Email = $row['user_Email'];
                                                 $user_method = $row['user_method'];
                                                 $user_time = $row['user_time'];
                                                 $user_date = $row['user_date'];
                                                 $appointment_status = $row['appointment_status'];
                                                 $created_TIME = $row['created_TIME'];
+
+                                                $statusID = $row['id'];
+                                                $status = $row['status'];
+
+                                                $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
 
                                                 $user_time1 = strtotime($row['user_time']);
                                                 $user_time2 = date("h:i a", $user_time1);
@@ -491,15 +447,25 @@ if ($getTodayNum->num_rows > 0) {
                                         ?>
                                                 <tr>
                                                     <td><?php echo $appointment_id ?></td>
-                                                    <td><?php echo $user_Email ?></td>
+                                                    <td><?php echo $therapist_name ?></td>
                                                     <td><?php echo $user_method ?></td>
                                                     <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
-                                                    <?php if ($appointment_status == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Approved</td>";
-                                                    } else if ($appointment_status == '3') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">Rejected</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">Pending</td>";
+                                                    <?php switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
                                                     } ?>
 
                                                     <td>
@@ -514,11 +480,12 @@ if ($getTodayNum->num_rows > 0) {
                                 </table>
                             </div>
                             <div id="waiting" class="container tab-pane fade">
+                                <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
                                             <th>Appointment_ID</th>
-                                            <th>Client Email</th>
+                                            <th>Therapist</th>
                                             <th>Consultation method</th>
                                             <th>Appointment</th>
                                             <th>Status</th>
@@ -532,12 +499,19 @@ if ($getTodayNum->num_rows > 0) {
                                             while ($row = $getWait->fetch_assoc()) {
                                                 //display result
                                                 $appointment_id = $row['appointment_id'];
+                                                $therapist_nameFirst = $row['name_first'];
+                                                $therapist_nameLast = $row['name_last'];
                                                 $user_Email = $row['user_Email'];
                                                 $user_method = $row['user_method'];
                                                 $user_time = $row['user_time'];
                                                 $user_date = $row['user_date'];
                                                 $appointment_status = $row['appointment_status'];
                                                 $created_TIME = $row['created_TIME'];
+
+                                                $statusID = $row['id'];
+                                                $status = $row['status'];
+
+                                                $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
 
                                                 $user_time1 = strtotime($row['user_time']);
                                                 $user_time2 = date("h:i a", $user_time1);
@@ -553,15 +527,25 @@ if ($getTodayNum->num_rows > 0) {
                                         ?>
                                                 <tr>
                                                     <td><?php echo $appointment_id ?></td>
-                                                    <td><?php echo $user_Email ?></td>
+                                                    <td><?php echo $therapist_name ?></td>
                                                     <td><?php echo $user_method ?></td>
                                                     <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
-                                                    <?php if ($appointment_status == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Approved</td>";
-                                                    } else if ($appointment_status == '3') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">Rejected</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">Pending</td>";
+                                                    <?php switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
                                                     } ?>
 
                                                     <td>
@@ -579,11 +563,12 @@ if ($getTodayNum->num_rows > 0) {
 
                             </div>
                             <div id="earlier" class="container tab-pane fade">
+                                <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
                                             <th>Appointment_ID</th>
-                                            <th>Client Email</th>
+                                            <th>Therapist</th>
                                             <th>Consultation method</th>
                                             <th>Appointment</th>
                                             <th>Status</th>
@@ -597,12 +582,19 @@ if ($getTodayNum->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
                                                 //display result
                                                 $appointment_id = $row['appointment_id'];
+                                                $therapist_nameFirst = $row['name_first'];
+                                                $therapist_nameLast = $row['name_last'];
                                                 $user_Email = $row['user_Email'];
                                                 $user_method = $row['user_method'];
                                                 $user_time = $row['user_time'];
                                                 $user_date = $row['user_date'];
                                                 $appointment_status = $row['appointment_status'];
                                                 $created_TIME = $row['created_TIME'];
+
+                                                $statusID = $row['id'];
+                                                $status = $row['status'];
+
+                                                $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
 
                                                 $user_time1 = strtotime($row['user_time']);
                                                 $user_time2 = date("h:i a", $user_time1);
@@ -618,15 +610,25 @@ if ($getTodayNum->num_rows > 0) {
                                         ?>
                                                 <tr>
                                                     <td><?php echo $appointment_id ?></td>
-                                                    <td><?php echo $user_Email ?></td>
+                                                    <td><?php echo $therapist_name ?></td>
                                                     <td><?php echo $user_method ?></td>
                                                     <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
-                                                    <?php if ($appointment_status == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Approved</td>";
-                                                    } else if ($appointment_status == '4') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">Cancel</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">Pending</td>";
+                                                    <?php switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
                                                     } ?>
 
                                                     <td>
