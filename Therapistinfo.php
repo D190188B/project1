@@ -1,85 +1,9 @@
 <?php
 include ("sessionTop.php");
-// check sql injection
-function validate_input_text($textValue)
-{
-  if (!empty($textValue)) {
-    $trim_text = trim($textValue);
-    // remove illegal character
-    $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_STRING);
-    return $sanitize_str;
-  }
-  return '';
-}
-
-//check sql injection
-function validate_input_email($emailValue)
-{
-  if (!empty($emailValue)) {
-    $trim_text = trim($emailValue);
-    // remove illegal character
-    $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_EMAIL);
-    return $sanitize_str;
-  }
-  return '';
-}
-
-
-//upload user image
-function upload_thera($path, $file)
-{
-  $targetDir = $path;
-  $default = "beard.png";
-  // get the filename
-  $filename = basename($file['name']);
-  $targetFilePath = $targetDir . $filename;
-  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-  if (!empty($filename)) {
-    // allow certain file format
-    $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
-    if (in_array($fileType, $allowType)) {
-      // upload file to the server
-      if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
-      }
-    }
-  } else {
-    // return default image
-    return $path . $default;
-  }
-}
-
-// upload user's certificate
-function upload_certificate($path, $file)
-{
-  $targetDir = $path;
-  $default = "beard.png";
-  // get the filename
-  $filename = basename($file['name']);
-  $targetFilePath = $targetDir . $filename;
-  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-  if (!empty($filename)) {
-    // allow certain file format
-    $allowType = array('docx', 'doc', 'pptx', 'pdf', 'jpg', 'png', 'jpeg');
-    if (in_array($fileType, $allowType)) {
-      // upload file to the server
-      if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
-      }
-    }
-  } else {
-    // return default image
-    return '';
-  }
-}
 
 //if submit the registration
 if (isset($_POST['submit'])) {
   $generateid = uniqid();
-
-
 
   if ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Chinese']))) {
     echo '<script>window.alert("Please checked at least one language")</script>';
@@ -113,9 +37,22 @@ if (isset($_POST['submit'])) {
   }
 
   $error = array();
-  $license = $_POST['license'];
-  $gender = $_POST['gender'];
-  $age = $_POST['age'];
+  
+  $license = validate_input_text($_POST['license']);
+  if (empty($license)) {
+    $error[] = "You forgot to enter your license";
+  }
+
+  
+  $gender = validate_input_text($_POST['gender']);
+  if (empty($gender)) {
+    $error[] = "You forgot to enter your gender";
+  }
+
+  $age = validate_input_text($_POST['age']);
+  if(empty($age)){
+    $error[] = "You forgot to enter your age";
+  }
 
   $firstname = validate_input_text($_POST['firstname']);
   if (empty($firstname)) {
