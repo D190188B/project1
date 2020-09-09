@@ -89,7 +89,7 @@
         
         //hide the edit button
         btnEdit.style.display="none";
-        btnSubmit.style.display="block";
+        btnSubmit.style.display="inline-block";
 
         //remove all the readonly
         a.removeAttribute('readonly');
