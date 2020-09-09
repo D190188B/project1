@@ -171,6 +171,34 @@ animation-name: fadeInUp;
 animation-duration:2s;
 }
 
+#info .register-success {
+  margin-bottom: -44px !important;
+  margin-top: 56px !important;
+  display: none;
+}
+
+#info .already-registered {
+  margin-bottom: -44px !important;
+  margin-top: 56px !important;
+  display: none;
+}
+
+#register #password_length {
+  color: red;
+  display: none;
+}
+
+#register #password_same{
+  color: red;
+  display: none;
+}
+
+#info .password-notmatch {
+  margin-bottom: -44px !important;
+  margin-top: 56px !important;
+  display: none;
+}
+
 @media screen and (max-width:414px){
   #info .container{
   padding-left:3px;
