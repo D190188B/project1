@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
     <link rel="stylesheet" type="text/css" href="css/navbar.css">
     <link rel="stylesheet" type="text/css" href="css/appointment.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -67,14 +68,20 @@
                 </li>
                 <form action="sessionTop.php" method="POST" id="getLogout"></form>
                 <?php
-                if (isset($_SESSION['id'])) {
-                    echo " <li class=\"nav-item active\" id=\"DropDown\"><div class=\"dropdown\">
-                        <button onclick=\"myFunction()\" class=\"dropbtn\">" . $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] . "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-down\"></i><i class=\"fa fa-arrow-up\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-up\"></i></button>
-                        <div id=\"myDropdown\" class=\"dropdown-content\">
+                if (isset($_SESSION['client_id'])) {
+                    $client = " <li class=\"nav-item active\" id=\"DropDown\"><div class=\"dropdown\">";
+                    $client .= "<button onclick=\"myFunction()\" class=\"dropbtn\">" . $_SESSION['client_name_first'] . "&nbsp;" . $_SESSION['client_name_last'] . "<i class=\"fa fa-arrow-down\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-down\"></i><i class=\"fa fa-arrow-up\" aria-hidden=\"true\" style=\"margin-left:10px;font-size: 12px;\" id=\"arrow-up\"></i></button>";
+                    if ($appointmentNumTop > 0) {
+                        $client .= "<span class=\"badge badge-danger\" style=\"padding:5px;font-size:20px;\" id=\"appointmentSecond_number\">$appointmentNumTop</span>";
+                    }
+
+                    $client .= "<div id=\"myDropdown\" class=\"dropdown-content\">
                           <a href=\"profileCopy.php\">Profile</a>
                           <button type=\"submit\" id=\"logout\" name=\"logout\" onclick=\"return confirm('Are you sure you want to Log out?')\" form=\"getLogout\">Log out<i class=\"fa fa-sign-out\" aria-hidden=\"true\" id=\"logout_iconSecond\" style=\"margin-left:10px;font-size:20px;\"></i></button>
                         </div>
                       </div></li>";
+
+                      echo $client;
                 } else {
                     echo "<li class=\"nav-item active\"><a class=\"nav-link\" href=\"login.php\" style=\"color:white;\">Login</a></li>";
                 }
@@ -89,6 +96,36 @@
     </nav>
 </header>
 
-<script src="js/main.js" type="text/javascript"></script>
-
 </html>
+
+<script type="text/javascript">
+    /* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+
+    let arrowup = document.querySelector("#arrow-up");
+    let arrowdown = document.querySelector('#arrow-down');
+
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+
+        arrowup.style.display = "inline-block";
+        arrowdown.style.display = "none";
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+            arrowup.style.display = "none";
+            arrowdown.style.display = "inline-block";
+        }
+    }
+</script>
