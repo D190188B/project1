@@ -2,25 +2,15 @@
   background-image: radial-gradient(circle farthest-corner at 1.3% 2.8%, rgba(239, 249, 249, 1) 0%, rgba(182, 199, 226, 1) 100.2%);
 }
 
-.content .content-top {
-  height: auto;
-  width: 100%;
+#home .carousel-item img{
+    height:500px;
 }
-
-.content .content-top img {
-  width: 100%;
-  height: 560px;
-  position: relative;
-}
-
 
 
 .arti {
   width: 100%;
   margin-top: 10px;
 }
-
-
 
 
 .arti .arti-contentWhole1 {
