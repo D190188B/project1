@@ -9,7 +9,7 @@
     font: normal 500 16px var(--font-ubuntu);
 }
 
-#login-form{
+#login-form {
     padding: 10% 0;
     background-color: rgba(155, 190, 222);
     background-size: cover;
@@ -27,7 +27,7 @@
     transition: filter .8s ease;
 }
 
-#register .modal .modal-dialog .modal-content .modal-body .inverse:hover{
+#register .modal .modal-dialog .modal-content .modal-body .inverse:hover {
     filter: drop-shadow(1px 1px 22px #7584bb);
 }
 
@@ -89,6 +89,15 @@
     background-color: yellow;
 }
 
+#register #password_length {
+    color: red;
+    display: none;
+}
+
+#register #password_same{
+    color: red;
+    display: none;
+}
 @media screen and (max-width:767px) {
     #login-form .container {
         margin-top: 30px;
@@ -169,13 +178,13 @@
     display: none;
 }
 
-.error{
+.error {
     margin-bottom: 50px !important;
     margin-top: -78px !important;
     display: none;
 }
 
-.password-notmatch{
+.password-notmatch {
     margin-bottom: 50px !important;
     margin-top: -78px !important;
     display: none;
@@ -209,6 +218,7 @@
     margin-top: 20px;
     margin-right: 20px;
     transition: ease 0.5s;
+    cursor: pointer;
 }
 
 #reg-form input[type='submit']:focus {
