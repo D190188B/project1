@@ -1,45 +1,30 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
+include("sessionTop.php");
 
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-
-
-session_start();
-
-if (isset($_SESSION['id'])) { //if already login
-    $id = $_SESSION['id'];
+if (isset($_SESSION['client_id'])) { //if already login
+    $id = $_SESSION['client_id'];
 
     $sql = "select * from client where id ='$id'"; //id is database name
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) { //over 1 database(record) so run
         while ($row = $result->fetch_assoc()) {
-            $_SESSION['id'] = $row['id'];
-            $_SESSION['name_first'] = $row['name_first'];
-            $_SESSION['name_last'] = $row['name_last'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['birth'] = $row['birth'];
-            $_SESSION['phone'] = $row['phone'];
-            $_SESSION['address'] = $row['address'];
-            $_SESSION['city'] = $row['city'];
-            $_SESSION['state'] = $row['state'];
-            $_SESSION['post_code'] = $row['post_code'];
-            $_SESSION['profileImage'] = $row['profileImage'];
+            $_SESSION['client_id'] = $row['id'];
+            $_SESSION['client_name_first'] = $row['name_first'];
+            $_SESSION['client_name_last'] = $row['name_last'];
+            $_SESSION['client_email'] = $row['email'];
+            $_SESSION['client_birth'] = $row['birth'];
+            $_SESSION['client_phone'] = $row['phone'];
+            $_SESSION['client_address'] = $row['address'];
+            $_SESSION['client_city'] = $row['city'];
+            $_SESSION['client_state'] = $row['state'];
+            $_SESSION['client_post_code'] = $row['post_code'];
+            $_SESSION['client_profileImage'] = $row['profileImage'];
         }
     }
 }
 
-$email = $_SESSION['email'];
+$email = $_SESSION['client_email'];
 $sql = "SELECT * FROM select_question WHERE user_email='$email'"; //id is database name
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 if ($result->num_rows > 0) {
@@ -76,24 +61,24 @@ if ($choices->num_rows > 0) {
     while ($row = $choices->fetch_assoc()) {
         $choice1 = $row['choice_ID'];
         $_SESSION['user_email'] = $row['user_email'];
-        if ($choice1 == 5) {
-            $_SESSION['choice_gender'] = $choice1;
-        } else if ($choice1 == 6) {
-            $_SESSION['choice_gender'] = $choice1;
-        } else if ($choice1 == 7) {
-            $_SESSION['choice_gender'] = $choice1;
-        } else if ($choice1 == 8) {
-            $_SESSION['choice_age'] = $choice1;
-        } else if ($choice1 == 9) {
-            $_SESSION['choice_age'] = $choice1;
-        } else if ($choice1 == 10) {
-            $_SESSION['choice_age'] = $choice1;
-        } else if ($choice1 == 98) {
-            $_SESSION['choice_lan'] = $choice1;
-        } else if ($choice1 == 99) {
-            $_SESSION['choice_lan'] = $choice1;
-        } else if ($choice1 == 100) {
-            $_SESSION['choice_lan'] = $choice1;
+        switch ($choice1) {
+            case 5:
+            case 6:
+            case 7:
+                $_SESSION['choice_gender'] = $choice1;
+                break;
+
+            case 8:
+            case 9:
+            case 10:
+                $_SESSION['choice_age'] = $choice1;
+                break;
+
+            case 98:
+            case 99:
+            case 100:
+                $_SESSION['choice_lan'] = $choice1;
+                break;
         }
     }
 }
@@ -102,7 +87,7 @@ if ($choices->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
+    <title>Show Result</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
@@ -110,16 +95,15 @@ if ($choices->num_rows > 0) {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <style>
-
-
+        body {
+            background-color: rgba(210, 232, 243) !important;
+        }
     </style>
 </head>
 <!DOCTYPE html>
 <html lang="en">
 <section id="showResult">
-
     <body>
-
         <h3>Answer the questions and get matched a suitable therapist!</h3>
         <hr id="ans">
         <div class="container">
@@ -130,7 +114,7 @@ if ($choices->num_rows > 0) {
 
 
                     <div class="row">
-                        <?php include ("ResultExtend.php")?>
+                        <?php include("ResultExtend.php") ?>
 
                         <div class="col-md-12">
                             <form action="showResult.php" method="POST" id="cancel">
