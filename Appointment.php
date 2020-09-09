@@ -3,7 +3,7 @@ include("sessionTop.php");
 date_default_timezone_set('Singapore');
 
 
-$email = $_SESSION['email']; //get user email
+$email = $_SESSION['client_email']; //get user email
 $sql = "SELECT * FROM select_question WHERE user_email='$email'"; //get the id from select_question
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 if ($result->num_rows > 0) {
@@ -23,36 +23,12 @@ $query = "select * from user_choices where selectID='$generateid'";
 $choices = $conn->query($query) or die($conn->error . __LINE__);
 $choice = $choices->fetch_assoc();
 
-//prevent injection
-function validate_input_text($textValue)
-{
-    if (!empty($textValue)) {
-        $trim_text = trim($textValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_STRING);
-        return $sanitize_str;
-    }
-    return '';
-}
-
-//prevent injection
-function validate_input_email($emailValue)
-{
-    if (!empty($emailValue)) {
-        $trim_text = trim($emailValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_EMAIL);
-        return $sanitize_str;
-    }
-    return '';
-}
-
 if (isset($_SESSION['work_id'])) {
-
-    if (isset($_SESSION['id'])) {
-
+    if (isset($_SESSION['client_id'])) {
         if (!empty($_SESSION['work_id'])) {
+            $email = $_SESSION['client_email'];
             $therapist_id = $_SESSION['work_id'];
+            $_SESSION['appointment_thera'] = $_SESSION['work_id'];
             $sql = "SELECT * FROM therapist where therapist_id='$therapist_id'"; //id is database name
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
@@ -84,14 +60,16 @@ if (isset($_SESSION['work_id'])) {
             $result1 = $run->fetch_assoc();
         }
     } else {
+        $_SESSION['work_id'] = '';
         echo '<script>window.alert("You must login first..!!");window.location.assign("login.php")</script>';
     }
 }
 
 if (isset($_GET['id'])) { //get therapist id
-    $email = $_SESSION['email'];
-    $id = $_GET['id'];
-    $sql = "select * from therapist where therapist_id='$id'";
+    $email = $_SESSION['client_email'];
+    $_SESSION['rec_work_id'] = $_GET['id'];
+    $_SESSION['appointment_thera'] = $_SESSION['rec_work_id'];
+    $sql = "select * from therapist where therapist_id='" . $_SESSION['rec_work_id'] . "'";
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result->num_rows > 0) {
@@ -113,6 +91,7 @@ if (isset($_GET['id'])) { //get therapist id
     $run = $conn->query($sqli) or die($conn->error . __LINE__);
     $result1 = $run->fetch_assoc();
 }
+
 
 
 if (isset($_POST['upload'])) { //upload appointment
@@ -158,8 +137,10 @@ if (isset($_POST['upload'])) { //upload appointment
             header('refresh: 3; url=Home.php');
             $_SESSION['generate_id'] = '';
             $_SESSION['user_email'] = '';
+            $_SESSION['work_id'] = '';
+            $_SESSION['rec_work_id'] = '';
         }
-    }else{
+    } else {
         $msg = "<div class='alert alert-danger'>Something error, Please Try Again!</div>";
     }
 }
@@ -174,8 +155,8 @@ function build_calendar($month, $year)
     // Create connection #scawx
     $conn = new mysqli($servername, $username, $password, $database);
 
+    $sql = "SELECT * FROM appointment where therapist_ID='" . $_SESSION['appointment_thera'] . "'";
 
-    $sql = "SELECT * FROM appointment";
     //display all the appointment
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
@@ -347,7 +328,7 @@ function build_calendar($month, $year)
                             <!-- <div class="row">
                                     <div class="col-md-6">
                                         <h5 style="color:white">Email</h5>
-                                        <input type="text" class="form-control" name="email" value="<?php echo $_SESSION['email'] ?>" readonly>
+                                        <input type="text" class="form-control" name="email" value="<?php echo $_SESSION['client_email'] ?>" readonly>
                                     </div>
 
                                     <div class="col-md-6">
@@ -444,7 +425,7 @@ function build_calendar($month, $year)
 
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="email" class="form-control" name="email" value="<?php echo $_SESSION['email'] ?>" readonly>
+                                        <input type="email" class="form-control" name="email" value="<?php echo $_SESSION['client_email'] ?>" readonly>
                                     </div>
 
                                     <div class="form-group">
