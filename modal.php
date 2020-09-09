@@ -129,6 +129,7 @@
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Password</h4>
               <input type="password" required name="rePassword" id="rePassword" class="form-control" placeholder="password">
+              <span id="password_length">Password length must over 6 digits</span>
               <div class="valid-feedback">Valid.</div>
               <div class="invalid-feedback">Please fill out this field.</div>
             </div>
@@ -136,6 +137,7 @@
             <div class="col">
               <h4 style="color:rgb(34, 19, 48)">Confirm Password</h4>
               <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control" placeholder="confirm password">
+              <span id="password_same">Password are not same!</span>
               <div class="valid-feedback">Valid.</div>
               <div class="invalid-feedback">Please fill out this field.</div>
               <small id="confirm_error" class="text-danger"></small>
@@ -159,13 +161,13 @@
       </div>
     </div>
   </div>
-  <script>
+  <script type="text/javascript">
     // Disable form submissions if there are invalid fields
     (function() {
       'use strict';
       window.addEventListener('load', function() {
         // Get the forms we want to add validation styles to
-        var forms = document.getElementsByClassName('need-validation');
+        var forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function(form) {
           form.addEventListener('submit', function(event) {
@@ -173,10 +175,62 @@
               event.preventDefault();
               event.stopPropagation();
             }
+
+            if (($('#rePassword').val() != '') && ($('#rePassword').val().length <= 6)) {
+              $('#password_length').css({
+                display: "block"
+              });
+              event.preventDefault();
+            }else{
+              $('#password_length').css({
+                display: "none"
+              });
+            }
+
+          if ($('#rePassword').val() != $('#confirm_pwd').val()) {
+              $('#password_same').css({
+                display: "block"
+              });
+              event.preventDefault();
+            }else{
+              $('#password_same').css({
+                display: "none"
+              });
+            }
+
+            $('#rePassword').keyup(function() {
+            if (($('#rePassword').val() != '') && ($('#rePassword').val().length <= 6)) {
+              $('#password_length').css({
+                display: "block"
+              });
+              event.preventDefault();
+            }else{
+              $('#password_length').css({
+                display: "none"
+              });
+            }
+          });
+            
+            $('#confirm_pwd').keyup(function() {
+            if ($('#rePassword').val() != $('#confirm_pwd').val()) {
+              $('#password_same').css({
+                display: "block"
+              });
+              event.preventDefault();
+            }else{
+              $('#password_same').css({
+                display: "none"
+              });
+            }
+          });
+
             form.classList.add('was-validated');
           }, false);
         });
       }, false);
+
+
     })();
+
   </script>
 </section>
