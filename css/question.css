@@ -1,37 +1,23 @@
-#Question {
-    background-color: rgb(255, 255, 255);
-
-}
 
 #Question ul.choices {
     padding-top: 10px;
 }
 
-#Question li {
+#Question .question-form li {
     list-style: none;
     padding-bottom: 10px;
     padding-left: 20px;
-    margin-left: 250px;
 }
 
 #Question span {
     padding-left: 10px;
 }
 
-#Question .container {
-    display: block;
-    padding: 30px 0 30px 0;
-    background-color: rgb(241, 241, 241);
-    margin-top: 30px;
-    width: 100vw;
-    height: auto;
-    border-radius: 20px;
-}
 
 #Question h3 {
     text-align: center;
     color: rgba(59, 82, 114);
-    margin-top: 70px;
+    margin-top: 5px;
 }
 
 #Question .container h4.question-text {
@@ -48,12 +34,11 @@
     border: 1px solid black;
 }
 
-#Question .container .question-form {
-    font-size: 20px;
-}
-
-#Question .container .question-form input[type='submit'] {
-    margin: 30px 0 0 310px;
+#Question .question-form {
+    font-size: 17px;
+    background-color: rgb(241, 241, 241);
+    border-radius: 20px;
+    padding: 20px;
 }
 
 #Question p {
@@ -63,22 +48,73 @@
 }
 
 #Question p#over {
-
     margin-left: 10px;
     font-size: 19px;
     font-weight: 500;
     display: none;
+    margin-top: 0 !important;
 }
 
 #Question .container .question-form input#cancel {
     margin-left: 20px;
 }
 
-#showResult {
-    background-color: rgb(255, 255, 255);
 
+#Question p {
+    font-size: 20px;
+    color: rgba(34, 19, 48) !important;
+    margin-top: 50px !important;
 }
 
+#Question .carousel-caption {
+    position: absolute !important;
+    right: 15% !important;
+    bottom: -136px !important;
+    left: 15% !important;
+    z-index: 10 !important;
+    padding-top: 20px !important;
+    color: #fff;
+    text-align: center;
+}
+
+#Question .carousel-caption p {
+    margin-top: 0 !important;
+    font-size: 14px;
+}
+
+#Question .carousel {
+    position: relative !important;
+    max-width: 1000px !important;
+    height: 200px !important;
+}
+
+#Question .carousel-inner {
+    position: relative !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    height: 100% !important;
+}
+
+#Question .carousel-indicators {
+    position: absolute !important;
+    right: 0 !important;
+    bottom: -50px !important;
+    left: 0 !important;
+    z-index: 15 !important;
+    display: -ms-flexbox;
+    display: flex !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+    padding-left: 0 !important;
+    margin-right: 15% !important;
+    margin-left: 15% !important;
+    list-style: none !important;
+    background-color: rgba(34, 19, 48);
+}
+
+#Question h2 {
+    color: rgba(34, 19, 48);
+}
 
 #showResult #Question span {
     padding-left: 10px;
@@ -140,7 +176,7 @@
 
 #showResult button {
     margin: 40px 60px 0 0;
-    
+
 }
 
 #showResult {
