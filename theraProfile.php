@@ -38,7 +38,7 @@ if (isset($_SESSION['thera_id'])) {
             $_SESSION['thera_gender'] = $row['gender'];
         }
     }
-}else{
+} else {
     echo '<script>window.alert("You must login first!");window.location.assign("therapistLogin.php")</script>';
 }
 
@@ -169,6 +169,8 @@ if (isset($_POST['submit'])) {
         #thera_profile .edit-success{
                 display:block !important;            
             }</style>';
+
+            header("refresh:1;url=theraProfile.php");
         } else {
             echo '<style type="text/css"> 
         #thera_profile .edit-fail{
@@ -182,12 +184,34 @@ $time = date("h:i a");
 $date = date("Y-m-d");
 
 //display today list
-$sql = "SELECT * FROM appointment LEFT JOIN therastatus on appointment.appointment_status=therastatus.id where therapist_ID='$id' and user_date='$date' and appointment_status='2' ORDER BY created_TIME DESC";
+$sql = "SELECT * FROM appointment LEFT JOIN therastatus on appointment.appointment_status=therastatus.id where therapist_ID='$id' and user_date='$date' and appointment_status='2' or appointment_status='5' ORDER BY created_TIME DESC";
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 //display today number
 $getRe = $conn->query($sql) or die($conn->error . __LINE__);
 //display totol number
 $getReTol = $conn->query($sql) or die($conn->error . __LINE__);
+
+//check if the time and date equals or greater than current, then the status will change to In consultation(If already accepted)
+$checkCurrent = $conn->query($sql) or die($conn->error . __LINE__);
+
+//check if the time and date equals or greater than current, then the status will change to In consultation(execute)
+if ($checkCurrent->num_rows > 0) {
+    while ($row = $checkCurrent->fetch_assoc()) {
+        //display result
+        $appointment_id = $row['appointment_id'];
+        $user_time = $row['user_time'];
+        $user_date = $row['user_date'];
+        $appointment_status = $row['appointment_status'];
+
+        $user_time3 = strtotime($row['user_date']);
+        $user_time4 = date("Y-m-d", $user_time3);
+
+        if (($user_time <= $time) && ($user_time4 <= $date) && ($appointment_status == 2)) {
+            $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
+            $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+        }
+    }
+}
 
 //display waiting number
 $wait = "SELECT * FROM appointment LEFT JOIN therastatus on appointment.appointment_status=therastatus.id where therapist_ID='$id' and appointment_status='1' ORDER BY created_TIME DESC";
@@ -249,6 +273,18 @@ if (isset($_POST['cancel'])) {
     }
 }
 
+if (isset($_POST['finish'])) {
+    $id = $_POST['finish']; //id
+    $statusID = 6;
+
+    $sql = "update appointment set appointment_status='$statusID' where appointment_id='$id'"; //set status=3 where therapist_id == this.id
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result == true) {
+        header('refresh: 0; url=theraProfile.php');
+    }
+}
+
 if (isset($_POST['change'])) {
     $id = $_SESSION['thera_id'];
     $current_Password = $_POST['password_old'];
@@ -270,7 +306,7 @@ if (isset($_POST['change'])) {
             display:block !important;            
         }</style>';
 
-        header('refresh: 1; url=theraProfile.php');
+            header('refresh: 1; url=theraProfile.php');
         }
     } else {
         echo '<style type="text/css"> 
@@ -445,17 +481,17 @@ if (isset($_POST['sub_logout'])) {
                                 <div class="col-md-12" style="margin-bottom:20px;">
                                     <div class="col-md-6" id="password_oldPlace">
                                         <h4 style="color:black">Current Password</h4>
-                                        <input type="text" class="form-control" form="thera_save" name="password_old" id="password_old" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please enter your current password">
+                                        <input type="text" required class="form-control" form="thera_save" name="password_old" id="password_old" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please enter your current password">
                                     </div>
 
                                     <div class="col-md-6" id="password_newPlace">
                                         <h4 style="color:black;margin-top:5px;">New Password</h4>
-                                        <input type="text" class="form-control" name="password_new" form="thera_save" id="password_new" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Minimum 6 characters with a number">
+                                        <input type="text" required class="form-control" name="password_new" form="thera_save" id="password_new" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Minimum 6 characters with a number">
                                     </div>
 
                                     <div class="col-md-6" id="password_confPlace">
                                         <h4 style="color:black;margin-top:5px;">Confirm Password</h4>
-                                        <input type="text" class="form-control" name="password_confirm" form="thera_save" id="password_confirm" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please retype your password">
+                                        <input type="text" required class="form-control" name="password_confirm" form="thera_save" id="password_confirm" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please retype your password">
                                         <span id="password_feedback">Password are not same!</span><br>
                                         <button class="btn btn-outline-success" type="submit" name="change" id="change" form="thera_save" onclick="return confirm('Are you sure you want to change the password?')">Change Password</button>
                                     </div>
@@ -485,7 +521,7 @@ if (isset($_POST['sub_logout'])) {
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div id="today" class="container tab-pane active"><br>
+                            <div id="today" class="container tab-pane active">
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
@@ -517,23 +553,32 @@ if (isset($_POST['sub_logout'])) {
                                                 $user_time3 = strtotime($row['user_date']);
                                                 $user_time4 = date("Y-m-d", $user_time3);
 
-                                                $user_time5 = strtotime($row['created_TIME']);
-                                                $user_time6 = date("Y-m-d h:i a", $user_time5);
-
-
                                         ?>
                                                 <tr>
                                                     <td><?php echo $appointment_id ?></td>
                                                     <td><?php echo $user_Email ?></td>
                                                     <td><?php echo $user_method ?></td>
                                                     <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
-                                                    <?php if ($statusID == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else if ($statusID == '3') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } ?>
+                                                    <?php
+
+                                                    switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                    }
+                                                    ?>
 
                                                     <td><?php if ($statusID == '1') {
                                                             echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-info btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$appointment_id\" id=\"accept\" form=\"thera_save\">Accept</button>";
@@ -543,7 +588,7 @@ if (isset($_POST['sub_logout'])) {
                                         } ?></tbody>
                                 </table>
                             </div>
-                            <div id="waiting" class="container tab-pane fade"><br>
+                            <div id="waiting" class="container tab-pane fade">
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
@@ -571,29 +616,35 @@ if (isset($_POST['sub_logout'])) {
                                                 $status = $row['status'];
                                                 $created_TIME = $row['created_TIME'];
 
-                                                $user_time1 = strtotime($row['user_time']);
-                                                $user_time2 = date("h:i a", $user_time1);
 
                                                 $user_time3 = strtotime($row['user_date']);
                                                 $user_time4 = date("Y-m-d", $user_time3);
-
-                                                $user_time5 = strtotime($row['created_TIME']);
-                                                $user_time6 = date("Y-m-d h:i a", $user_time5);
-
 
                                         ?>
                                                 <tr>
                                                     <td><?php echo $appointment_id ?></td>
                                                     <td><?php echo $user_Email ?></td>
                                                     <td><?php echo $user_method ?></td>
-                                                    <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
-                                                    <?php if ($statusID == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else if ($statusID == '3') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } ?>
+                                                    <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
+                                                    <?php
+                                                    switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                    }
+                                                    ?>
 
                                                     <td><?php if ($statusID == '1') {
                                                             echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-info btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$appointment_id\" id=\"accept\" form=\"thera_save\">Accept</button>";
@@ -605,7 +656,7 @@ if (isset($_POST['sub_logout'])) {
                                 </table>
 
                             </div>
-                            <div id="earlier" class="container tab-pane fade"><br>
+                            <div id="earlier" class="container tab-pane fade">
                                 <table class="table table-striped custab text-center">
                                     <thead>
                                         <tr>
@@ -633,9 +684,6 @@ if (isset($_POST['sub_logout'])) {
                                                 $status = $row['status'];
                                                 $created_TIME = $row['created_TIME'];
 
-                                                $user_time1 = strtotime($row['user_time']);
-                                                $user_time2 = date("h:i a", $user_time1);
-
                                                 $user_time3 = strtotime($row['user_date']);
                                                 $user_time4 = date("Y-m-d", $user_time3);
 
@@ -648,17 +696,34 @@ if (isset($_POST['sub_logout'])) {
                                                     <td><?php echo $appointment_id ?></td>
                                                     <td><?php echo $user_Email ?></td>
                                                     <td><?php echo $user_method ?></td>
-                                                    <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
-                                                    <?php if ($statusID == '2') {
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else if ($statusID == '4') {
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } else {
-                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
-                                                    } ?>
+                                                    <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
+                                                    <?php
+                                                    switch ($statusID) {
+                                                        case 1:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 2:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 4:
+                                                            echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 5:
+                                                            echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                        case 6:
+                                                            echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
+                                                            break;
+                                                    }
+                                                    ?>
 
-                                                    <td><?php if ($statusID == '1') {
-                                                            echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-info btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$appointment_id\" id=\"accept\" form=\"thera_save\">Accept</button>";
+                                                    <td><?php switch ($statusID) {
+                                                            case 1:
+                                                                echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-info btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$appointment_id\" id=\"accept\" form=\"thera_save\">Accept</button>";
+                                                                break;
+                                                            case 5:
+                                                                echo "<button name=\"finish\" type=\"submit\" class=\"btn btn-outline-success my-2 btn-xs\" onclick=\"return confirm('Please ensure the consultation was finish')\" value=\"$appointment_id\" id=\"finish\" form=\"thera_save\">Accept</button>";
+                                                                break;
                                                         } ?><button name="cancel" type="submit" form="thera_save" class="btn btn-danger btn-xs" value="<?php echo $appointment_id ?>" onclick="return confirm('Are you sure you want to cancel?')">Cancel</button></td>
                                                 </tr>
                                         <?php }
