@@ -1,64 +1,14 @@
 <?php
-include ("sessionTop.php");
-
-
-//check the pathinfo and upload the file
-function upload_profile($path, $file)
-{
-    $targetDir = $path;
-    $default = "beard.png";
-
-    // get the filename
-    $filename = basename($file['name']);
-    $targetFilePath = $targetDir . $filename;
-    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-    if (!empty($filename)) {
-        // allow certain file format
-        $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
-        if (in_array($fileType, $allowType)) {
-            // upload file to the server
-            if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-                return $targetFilePath;
-            }
-        }
-    }
-    // return default image
-    return $path . $default;
-}
-
-
-//prevent injection
-function validate_input_text($textValue)
-{
-    if (!empty($textValue)) {
-        $trim_text = trim($textValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_STRING);
-        return $sanitize_str;
-    }
-    return '';
-}
-
-//prevent injection
-function validate_input_email($emailValue)
-{
-    if (!empty($emailValue)) {
-        $trim_text = trim($emailValue);
-        // remove illegal character
-        $sanitize_str = filter_var($trim_text, FILTER_SANITIZE_EMAIL);
-        return $sanitize_str;
-    }
-    return '';
-}
-
-
+include("sessionTop.php");
 
 if (isset($_POST['submit'])) { //if user register an account
     // error variable.
     $error = array();
 
-    $birth = $_POST['birth'];
+    $birth = mysqli_real_escape_string($conn, $_POST['birth']);
+    if (empty($birth)) {
+        $error[] = "You forgot to enter your brith";
+    }
 
     $firstname = validate_input_text($_POST['firstname']);
     if (empty($firstname)) {
@@ -110,8 +60,8 @@ if (isset($_POST['submit'])) { //if user register an account
         $error[] = "You forgot to enter your Confirm Password";
     }
 
-
     $files = $_FILES['profileUpload'];
+
     $profileImage = upload_profile('./images/profile/', $files);
 
 
@@ -175,14 +125,14 @@ if (isset($_POST['login'])) { //if user login
             while ($row = $result->fetch_assoc()) {
                 //display result
                 $id = $row['id']; //[] inside is follow database 
-                $name_first= $row['name_first'];
+                $name_first = $row['name_first'];
                 $name_last = $row['name_last'];
                 $passwordHash = $row['password'];
             }
             if (password_verify($password, $passwordHash)) {
-                $_SESSION['id'] = $id;
-                $_SESSION['name_first'] = $name_first;
-                $_SESSION['name_last'] = $name_last;
+                $_SESSION['client_id'] = $id;
+                $_SESSION['client_name_first'] = $name_first;
+                $_SESSION['client_name_last'] = $name_last;
                 echo '<script>window.location.assign("Home.php");</script>';
                 exit();
             } else {
@@ -205,13 +155,12 @@ if (isset($_POST['login'])) { //if user login
     }
 }
 ?>
+
 <!doctype html>
 <html lang="en">
 
 <head>
     <title>Login</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <header>
     <?php require_once("header1.php"); ?>
@@ -298,7 +247,7 @@ if (isset($_POST['login'])) { //if user login
                             </div>
 
                             <div class="submit-btn text-center my-3">
-                                <input type="submit" name="login" value="submit">
+                                <input type="submit" name="login" value="submit" id="submitBtn">
                             </div>
 
                         </form>
@@ -307,27 +256,27 @@ if (isset($_POST['login'])) { //if user login
             </div>
         </div>
     </section>
-    <script type="text/javascript">
-        // Disable form submissions if there are invalid fields
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                // Get the forms we want to add validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() == false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
 </body>
+<script>
+    // Disable form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('should-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 <?php include("modal.php") ?>
 
 </html>
