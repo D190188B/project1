@@ -123,7 +123,7 @@ function client_Table()
 
         $number_of_results = mysqli_num_rows($result);
         //define how many results you want per page
-        $results_per_page = 3;
+        $results_per_page = 5;
 
         //determine number of total pages available
         $number_of_pages = ceil($number_of_results / $results_per_page);
