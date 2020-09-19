@@ -4,78 +4,74 @@ $generateID = uniqid();
 
 //if user get started the question
 if (isset($_GET['id'])) {
+    $_SESSION['rec_work_id'] = $_GET['id'];
+    $_SESSION['generate_id'] = $generateID;
+    $user_ID = $_SESSION['client_id'];
+    $_SESSION['work_id'] = '';
+    $sql = "select * from client where id ='$user_ID'"; //id is database name
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-    if (isset($_SESSION['client_id'])) {
-        $user_ID = $_SESSION['client_id'];
-        $_SESSION['work_id'] = '';
-        $sql = "select * from client where id ='$user_ID'"; //id is database name
-        $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-
-
-
-        if ($result->num_rows > 0) { //over 1 database(record) so run
-            while ($row = $result->fetch_assoc()) {
-                $_SESSION['client_email'] = $row['email'];
-            }
+    if ($result->num_rows > 0) { //over 1 database(record) so run
+        while ($row = $result->fetch_assoc()) {
+            $_SESSION['client_email'] = $row['email'];
         }
-
-        $mysqli = "SELECT * FROM appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status=1 or appointment_status=2 or appointment_status=5";
-        $check = $conn->query($mysqli) or die($conn->error . __LINE__);
-        $count = mysqli_num_rows($check);
-
-
-        if ($count > 0) {
-            echo '<script>window.alert("You must finish the current consultation first!");window.location.assign("Help.php")</script>';
-        } else {
-            $sqli = "insert into select_question values('$generateID','" . $_SESSION['client_email'] . "')";
-            $run = $conn->query($sqli) or die($conn->error . __LINE__);
-        }
-    } else {
-        $_SESSION['work_id'] = '';
-        echo '<script>window.alert("You must login first!");window.location.assign("login.php")</script>';
     }
-}
 
-if (isset($_GET['work_id'])) {
+    $mysqli = "SELECT * FROM appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status=1 or appointment_status=2 or appointment_status=5";
+    $check = $conn->query($mysqli) or die($conn->error . __LINE__);
+    $count = mysqli_num_rows($check);
 
-    if (isset($_SESSION['client_id'])) {
-        $user_ID = $_SESSION['client_id'];
-        $work_id = $_GET['work_id'];
-        $_SESSION['work_id'] = $work_id;
-
-
-
-        $sql = "select * from client where id ='$user_ID'"; //id is database name
-        $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-
-        if ($result->num_rows > 0) { //over 1 database(record) so run
-            while ($row = $result->fetch_assoc()) {
-                $_SESSION['client_email'] = $row['email'];
-            }
-        }
-
-        $mysqli = "SELECT * FROM appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status=1 or appointment_status=2 or appointment_status=5";
-        $check = $conn->query($mysqli) or die($conn->error . __LINE__);
-        $count = mysqli_num_rows($check);
-
-        if ($count > 0) {
-            echo '<script>window.alert("You must finish the current consultation first!");window.location.assign("Help.php")</script>';
-        } else {
-            $sqli = "insert into select_question values('$generateID','" . $_SESSION['client_email'] . "')";
-            $run = $conn->query($sqli) or die($conn->error . __LINE__);
-        }
-    } else {
+    if ($count > 0) {
+        $_SESSION['rec_work_id'] = '';
         $_SESSION['work_id'] = '';
-        echo '<script>window.alert("You must login first!");window.location.assign("login.php")</script>';
+        echo '<script>window.alert("You must finish the current consultation first!");window.location.assign("Help.php")</script>';
+    } else {
+        $sqli = "insert into select_question values('$generateID','" . $_SESSION['client_email'] . "')";
+        $run = $conn->query($sqli) or die($conn->error . __LINE__);
     }
+
+
+} else if (isset($_GET['work_id'])) {
+    $_SESSION['work_id'] = $_GET['work_id'];
+    $_SESSION['generate_id'] = $generateID;
+    $user_ID = $_SESSION['client_id'];
+    $_SESSION['rec_work_id'] = '';
+    $sql = "select * from client where id ='$user_ID'"; //id is database name
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result->num_rows > 0) { //over 1 database(record) so run
+        while ($row = $result->fetch_assoc()) {
+            $_SESSION['client_email'] = $row['email'];
+        }
+    }
+
+    $mysqli = "SELECT * FROM appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status=1 or appointment_status=2 or appointment_status=5";
+    $check = $conn->query($mysqli) or die($conn->error . __LINE__);
+    $count = mysqli_num_rows($check);
+
+    if ($count > 0) {
+        $_SESSION['rec_work_id'] = '';
+        $_SESSION['work_id'] = '';
+        echo '<script>window.alert("You must finish the current consultation first!");window.location.assign("Help.php")</script>';
+    } else {
+        $sqli = "insert into select_question values('$generateID','" . $_SESSION['client_email'] . "')";
+        $run = $conn->query($sqli) or die($conn->error . __LINE__);
+    }
+
+} else if (((empty($_SESSION['rec_work_id'])) && (empty($_SESSION['work_id']))) && (isset($_SESSION['client_id']))) {
+    $_SESSION['rec_work_id'] = '';
+    $_SESSION['work_id'] = '';
+    echo '<script>window.alert("You cannot directly access this page...!");window.location.assign("help.php")</script>';
+    
+} else{
+    $_SESSION['rec_work_id'] = '';
+    $_SESSION['work_id'] = '';
+    echo '<script>window.alert("You must login first!");window.location.assign("login.php")</script>';
 }
 
 
 //get the id from select_question
 $Email = $_SESSION['client_email'];
-$work_id = $_SESSION['work_id'];
 
 
 $sql = "SELECT * FROM `select_question` WHERE user_email='$Email'";
@@ -190,7 +186,7 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
     }
 
     $_SESSION['work_id'] = '';
-    $work_id = '';
+    $_SESSION['rec_work_id'] = '';
     echo '<script>window.location.assign("help.php");</script>';
 }
 
@@ -268,7 +264,9 @@ if (isset($_POST['finish'])) { //if done
                                 <h4 class="question-text"><strong><?php echo $_SESSION['question_text'] ?></strong></h4>
                             <?php
                             } else { ?>
-                                <center><h4 class="question-text"><strong>You've completed the questionnaire!</strong></h4></center>
+                                <center>
+                                    <h4 class="question-text"><strong>You've completed the questionnaire!</strong></h4>
+                                </center>
                             <?php
                             }
                             ?>
@@ -304,7 +302,7 @@ if (isset($_POST['finish'])) { //if done
                             <!-- Current id -->
                             <input name="big_id" type="hidden" value="<?php echo $_SESSION['generate_id'] ?>">
                             <!-- current user email -->
-                            <input name="email" type="hidden" value="<?php echo $_SESSION['client_email'] ?>">
+                            <input name="email" type="hidden" value="<?php echo $_SESSION['user_email'] ?>">
                         </form>
                     </div>
 
