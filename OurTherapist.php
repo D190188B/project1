@@ -55,9 +55,28 @@ include("sessionTop.php");
             <div class="col-md-12">
                 <div clas="col-md-12" id="search">
                     <div class="row">
-                        <div class="form-group w-100">
-                            <label for="Search" id="searchWord"><h2>Search</h2></label>
-                            <input type="search" id="searchText" name="Search" class="form-control" placeholder="Search">
+                        <div class="col-md-6">
+                            <div class="form-group w-100">
+                                <label for="searchText" id="searchWord">
+                                    <h2>Search</h2>
+                                </label>
+                                <input type="search" id="searchText" name="Search" class="form-control" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <div class="form-group w-100">
+                                <label for="licenseType" style="display:block">
+                                    <h2>Sort by License Type</h2>
+                                </label>
+                                <select name="licenseType" class="custom-select" style="width:50%;" id="licenseType">
+                                    <option value="All" class="getLicense">All</option>
+                                    <option value="Clinical Social Worker" class="getLicense">Clinical Social Worker</option>
+                                    <option value="Marriage & Family Therapist" class="getLicense">Marriage & Family Therapist</option>
+                                    <option value="Mental Health Counselor" class="getLicense">Mental Health Counselor</option>
+                                    <option value="Professional Counselor" class="getLicense">Professional Counselor</option>
+                                    <option value="Psychologist" class="getLicense">Psychologist</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,44 +119,7 @@ include("sessionTop.php");
     </body>
 </section>
 <!-- Team -->
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#searchbtn').click(function() {
-            var txt = $('#searchText').val();
-            $.ajax({
-                url: "insert.php",
-                method: "post",
-                data: {
-                    search: txt,
-                },
-                dataType: "text",
-                success: function(data) {
-                    $('#results').html(data);
-                }
-            });
-
-        });
-
-
-        $('#searchText').keyup(function() {
-            var txt = $('#searchText').val();
-            $.ajax({
-                url: "insert.php",
-                method: "post",
-                data: {
-                    search: txt
-                },
-                dataType: "text",
-                success: function(data) {
-                    $('#results').html(data);
-                }
-            });
-
-        });
-    });
-</script>
-
+<script src="js/main.js" type="text/javascript"></script>
 
 <footer>
     <?php require_once("footer.php"); ?>
