@@ -221,6 +221,16 @@
     display: none;
 }
 
+#profile_copy #password_empty1 {
+    color: red;
+    display: none;
+}
+
+#profile_copy #password_empty2 {
+    color: red;
+    display: none;
+}
+
 #profile_copy .Password_fail {
     margin-top: -4px !important;
     display: none;
