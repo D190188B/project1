@@ -225,16 +225,32 @@
 
 
         let password_feedback = document.querySelector('#password_feedback');
-        let newPassword= document.querySelector('#password_new');
-        let confPassword=document.querySelector('#password_confirm');
+        let password_empty1=document.querySelector('#password_empty1');
+        let password_empty2=document.querySelector('#password_empty2');
+        let newPassword = document.querySelector('#password_new');
+        let confPassword = document.querySelector('#password_confirm');
         let save_change = document.querySelector('#change');
 
-        save_change.addEventListener('click',()=>{
-          var getNewPassword= newPassword.value;
+        save_change.addEventListener('click', () => {
+          var getNewPassword = newPassword.value;
           var getConfPassword = confPassword.value;
 
-          if(getNewPassword != getConfPassword){
+          if((getNewPassword != getConfPassword) && (!getNewPassword=='') && (!getConfPassword=='')){
             password_feedback.style.display="block";
+            password_empty1.style.display="none";
+            password_empty2.style.display="none";
+            event.preventDefault();
+          }else if((getNewPassword=='') && (!getConfPassword=='')){
+            password_empty1.style.display="block";
+            password_empty2.style.display="none";
+            event.preventDefault();
+          }else if ((getConfPassword=='') && (!getNewPassword=='')){
+            password_empty2.style.display="block";
+            password_empty1.style.display="none";
+            event.preventDefault();
+          }else if((getConfPassword=='') && (getNewPassword=='')){
+            password_empty1.style.display="block";
+            password_empty2.style.display="block";
             event.preventDefault();
           }
         });
