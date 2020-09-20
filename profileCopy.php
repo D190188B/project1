@@ -65,9 +65,9 @@ if (isset($_POST['submit'])) { //if user edit the information
         $error[] = "You forgot to enter your postCode";
     }
 
-
     $files = $_FILES['uploadProfile'];
-    $profileImage = upload_profile('./images/profile/', $files);
+    $profileImage = upload_Editprofile('./images/profile/', $files);
+
 
     if (empty($error)) {
         $sql = "update client set name_first='$nameFirst',name_last='$nameLast',phone='$phone',address='$address',city='$city',post_code='$postCode',state='$state',profileImage='$profileImage' where id='$id'";
@@ -189,10 +189,6 @@ if ($getTodayNum->num_rows > 0) {
 }
 
 ?>
-
-
-
-
 
 <head>
     <meta charset="UTF-8">
@@ -366,12 +362,15 @@ if ($getTodayNum->num_rows > 0) {
                                 <div class="col-md-6" id="password_newPlace">
                                     <h4 style="color:black;margin-top:5px;">New Password</h4>
                                     <input type="text" class="form-control" name="password_new" form="save" id="password_new" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Minimum 6 characters with a number">
+                                    <span id="password_empty1">Password cannot be empty!</span>
                                 </div>
 
                                 <div class="col-md-6" id="password_confPlace">
                                     <h4 style="color:black;margin-top:5px;">Confirm Password</h4>
                                     <input type="text" class="form-control" name="password_confirm" form="save" id="password_confirm" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please retype your password">
-                                    <span id="password_feedback">Password are not same!</span><br>
+                                    <span id="password_feedback">Password are not same!</span>
+                                    <span id="password_empty2">Password cannot be empty!</span>
+                                    <br>
                                     <button class="btn btn-outline-success" type="submit" name="change" id="change" form="save" onclick="return confirm('Are you sure you want to change the password?')">Change Password</button>
                                 </div>
                             </div>
@@ -682,7 +681,6 @@ if ($getTodayNum->num_rows > 0) {
             </div>
         </div>
     </section>
-
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
 
