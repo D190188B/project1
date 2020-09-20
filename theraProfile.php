@@ -481,18 +481,20 @@ if (isset($_POST['sub_logout'])) {
                                 <div class="col-md-12" style="margin-bottom:20px;">
                                     <div class="col-md-6" id="password_oldPlace">
                                         <h4 style="color:black">Current Password</h4>
-                                        <input type="text" required class="form-control" form="thera_save" name="password_old" id="password_old" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please enter your current password">
+                                        <input type="text" class="form-control" form="thera_save" name="password_old" id="password_old" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please enter your current password">
                                     </div>
 
                                     <div class="col-md-6" id="password_newPlace">
                                         <h4 style="color:black;margin-top:5px;">New Password</h4>
-                                        <input type="text" required class="form-control" name="password_new" form="thera_save" id="password_new" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Minimum 6 characters with a number">
+                                        <input type="text" class="form-control" name="password_new" form="thera_save" id="password_new" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Minimum 6 characters with a number">
+                                        <span id="password_empty1">Password cannot be empty!</span>
                                     </div>
 
                                     <div class="col-md-6" id="password_confPlace">
                                         <h4 style="color:black;margin-top:5px;">Confirm Password</h4>
-                                        <input type="text" required class="form-control" name="password_confirm" form="thera_save" id="password_confirm" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please retype your password">
-                                        <span id="password_feedback">Password are not same!</span><br>
+                                        <input type="text" class="form-control" name="password_confirm" form="thera_save" id="password_confirm" value="" style="outline:none;border-radius:5px;width:50%;font-size:18px;width:100%" placeholder="Please retype your password">
+                                        <span id="password_feedback">Password are not same!</span>
+                                        <span id="password_empty2">Password cannot be empty!</span><br>
                                         <button class="btn btn-outline-success" type="submit" name="change" id="change" form="thera_save" onclick="return confirm('Are you sure you want to change the password?')">Change Password</button>
                                     </div>
                                 </div>
