@@ -3,13 +3,17 @@ include ("sessionTop.php");
 
 //if submit the registration
 if (isset($_POST['submit'])) {
-  $generateid = uniqid();
+  $generateid = uniqid();//declare the unique id
 
+  //if all the checkboxes haven't checked, will ask him checked again
   if ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Chinese']))) {
     echo '<script>window.alert("Please checked at least one language")</script>';
-  } else {
+
+  } else {//if atleast one checkbox has been checked
+    //insert the id
     $lan = "insert into language values('$generateid','','','')";
     $run = $conn->query($lan) or die($conn->error . __LINE__);
+
 
     if (empty($_REQUEST['Malay'])) {
       $updateLan = "update language set Malay='No' where thera_ID='$generateid'";
@@ -43,7 +47,6 @@ if (isset($_POST['submit'])) {
     $error[] = "You forgot to enter your license";
   }
 
-  
   $gender = validate_input_text($_POST['gender']);
   if (empty($gender)) {
     $error[] = "You forgot to enter your gender";
@@ -118,7 +121,7 @@ if (isset($_POST['submit'])) {
   $profileImage = upload_thera('./images/therapists/', $files);
 
 
-
+  //if no error
   if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
     // register a new user
     $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
@@ -133,17 +136,20 @@ if (isset($_POST['submit'])) {
       $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
+      //display successful statement
       echo '<style type="text/css"> 
       #info .register-success{
           display:block !important;            
       }</style>';
     } else {
+      //display already registered statement
       echo '<style type="text/css"> 
       #info .already-registered{
           display:block !important;            
       }</style>';
     }
   } else {
+    //display password not match statement
     echo '<style type="text/css"> 
     #info .password-notmatch{
           display:block !important;            
