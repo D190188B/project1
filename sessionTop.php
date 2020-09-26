@@ -93,6 +93,30 @@ function upload_profile($path, $file)
   return $path . $default;
 }
 
+function upload_Editprofile($path, $file)
+{
+  $targetDir = $path;
+  $default =$_SESSION['client_profileImage'];
+
+  // get the filename
+  $filename = basename($file['name']);
+  $targetFilePath = $targetDir . $filename;
+  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+  if (!empty($filename)) {
+    // allow certain file format
+    $allowType = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
+    if (in_array($fileType, $allowType)) {
+      // upload file to the server
+      if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+        return $targetFilePath;
+      }
+    }
+  }
+  // return default image
+  return $default;
+}
+
 
 // upload user's certificate
 function upload_certificate($path, $file)
