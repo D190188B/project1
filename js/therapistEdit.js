@@ -209,58 +209,115 @@
         });
 
 
-        let changeBtn = document.querySelector('#change_password');
-        let password_oldPlace = document.querySelector('#password_oldPlace');
-        let password_newPlace = document.querySelector('#password_newPlace');
-        let password_confPlace = document.querySelector('#password_confPlace');
-
-        changeBtn.addEventListener('click', () => {
-          changeBtn.style.display = "none";
-          password_oldPlace.style.display = "block";
-          password_newPlace.style.display = "block";
-          password_confPlace.style.display = "block";
-
-        });
-
-
-
-        let password_feedback = document.querySelector('#password_feedback');
-        let password_empty1=document.querySelector('#password_empty1');
-        let password_empty2=document.querySelector('#password_empty2');
-        let newPassword = document.querySelector('#password_new');
-        let confPassword = document.querySelector('#password_confirm');
-        let save_change = document.querySelector('#change');
-
-        save_change.addEventListener('click', () => {
-          var getNewPassword = newPassword.value;
-          var getConfPassword = confPassword.value;
-
-          if((getNewPassword != getConfPassword) && (!getNewPassword=='') && (!getConfPassword=='')){
-            password_feedback.style.display="block";
-            password_empty1.style.display="none";
-            password_empty2.style.display="none";
-            event.preventDefault();
-          }else if((getNewPassword=='') && (!getConfPassword=='')){
-            password_empty1.style.display="block";
-            password_empty2.style.display="none";
-            event.preventDefault();
-          }else if ((getConfPassword=='') && (!getNewPassword=='')){
-            password_empty2.style.display="block";
-            password_empty1.style.display="none";
-            event.preventDefault();
-          }else if((getConfPassword=='') && (getNewPassword=='')){
-            password_empty1.style.display="block";
-            password_empty2.style.display="block";
-            event.preventDefault();
-          }
-        });
-
-
         // change image
         $(document).ready(function (e) {
           let $uploadfile = $('#uploadProfile');
           $uploadfile.change(function () {
             readURL(this);
+          });
+
+          $('#change_password').click(function () {
+            $('#change_password').css({
+              display: "none"
+            });
+            $('#password_oldPlace').css({
+              display: "block"
+            });
+            $('#password_newPlace').css({
+              display: "block"
+            });
+
+            $('#password_confPlace').css({
+              display: "block"
+            });
+          });
+          $('#change').click(function () {
+            if (($('#password_new').val() == $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length <= 6)) {
+              $('#password_feedback').css({
+                display: "none"
+              })
+              $('#password_empty1').css({
+                display: "none"
+              })
+              $('#password_empty2').css({
+                display: "none"
+              })
+              $('#password_length').css({
+                display: "block"
+              });
+              event.preventDefault();
+
+            } else if (($('#password_new').val() == '') && ($('#password_confirm').val() != '')) {
+              $('#password_feedback').css({
+                display: "block"
+              })
+              $('#password_empty1').css({
+                display: "block"
+              })
+              $('#password_empty2').css({
+                display: "none"
+              })
+              $('#password_length').css({
+                display: "none"
+              });
+              event.preventDefault();
+            } else if (($('#password_confirm').val() == '') && ($('#password_new').val() != '')) {
+              $('#password_feedback').css({
+                display: "block"
+              })
+              $('#password_empty1').css({
+                display: "none"
+              })
+              $('#password_empty2').css({
+                display: "block"
+              })
+              $('#password_length').css({
+                display: "none"
+              });
+              event.preventDefault();
+            } else if (($('#password_confirm').val() == '') && ($('#password_new').val() == '')) {
+              $('#password_feedback').css({
+                display: "none"
+              })
+              $('#password_empty1').css({
+                display: "block"
+              })
+              $('#password_empty2').css({
+                display: "block"
+              })
+              $('#password_length').css({
+                display: "none"
+              });
+              event.preventDefault();
+            } else if (($('#password_new').val() != $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length >= 7)) {
+              $('#password_feedback').css({
+                display: "block"
+              })
+              $('#password_empty1').css({
+                display: "none"
+              })
+              $('#password_empty2').css({
+                display: "none"
+              })
+              $('#password_length').css({
+                display: "none"
+              });
+              event.preventDefault();
+            } else if (($('#password_new').val() != $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length <= 7)) {
+              $('#password_feedback').css({
+                display: "block"
+              })
+              $('#password_empty1').css({
+                display: "none"
+              })
+              $('#password_empty2').css({
+                display: "none"
+              })
+              $('#password_length').css({
+                display: "none"
+              });
+              event.preventDefault();
+            }
           });
         });
 
