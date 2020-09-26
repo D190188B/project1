@@ -2,13 +2,11 @@
     display: none;
 }
 
-#thera_profile .container {
-    max-height: auto !important;
-    box-shadow: 0 2px 30px rgba(0, 0, 0, .6);
-    border-radius: 20px;
-    margin-top: 10px;
-    max-width: 1200px;
+#thera_profile #whole {
+    margin-left: 0 !important;
+    margin-right:0 !important;
 }
+
 
 #thera_profile .col-md-4 .col-md-12 img {
     width: 160px;
@@ -21,7 +19,6 @@
     text-align: center;
     padding-top: 30px;
     background-color: rgb(152, 152, 250);
-    border-radius: 20px;
 }
 
 #thera_profile h4.welcome {
@@ -288,6 +285,11 @@
     display: none;
 }
 
+#thera_profile #password_length {
+    color: red;
+    display: none;
+}
+
 @media screen and (max-width:414px) {
     #thera_profile .hand {
         display: block;
@@ -421,7 +423,7 @@
     color: rgba(37, 74, 118);
     background-color: rgba(155, 190, 222);
     background-size: cover;
-    padding-top:10px;
+    padding-top: 10px;
 }
 
 #theraLogin-form h1.login-title {
