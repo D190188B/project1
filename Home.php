@@ -129,7 +129,8 @@ include ("sessionTop.php");
       </div>
     </div>
   </section>
-
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script>
+  <script src="js/main.js" type="text/javascript"></script>
 </body>
 
 
