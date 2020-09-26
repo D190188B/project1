@@ -3,7 +3,12 @@
 }
 
 #profile_copy {
-    margin-top: 60px;
+    margin-top: 56px;
+}
+
+#profile_copy #whole {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 #profile_copy button.info:focus {
@@ -178,14 +183,6 @@
 
 #profile_copy .Bot {
     background-color: rgb(245, 245, 245);
-    border-radius: 20px;
-}
-
-#profile_copy .whole {
-    border: 1px solid rgb(223, 223, 223);
-    border-radius: 20px;
-    box-shadow: 0 20px 20px rgba(0, 0, 0, .6);
-    margin-bottom: 0;
 }
 
 #profile_copy .edit-success {
@@ -241,6 +238,10 @@
     display: none;
 }
 
+#profile_copy #password_length {
+    color: red;
+    display: none;
+}
 
 @media screen and (max-width:414px) {
     #profile_copy .AllInfo .col-md-6 {
