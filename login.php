@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) { //if user register an account
         $count = mysqli_num_rows($result1);
 
         if ($count == 0) {
-            $sql = "insert into client values('$generateid','$firstname','$lastname','$birth','$phone','$address','$city','$postCode','$state','$email','$hashed_pass','$profileImage',NOW())";
+            $sql = "INSERT INTO client VALUES('$generateid','$firstname','$lastname','$birth','$phone','$address','$city','$postCode','$state','$email','$hashed_pass','$profileImage',NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
