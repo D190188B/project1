@@ -115,7 +115,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' style='display:block' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -137,7 +137,7 @@ function therapist_Table()
 
         $number_of_results = mysqli_num_rows($result);
         //define how many results you want per page
-        $results_per_page = 3;
+        $results_per_page = 5;
 
         //determine number of total pages available
         $number_of_pages = ceil($number_of_results / $results_per_page);
@@ -213,7 +213,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' style='display:block' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -281,7 +281,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' style='display:block' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -337,8 +337,6 @@ if (isset($_POST['reject'])) {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Therapist Table</title>
 </head>
 <style>
