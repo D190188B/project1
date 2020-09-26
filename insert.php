@@ -1,16 +1,5 @@
 <?php
-$servername = "localhost"; //localhost for local PC or use IP address
-$username = "root"; //database name
-$password = ""; //database password
-$database = "oncoun"; //database name
-
-// Create connection #scawx
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection #scawx
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("sessionTop.php");
 
 $output = '';
 if (isset($_POST['getLicense'])) {
@@ -88,5 +77,43 @@ if (isset($_POST['search'])) {
             </div>
         </div>
 </div>';
+    }
+}
+
+
+if (isset($_POST['login'])) { //if user login
+    $servername = "localhost"; //localhost for local PC or use IP address
+    $username = "root"; //database name
+    $password = ""; //database password
+    $database = "oncoun"; //database name
+
+    // Create connection #scawx
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    $sql = "select * from client where email='$email'"; //username and password same ？
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $id = $row['id']; //[] inside is follow database 
+            $name_first = $row['name_first'];
+            $name_last = $row['name_last'];
+            $passwordHash = $row['password'];
+        }
+
+        if (password_verify($password, $passwordHash)) {
+            session_start();
+            $_SESSION['client_id'] = $id;
+            $_SESSION['client_name_first'] = $name_first;
+            $_SESSION['client_name_last'] = $name_last;
+            echo "success";
+        } else {
+            echo "wrong";
+        }
+    } else {
+        echo "noFound";
     }
 }
