@@ -25,62 +25,51 @@ if (isset($_SESSION['client_id'])) { //if already login
 }
 
 $email = $_SESSION['client_email'];
-$sql = "SELECT * FROM select_question WHERE user_email='$email'"; //id is database name
-$result = $conn->query($sql) or die($conn->error . __LINE__);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $_SESSION['generate_id'] = $row['generate_id'];
-        $_SESSION['user_email'] = $row['user_email'];
-    }
-} else {
-    $_SESSION['generate_id'] = '';
-    $_SESSION['user_email'] = '';
-}
 
-$generateid = $_SESSION['generate_id'];
-
-$query = "select * from user_choices where selectID='$generateid'";
+$query = "select * from user_choices where user_email='$email'";
 $choices = $conn->query($query) or die($conn->error . __LINE__);
-
-
-if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
-    $generate = $_SESSION['generate_id'];
-
-    $sql = "delete from select_question where generate_id='$generate'";
-    $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-
-    $sqli = "delete from user_choices where selectID='$generate'";
-    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
-
-
-    echo '<script>window.location.assign("help.php");</script>';
-}
 
 if ($choices->num_rows > 0) {
     while ($row = $choices->fetch_assoc()) {
+        $_SESSION['generate_id'] = $row['selectID'];
         $choice1 = $row['choice_ID'];
         $_SESSION['user_email'] = $row['user_email'];
         switch ($choice1) {
             case 5:
             case 6:
             case 7:
-                $_SESSION['choice_gender'] = $choice1;
+                $_SESSION['choice_gender'] = $choice1;//get gender choice
                 break;
 
             case 8:
             case 9:
             case 10:
-                $_SESSION['choice_age'] = $choice1;
+                $_SESSION['choice_age'] = $choice1;//get age choice
                 break;
 
             case 98:
             case 99:
             case 100:
-                $_SESSION['choice_lan'] = $choice1;
+                $_SESSION['choice_lan'] = $choice1;//get language choice
                 break;
         }
     }
+} else {
+    $_SESSION['generate_id'] = '';
+    $_SESSION['user_email'] = '';
+}
+
+
+if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
+    $generate = $_SESSION['generate_id'];
+
+    $sqli = "delete from user_choices where selectID='$generate'";
+    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+    $_SESSION['rec_work_id'] = '';
+    $_SESSION['work_id'] = '';
+
+    echo '<script>window.location.assign("help.php");</script>';
 }
 ?>
 
@@ -103,6 +92,7 @@ if ($choices->num_rows > 0) {
 <!DOCTYPE html>
 <html lang="en">
 <section id="showResult">
+
     <body>
         <h3>Answer the questions and get matched a suitable therapist!</h3>
         <hr id="ans">
