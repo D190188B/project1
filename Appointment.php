@@ -26,7 +26,7 @@ if (isset($_GET['id'])) {
     $_SESSION['appointment_thera'] = $_SESSION['work_id'];
 }
 
-if (isset($_SESSION['rec_word_id']) && (!empty($_SESSION['rec_work_id'])) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
+if (isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id'])) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
     $therapist_id = $_SESSION['appointment_thera'];
     $sql = "SELECT * FROM therapist where therapist_id='$therapist_id'"; //id is database name
     $result = $conn->query($sql) or die($conn->error . __LINE__);
