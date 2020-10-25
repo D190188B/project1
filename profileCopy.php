@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) { //if user edit the information
     }
 }
 
-if (isset($_POST['change'])) {//if user change the password
+if (isset($_POST['change'])) { //if user change the password
     $id = $_SESSION['client_id'];
     $current_Password = $_POST['password_old'];
     $new_Password = $_POST['password_new'];
@@ -140,7 +140,10 @@ if (isset($_POST['cancel'])) {
         header('refresh: 0; url=profileCopy.php');
     }
 }
-$date = date("Y-m-d");
+
+
+$date = date("Y-m-d"); //get the current date
+$time = date("h:i a"); //get the current time
 
 //show the appointment and therapist
 $email = $_SESSION['client_email'];
@@ -151,19 +154,20 @@ $sqli = "SELECT * from appointment left join therapist on appointment.therapist_
 //display all the appointment
 $result = $conn->query($sqli) or die($conn->error . __LINE__);
 
-
+//the number of accept
+$accept = "SELECT * from appointment where user_Email='$email' and appointment_status='2'";
+//get the number of accept
+$getAccept = $conn->query($accept) or die($conn->error . __LINE__);
 
 //get waiting list
 $wait = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and appointment_status='1' ORDER BY created_TIME DESC";
 
 //get waiting list
 $getWait = $conn->query($wait) or die($conn->error . __LINE__);
-//get before number
-$getBeNum = $conn->query($wait) or die($conn->error . __LINE__);
 
 
 //get today list
-$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and user_date ='$date' and appointment_status='2' or appointment_status='5' ORDER BY created_TIME DESC";
+$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and user_date ='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
 //get today list
 $results = $conn->query($mysql) or die($conn->error . __LINE__);
 //get today number
@@ -172,19 +176,60 @@ $getTodayNum = $conn->query($mysql) or die($conn->error . __LINE__);
 //count number
 $appointmentNum = 0;
 $TodayNum = 0;
-$WaitNum = 0;
+$AcceptNum = 0;
 
-if ($getBeNum->num_rows > 0) {
-    while ($row = $getBeNum->fetch_assoc()) {
-        ++$appointmentNum;
-        ++$WaitNum;
+$paidNum = 0;
+
+//get the payment
+$paid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='$email' and appointment_status='2' and paymentStatus='1'";
+//get the payment
+$getPaid = $conn->query($paid) or die($conn->error . __LINE__);
+//get the payment list number
+$getPaidNum = $conn->query($paid) or die($conn->error . __LINE__);
+
+if ($getPaidNum->num_rows > 0) {
+    while ($row = $getPaidNum->fetch_assoc()) {
+        ++$paidNum;
     }
 }
 
+
 if ($getTodayNum->num_rows > 0) {
     while ($row = $getTodayNum->fetch_assoc()) {
+        $appointment_id = $row['appointment_id'];
+        $user_time = $row['user_time'];
+        $user_date = $row['user_date'];
+        $appointment_status = $row['appointment_status'];
+        $paymentStatus = $row['paymentStatus'];
+
+        $user_time1 = strtotime($row['user_time']);
+        $user_time2 = date("h:i a", $user_time1);
+
+        $user_time3 = strtotime($row['user_date']);
+        $user_time4 = date("Y-m-d", $user_time3);
+
+
+        if (($user_time <= $time) && ($user_time4 == $date) && ($appointment_status == '2') && ($paymentStatus == '2')) {
+            $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
+            $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+            header("refresh:0;url=profileCopy.php");
+        } else if (($user_time <= $time) && ($user_time4 == $date) && ($appointment_status == '2') && ($paymentStatus == '1')) {
+            $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
+            $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+            header("refresh:0;url=profileCopy.php");
+        }
+
+        if ($appointment_status == '5') {
+            ++$appointmentNum;
+            ++$TodayNum;
+        }
+    }
+}
+
+if ($getAccept->num_rows > 0) {
+    while ($row = $getAccept->fetch_assoc()) {
         ++$appointmentNum;
-        ++$TodayNum;
+        ++$AcceptNum;
     }
 }
 
@@ -264,6 +309,9 @@ if ($getTodayNum->num_rows > 0) {
                         <button class="info" name="paymentBtn" id="paymentBtn">
                             <h4 id="payment_h4">Your Payment</h4>
                         </button>
+                        <?php if ($paidNum != 0) {
+                            echo "<span class=\"badge badge-danger\" style=\"padding:7px;font-size:20px;\" id=\"appointmentSecond_number\">$paidNum</span>";
+                        } ?>
                     </div>
                 </div>
                 <hr>
@@ -380,34 +428,35 @@ if ($getTodayNum->num_rows > 0) {
                 <div class="col-md-12" id="showAppointment" name="showAppointment">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#today">Today&nbsp;<?php if ($TodayNum != 0) {
-                                                                                                        echo "<span class=\"badge badge-primary\">$TodayNum</span>";
-                                                                                                    }
-                                                                                                    ?></a>
+                            <a class="nav-link active" data-toggle="tab" href="#today">In Consultation&nbsp;<?php if ($TodayNum != 0) {
+                                                                                                                echo "<span class=\"badge badge-primary\">$TodayNum</span>";
+                                                                                                            }
+                                                                                                            ?></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#waiting">Wait List &nbsp;<?php if ($WaitNum != 0) {
-                                                                                                        echo "<span class=\"badge badge-primary\">$WaitNum</span>";
-                                                                                                    }
-                                                                                                    ?></a>
+                            <a class="nav-link" data-toggle="tab" href="#waiting">Wait List &nbsp;</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#earlier">Earlier&nbsp;<span class="badge badge-primary"></a>
+                            <a class="nav-link" data-toggle="tab" href="#all">All&nbsp;<?php if ($AcceptNum != 0) {
+                                                                                            echo "<span class=\"badge badge-primary\">$AcceptNum</span>";
+                                                                                        }
+                                                                                        ?></a>
                         </li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div id="today" class="container tab-pane active">
-                            <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
+                            <center><span style="color:red">You must paid it before you start the consultation, otherwise we will automatically cancel the appointment</span></center>
                             <table class="table table-striped custab text-center">
                                 <thead>
                                     <tr>
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Appointment</th>
+                                        <th>Date and Time</th>
                                         <th>Status</th>
+                                        <th>Payment Status</th>
                                         <th>Action<br></th>
                                     </tr>
                                 </thead>
@@ -426,6 +475,7 @@ if ($getTodayNum->num_rows > 0) {
                                             $user_date = $row['user_date'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
+                                            $paymentStatus = $row['paymentStatus'];
 
                                             $statusID = $row['id'];
                                             $status = $row['status'];
@@ -434,7 +484,6 @@ if ($getTodayNum->num_rows > 0) {
 
                                             $user_time1 = strtotime($row['user_time']);
                                             $user_time2 = date("h:i a", $user_time1);
-                                            $user_time7 = date("h:i", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -467,8 +516,19 @@ if ($getTodayNum->num_rows > 0) {
                                                         break;
                                                 } ?>
 
+                                                <?php
+                                                switch ($paymentStatus) {
+                                                    case 1:
+                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">No</td>";
+                                                        break;
+                                                    case 2:
+                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Yes</td>";
+                                                        break;
+                                                }
+                                                ?>
+
                                                 <td>
-                                                    <?php if ($user_time4 < $date) {
+                                                    <?php if ($user_time4 > $date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
                                                     ?>
@@ -479,14 +539,14 @@ if ($getTodayNum->num_rows > 0) {
                             </table>
                         </div>
                         <div id="waiting" class="container tab-pane fade">
-                            <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
+                            <center><span style="color:red">You must paid it before you start the consultation, otherwise we will automatically cancel the appointment</span></center>
                             <table class="table table-striped custab text-center">
                                 <thead>
                                     <tr>
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Appointment</th>
+                                        <th>Date and Time</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -514,7 +574,6 @@ if ($getTodayNum->num_rows > 0) {
 
                                             $user_time1 = strtotime($row['user_time']);
                                             $user_time2 = date("h:i a", $user_time1);
-                                            $user_time7 = date("h:i", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -549,7 +608,7 @@ if ($getTodayNum->num_rows > 0) {
 
                                                 <td>
                                                     <!-- If before due date -->
-                                                    <?php if ($user_time4 < $date) {
+                                                    <?php if ($user_time4 >= $date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
                                                     ?>
@@ -561,16 +620,17 @@ if ($getTodayNum->num_rows > 0) {
                             </table>
 
                         </div>
-                        <div id="earlier" class="container tab-pane fade">
-                            <center><span style="color:red">You can only cancel the appointment before the booked date</span></center>
+                        <div id="all" class="container tab-pane fade">
+                            <center><span style="color:red">You must paid it before you start the consultation, otherwise we will automatically cancel the appointment</span></center>
                             <table class="table table-striped custab text-center">
                                 <thead>
                                     <tr>
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Appointment</th>
+                                        <th>Date and Time</th>
                                         <th>Status</th>
+                                        <th>Payment Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -589,6 +649,7 @@ if ($getTodayNum->num_rows > 0) {
                                             $user_date = $row['user_date'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
+                                            $paymentStatus = $row['paymentStatus'];
 
                                             $statusID = $row['id'];
                                             $status = $row['status'];
@@ -597,7 +658,6 @@ if ($getTodayNum->num_rows > 0) {
 
                                             $user_time1 = strtotime($row['user_time']);
                                             $user_time2 = date("h:i a", $user_time1);
-                                            $user_time7 = date("h:i", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -619,6 +679,9 @@ if ($getTodayNum->num_rows > 0) {
                                                     case 2:
                                                         echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
                                                         break;
+                                                    case 3:
+                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                        break;
                                                     case 4:
                                                         echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
                                                         break;
@@ -630,8 +693,19 @@ if ($getTodayNum->num_rows > 0) {
                                                         break;
                                                 } ?>
 
+                                                <?php
+                                                switch ($paymentStatus) {
+                                                    case 1:
+                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">No</td>";
+                                                        break;
+                                                    case 2:
+                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Yes</td>";
+                                                        break;
+                                                }
+                                                ?>
+
                                                 <td>
-                                                    <?php if (($user_time4 > $date)) {
+                                                    <?php if ($user_time4 > $date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
                                                     ?>
@@ -645,18 +719,68 @@ if ($getTodayNum->num_rows > 0) {
                 </div>
 
                 <div class="col-md-12" id="showPayment" name="showPayment" style="margin-top:20px;height: 535px;">
-                    <!-- <div class="row">
-                            <div class="col-md-12" style="margin-bottom:10px;">
+                    <div class="row">
+                        <table class="table table-striped custab text-center">
+                            <thead>
+                                <tr>
+                                    <th>Appointment_ID</th>
+                                    <th>Therapist</th>
+                                    <th>Consultation method</th>
+                                    <th>Date and Time</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
 
-                                <div class="card h-100">
-                                    <div class="card-body" align="center">
-                                        <img src="./images/beard.png" alt="" style="width:150px;height:150px;">
-                                        <h5 style="margin-top:-10px;margin-bottom:20px;">Halo</h5>
-                                    </div>
-                                </div>
+                            <tbody>
 
-                            </div>
-                        </div> -->
+                                <?php
+                                if ($getPaid->num_rows > 0) { //over 1 database(record) so run
+                                    while ($row = $getPaid->fetch_assoc()) {
+                                        //display result
+                                        $appointment_id = $row['appointment_id'];
+                                        $therapist_nameFirst = $row['name_first'];
+                                        $therapist_nameLast = $row['name_last'];
+                                        $user_method = $row['user_method'];
+                                        $user_time = $row['user_time'];
+                                        $user_date = $row['user_date'];
+                                        $appointment_status = $row['appointment_status'];
+                                        $paymentStatus = $row['paymentStatus'];
+
+                                        $statusID = $row['id'];
+                                        $status = $row['status'];
+
+                                        $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
+
+                                        $user_time1 = strtotime($row['user_time']);
+                                        $user_time2 = date("h:i a", $user_time1);
+
+                                        $user_time3 = strtotime($row['user_date']);
+                                        $user_time4 = date("Y-m-d", $user_time3);
+
+                                        $user_time5 = strtotime($row['created_TIME']);
+                                        $user_time6 = date("Y-m-d h:i a", $user_time5);
+
+
+                                ?>
+                                        <tr>
+                                            <td><?php echo $appointment_id ?></td>
+                                            <td><?php echo $therapist_name ?></td>
+                                            <td><?php echo $user_method ?></td>
+                                            <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                            <td><strong>RM100.00</strong></td>
+                                            <td>
+                                                <!-- <button name="checkout" id="checkout" type="submit" form="save" class="btn btn-success btn-xs" value="<?php echo $appointment_id ?>">Check Out</button> <br> -->
+                                                <input type="hidden" name="amount" id="Amount" value="100.00">
+                                                <div id="paypal-button-container"></div>
+                                                <button name="cancel" type="submit" form="save" class="btn btn-danger btn-xs" value="<?php echo $appointment_id ?>" onclick="return confirm('Are you sure you want to cancel?')">Cancel</button>
+                                            </td>
+                                        </tr>
+                                <?php }
+                                } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
@@ -680,6 +804,29 @@ if ($getTodayNum->num_rows > 0) {
             </div>
         </div>
     </section>
+    <script src="https://www.paypal.com/sdk/js?client-id=AWvgBnBqNDG7BblFWo-V7Jx_cKStjDXdalDvZiJ4QqcnKYtcCBGkTd1hn3LPCELeXgiNwl0RI9Tnsxsc&currency=MYR">
+        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
+    <script>
+        var Amount = $('#Amount').val();
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                // This function sets up the details of the transaction, including the amount and line item details.
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: Amount
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                // This function captures the funds from the transaction.
+                window.location = "transaction-completed.php?&orderID=" + data.orderID;
+            }
+        }).render('#paypal-button-container');
+        //This function displays Smart Payment Buttons on your web page.
+    </script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
 
