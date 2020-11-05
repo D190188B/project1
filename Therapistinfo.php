@@ -73,7 +73,8 @@ if (isset($_POST['submit'])) {
   }
 
   $phone = validate_input_text($_POST['phone']);
-  if (empty($phone)) {
+  $phone1 = "+6".$phone;
+  if (empty($phone1)) {
     $error[] = "You forgot to enter your phone number";
   }
 
@@ -133,7 +134,7 @@ if (isset($_POST['submit'])) {
 
     // if this email no exist in database
     if ($count == 0) {
-      $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+      $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone1','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
       $result = $conn->query($sql);
 
       //display successful statement
