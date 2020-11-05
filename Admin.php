@@ -15,23 +15,22 @@ if ($conn->connect_error) {
 
 session_start();
 
-if(isset($_SESSION['thera_id'])){
+if (isset($_SESSION['thera_id'])) {
 	$id = $_SESSION['thera_id'];
-	$sql ="SELECT * from therapist where therapist_id='$id'";
-	$result = $conn->query($sql) or die($conn->error.__LINE__);
-	
-	if ($result->num_rows > 0) { //over 1 database(record) so run
-        while ($row = $result->fetch_assoc()) {
-            $_SESSION['name_first'] = $row['name_first'];
-            $_SESSION['name_last'] = $row['name_last'];
-            $_SESSION['about'] = $row['about'];
-            $_SESSION['age'] = $row['age'];
-            $_SESSION['license'] = $row['license'];
-            $_SESSION['profile_image'] = $row['profile_image'];
-            $_SESSION['gender'] = $row['gender'];
-        }
-    }
+	$sql = "SELECT * from therapist where therapist_id='$id'";
+	$result = $conn->query($sql) or die($conn->error . __LINE__);
 
+	if ($result->num_rows > 0) { //over 1 database(record) so run
+		while ($row = $result->fetch_assoc()) {
+			$_SESSION['name_first'] = $row['name_first'];
+			$_SESSION['name_last'] = $row['name_last'];
+			$_SESSION['about'] = $row['about'];
+			$_SESSION['age'] = $row['age'];
+			$_SESSION['license'] = $row['license'];
+			$_SESSION['profile_image'] = $row['profile_image'];
+			$_SESSION['gender'] = $row['gender'];
+		}
+	}
 }
 ?>
 
@@ -51,6 +50,12 @@ if(isset($_SESSION['thera_id'])){
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
+	<style>
+		body {
+			padding-top: 20px;
+			background-color: rgb(206, 230, 240) !important;
+		}
+	</style>
 </head>
 
 <body>
@@ -63,7 +68,7 @@ if(isset($_SESSION['thera_id'])){
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="page-caption">
-								<h1 class="page-title">Welcome <?php echo $_SESSION['name_first']."&nbsp;".$_SESSION['name_last']?></h1>
+								<h1 class="page-title">Welcome <?php echo $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] ?></h1>
 							</div>
 						</div>
 					</div>
@@ -93,8 +98,13 @@ if(isset($_SESSION['thera_id'])){
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="appointmentTable.php" class="btn btn-danger btn-lg w-75 h-100" role="button">
+										<a href="appointmentTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-list-alt"></span><br />Appointment</a>
+									</div>
+
+									<div class="col-xs-12 col-md-3 my-5">
+										<a href="appointmentTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
+											<span class="glyphicon glyphicon-list-alt"></span><br />Payment List</a>
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
@@ -109,18 +119,18 @@ if(isset($_SESSION['thera_id'])){
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="#" class="btn btn-info btn-lg w-75 h-100" role="button">
+										<a href="feedbackTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-user"></span> <br />Feedbacks</a>
 
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="clientTable.php" class="btn btn-success btn-lg w-75 h-100" role="button">
+										<a href="clientTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-user"></span> <br />Client</a>
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="therapistTable.php" class="btn btn-info btn-lg w-75 h-100" role="button">
+										<a href="therapistTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-user"></span> <br />Therapist</a>
 
 									</div>
