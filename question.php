@@ -2,37 +2,55 @@
 include("sessionTop.php");
 $generateID = uniqid();
 
+$checkAppointment = "SELECT * from appointment where user_Email = '" . $_SESSION['client_email'] . "' and (appointment_status='1' or appointment_status='2' or appointment_status='5')";
+$check = $conn->query($checkAppointment) or die($conn->error . __LINE__);
+
+$count = mysqli_num_rows($check);
+
 //if user get started the question
-if ((isset($_GET['id']) || isset($_GET['work_id'])) && isset($_SESSION['client_id'])) {
-    if (isset($_GET['id'])) {
-        $_SESSION['rec_work_id'] = $_GET['id'];
-        $_SESSION['work_id'] = '';
-    } else if (isset($_GET['work_id'])) {
-        $_SESSION['work_id'] = $_GET['work_id'];
-        $_SESSION['rec_work_id'] = '';
-    }
+if (isset($_GET['id']) && isset($_SESSION['client_id']) && ($count == 0)) {
+    $_SESSION['rec_work_id'] = $_GET['id'];
+    $_SESSION['work_id'] = '';
+    $_SESSION['generate_id'] = $generateID;
+} else if (isset($_GET['work_id']) && isset($_SESSION['client_id']) && ($count == 0)) {
+
+    $_SESSION['work_id'] = $_GET['work_id'];
+    $_SESSION['rec_work_id'] = '';
     $_SESSION['generate_id'] = $generateID;
 
 } else if (!isset($_SESSION['client_id'])) { //if user dosen't log in
     echo '<script>window.alert("You must login first!");window.location.assign("login.php")</script>';
-} else if (((empty($_SESSION['rec_work_id'])) && (empty($_SESSION['work_id']))) && (isset($_SESSION['client_id']))) { // if user already log in but directly access this page
+} else if ((((!isset($_GET['id'])) && (!isset($_GET['work_id']))) && ((empty($_SESSION['rec_work_id'])) && (empty($_SESSION['work_id'])))) && (isset($_SESSION['client_id']))) { // if user already log in but directly access this page
     echo '<script>window.alert("You cannot directly access this page...!");window.location.assign("help.php")</script>';
+} else if ($count > 0) {
+    // if user already make the appointment and the status are pending, accept or In consultation
+    echo '<script>window.alert("You must complete the current consultation first...!");window.location.assign("help.php")</script>';
 }
 
-if (isset($_POST['finish'])) {//if finish the recommendation question
+
+
+if (isset($_POST['finish'])) { //if finish the recommendation question
+    $total=1;
     foreach ($_REQUEST['allChoices'] as $choice) {
         $email = $_SESSION['client_email'];
-        $sql = "INSERT into user_choices values('','$generateID','$choice','$email')";
+        $sql = "INSERT into user_choices values('','".$_SESSION['generate_id']."','$total','$choice','$email')";
         $result = $conn->query($sql) or die($conn->error . __LINE__);
+        $total++;
     }
     echo '<script>window.location.assign("showResult.php");</script>';
 }
 
-if (isset($_POST['finish1'])) {//if finish without the recommendation question
+if (isset($_POST['finish1'])) { //if finish without the recommendation question
+    $total=1;
     foreach ($_REQUEST['allChoices'] as $choice) {
+        if($total==3){
+            $total=5;
+        }
+
         $email = $_SESSION['client_email'];
-        $sql = "INSERT into user_choices values('','$generateID','$choice','$email')";
+        $sql = "INSERT into user_choices values('','".$_SESSION['generate_id']."','$total','$choice','$email')";
         $result = $conn->query($sql) or die($conn->error . __LINE__);
+        $total++;
     }
     echo '<script>window.location.assign("Appointment.php");</script>';
 }
@@ -113,6 +131,7 @@ if (isset($_POST['finish1'])) {//if finish without the recommendation question
 
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
+                                            $quesNum = 0;
                                             $choice_id = $row['choice_id'];
                                             $question_number = $row['question_number'];
                                             $text = $row['text'];
@@ -173,7 +192,7 @@ if (isset($_POST['finish1'])) {//if finish without the recommendation question
                                 <div class="carousel-item active">
                                     <center><img src="images/therapists/hair (3).png" alt="Los Angeles" width="100" height="100"></center>
                                     <div class="carousel-caption">
-                                        <h3>Los Angeles</h3>
+                                        <h3>Lorem</h3>
                                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste labore ipsum soluta exercitationem consectetur iusto. Nobis omnis iste maxime odit delectus, quasi officia optio, nulla quos tempora pariatur, perferendis modi?</p>
                                     </div>
                                 </div>
@@ -181,7 +200,7 @@ if (isset($_POST['finish1'])) {//if finish without the recommendation question
                                 <div class="carousel-item">
                                     <center><img src="images/therapists/hair (3).png" alt="Los Angeles" width="100" height="100"></center>
                                     <div class="carousel-caption">
-                                        <h3>Los Angeles</h3>
+                                        <h3>Lorem</h3>
                                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste labore ipsum soluta exercitationem consectetur iusto. Nobis omnis iste maxime odit delectus, quasi officia optio, nulla quos tempora pariatur, perferendis modi?</p>
                                     </div>
                                 </div>
@@ -189,7 +208,7 @@ if (isset($_POST['finish1'])) {//if finish without the recommendation question
                                 <div class="carousel-item">
                                     <center><img src="images/therapists/hair (3).png" alt="Los Angeles" width="100" height="100"></center>
                                     <div class="carousel-caption">
-                                        <h3>Los Angeles</h3>
+                                        <h3>Lorem</h3>
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt minima odio a aperiam deleniti eveniet iusto fuga exercitationem fugiat, magni quo temporibus totam harum quia mollitia doloribus incidunt? Fuga, ipsum.</p>
                                     </div>
                                 </div>
