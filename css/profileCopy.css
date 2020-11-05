@@ -185,10 +185,13 @@
     background-color: rgb(245, 245, 245);
 }
 
-#profile_copy .edit-success {
+#profile_copy .edit-success,
+#profile_copy .review-success
+ {
     margin-top: -4px !important;
     display: none;
 }
+
 
 #profile_copy .edit-fail {
     margin-top: -4px !important;
@@ -213,23 +216,12 @@
 }
 
 
-#profile_copy #password_feedback {
+#profile_copy #password_feedback,
+#profile_copy #password_empty1,
+#profile_copy #password_empty2,
+#profile_copy .Password_fail,
+#profile_copy #password_length {
     color: red;
-    display: none;
-}
-
-#profile_copy #password_empty1 {
-    color: red;
-    display: none;
-}
-
-#profile_copy #password_empty2 {
-    color: red;
-    display: none;
-}
-
-#profile_copy .Password_fail {
-    margin-top: -4px !important;
     display: none;
 }
 
@@ -238,9 +230,23 @@
     display: none;
 }
 
-#profile_copy #password_length {
-    color: red;
-    display: none;
+
+#profile_copy #checkout {
+    margin-bottom: 10px;
+}
+
+#profile_copy input[type='submit'] {
+    border: none;
+    color: white;
+    background-color: darkblue;
+    font-weight: 600;
+    transition: ease 0.5s;
+    cursor: pointer;
+}
+
+#profile_copy input[type='submit']:hover {
+    background-color: rgba(59, 82, 114);
+    transition: ease 0.5s;
 }
 
 @media screen and (max-width:414px) {
@@ -385,27 +391,14 @@
         overflow-y: hidden;
     }
 
-    #profile_copy #today {
+    #profile_copy #today ,
+    #profile_copy #waiting,
+    #profile_copy #earlier{
         overflow: hidden;
         overflow-x: scroll;
         overflow-y: scroll;
         height: 570px;
     }
-
-    #profile_copy #waiting {
-        overflow: hidden;
-        overflow-x: scroll;
-        overflow-y: scroll;
-        height: 570px;
-    }
-
-    #profile_copy #earlier {
-        overflow: hidden;
-        overflow-x: scroll;
-        overflow-y: scroll;
-        height: 570px;
-    }
-
 
     #profile_copy #logout_iconSecond {
         font-size: 50px;
@@ -422,32 +415,22 @@
         margin-top: 10px;
     }
 
-    #profile_copy #password_oldPlace {
+    #profile_copy #password_oldPlace ,
+    #profile_copy #password_newPlace,
+    #profile_copy #password_confPlace{
         display: none;
     }
-
-    #profile_copy #password_newPlace {
-        display: none;
-    }
-
-    #profile_copy #password_confPlace {
-        display: none;
-    }
-
 
     #profile_copy #password_feedback {
         color: red;
         display: none;
     }
 
-    #profile_copy .Password_fail {
-        margin-top: -4px !important;
-        display: none;
-    }
-
+    #profile_copy .Password_fail ,
     #profile_copy .change-success {
         margin-top: -4px !important;
         display: none;
     }
+
 
 }
