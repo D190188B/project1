@@ -22,11 +22,10 @@ if (isset($_POST['logout'])) {
   header('refresh: 0; url=Home.php');
 }
 
-$date1 = date("Y-m-d");
-$appointmentNumTop = 0;
-$TodayNumTop = 0;
-$WaitNumTop = 0;
+$date1 = date("Y-m-d"); // get the current date
+$time1 = date("h:i a"); //get the current time
 
+$appointmentNumTop = 0;
 
 if (isset($_SESSION['client_id'])) { //if already login
   $id = $_SESSION['client_id'];
@@ -49,24 +48,42 @@ if (isset($_SESSION['client_id'])) { //if already login
       $_SESSION['client_profileImage'] = $row['profileImage'];
     }
   }
-  $topWait = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='".$_SESSION['client_email']."' and appointment_status='1' ORDER BY created_TIME DESC";
-  $getBeNum1 = $conn->query($topWait) or die($conn->error . __LINE__);
-  if ($getBeNum1->num_rows > 0) {
-    while ($row = $getBeNum1->fetch_assoc()) {
+
+
+
+  $topAll = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='2' ORDER BY created_TIME DESC";
+  $getAllNum1 = $conn->query($topAll) or die($conn->error . __LINE__);
+  if ($getAllNum1->num_rows > 0) {
+    while ($row = $getAllNum1->fetch_assoc()) {
       ++$appointmentNumTop;
-      ++$WaitNumTop;
     }
   }
 
-  $topMysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join therastatus on appointment.appointment_status=therastatus.id where user_Email='".$_SESSION['client_email']."' and user_date ='$date1' and appointment_status='2' or appointment_status='5' ORDER BY created_TIME DESC";
+  $topMysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and user_date ='$date1' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
   $getTodayNum1 = $conn->query($topMysql) or die($conn->error . __LINE__);
   if ($getTodayNum1->num_rows > 0) {
     while ($row = $getTodayNum1->fetch_assoc()) {
-      ++$appointmentNumTop;
-      ++$TodayNumTop;
+      $appointment_status = $row['appointment_status'];
+      if ($appointment_status == '5') {
+        ++$appointmentNumTop;
+      }
+    }
+  }
+
+
+  $topPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='2' and paymentStatus='1'";
+  //get the payment
+  $getTopPaid = $conn->query($topPaid) or die($conn->error . __LINE__);
+
+  if ($getTopPaid->num_rows > 0) {
+    while ($row = $getTopPaid->fetch_assoc()) {
+      $appointment_status = $row['appointment_status'];
+        ++$appointmentNumTop;
     }
   }
 }
+
+
 
 //check the pathinfo and upload the file
 function upload_profile($path, $file)
@@ -96,7 +113,7 @@ function upload_profile($path, $file)
 function upload_Editprofile($path, $file)
 {
   $targetDir = $path;
-  $default =$_SESSION['client_profileImage'];
+  $default = $_SESSION['client_profileImage'];
 
   // get the filename
   $filename = basename($file['name']);
