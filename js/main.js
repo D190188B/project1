@@ -36,7 +36,7 @@ $(document).ready(function (e) {
         $('#postCode').val(theraPost);
         $('#state').val(theraState);
         $('#license').val(theraLicense);
-        $('#resume').attr('src', theraResume);
+        $('#resume').val(theraResume);
     });
 
 
