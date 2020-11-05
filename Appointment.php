@@ -1,59 +1,19 @@
 <?php
 include("sessionTop.php");
 date_default_timezone_set('Singapore');
-
+$generateID = uniqid();
 
 $email = $_SESSION['client_email']; //get user email
 
-
-//get the user choices
-$query = "select * from user_choices where user_email='$email'";
-$choices = $conn->query($query) or die($conn->error . __LINE__);
-
-if ($choices->num_rows > 0) {
-    while ($row = $choices->fetch_assoc()) {
-        $_SESSION['generate_id'] = $row['selectID'];
-    }
-} else {
-    $_SESSION['generate_id'] = '';
-}
-
-$generateid = $_SESSION['generate_id'];
-
 if (isset($_GET['id'])) {
+
     $_SESSION['appointment_thera'] = $_GET['id'];
 } else if (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id']))) {
+
     $_SESSION['appointment_thera'] = $_SESSION['work_id'];
 }
 
-if (isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id'])) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
-    $therapist_id = $_SESSION['appointment_thera'];
-    $sql = "SELECT * FROM therapist where therapist_id='$therapist_id'"; //id is database name
-    $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-    if ($result->num_rows > 0) { //over 1 database(record) so run
-        while ($row = $result->fetch_assoc()) {
-            //display result
-            $_SESSION['select_id'] = $row['therapist_id']; //[] inside is follow database 
-            $_SESSION['select_name_first'] = $row['name_first'];
-            $_SESSION['select_name_last'] = $row['name_last'];
-            $_SESSION['select_email'] = $row['email'];
-            $_SESSION['select_gender'] = $row['gender'];
-            $_SESSION['select_age'] = $row['age'];
-            $_SESSION['select_phone'] = $row['phone'];
-            $_SESSION['select_ic'] = $row['ic'];
-            $_SESSION['select_address'] = $row['address'];
-            $_SESSION['select_therapist_city'] = $row['therapist_city'];
-            $_SESSION['select_therapist_postCode'] = $row['therapist_postCode'];
-            $_SESSION['select_therapist_state'] = $row['therapist_state'];
-            $_SESSION['select_license'] = $row['license'];
-            $_SESSION['select_resume'] = $row['resume'];
-            $_SESSION['select_profile_image'] = $row['profile_image'];
-            $_SESSION['select_statusID'] = $row['statusID'];
-            $_SESSION['select_created_at'] = $row['created_at'];
-        }
-    }
-} else if (isset($_SESSION['word_id']) && (!empty($_SESSION['work_id'])) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
+if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id'])))) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
     $therapist_id = $_SESSION['appointment_thera'];
     $sql = "SELECT * FROM therapist where therapist_id='$therapist_id'"; //id is database name
     $result = $conn->query($sql) or die($conn->error . __LINE__);
@@ -86,8 +46,6 @@ if (isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id'])) && (is
     $_SESSION['rec_word_id'] = '';
     $_SESSION['work_id'] = '';
     echo '<script>window.alert("You cant access this page without answer the questions....!!!!");window.location.assign("help.php")</script>';
-}else if(!empty($_SESSION['appointment_thera'])){
-
 } else {
     $_SESSION['generate_id'] = '';
     $_SESSION['appointment_thera'] = '';
@@ -95,6 +53,7 @@ if (isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id'])) && (is
     $_SESSION['work_id'] = '';
     echo '<script>window.alert("You must login first....!!!!");window.location.assign("login.php")</script>';
 }
+
 
 if (isset($_POST['upload'])) { //upload appointment
     $error = array();
@@ -130,17 +89,32 @@ if (isset($_POST['upload'])) { //upload appointment
     $user_time4 = date("Y-m-d", $user_time3);
 
     if (empty($error)) {
-        $sql = "INSERT INTO `appointment` VALUES('$generateid','$email','$method','$user_time2','$user_time4','$therapistID',1,1,NOW())";
-        $result = $conn->query($sql) or die($conn->error . __LINE__);
+        if (!empty($_SESSION['generate_id'])) {
+            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
+            $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-        if ($result == true) {
+            if ($result == true) {
 
-            $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-            header('refresh: 3; url=Home.php');
-            $_SESSION['generate_id'] = '';
-            $_SESSION['user_email'] = '';
-            $_SESSION['work_id'] = '';
-            $_SESSION['rec_work_id'] = '';
+                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                header('refresh: 3; url=Home.php');
+                $_SESSION['generate_id'] = '';
+                $_SESSION['user_email'] = '';
+                $_SESSION['work_id'] = '';
+                $_SESSION['rec_work_id'] = '';
+            }
+        } else {
+            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
+            $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+            if ($result == true) {
+
+                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                header('refresh: 3; url=Home.php');
+                $_SESSION['generate_id'] = '';
+                $_SESSION['user_email'] = '';
+                $_SESSION['work_id'] = '';
+                $_SESSION['rec_work_id'] = '';
+            }
         }
     } else {
         $msg = "<div class='alert alert-danger'>Something error, Please Try Again!</div>";
@@ -272,12 +246,8 @@ function build_calendar($month, $year)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <title>Document</title>
+    <title>Appointment</title>
     <link rel="stylesheet" type="text/css" href="css/appointment.css">
     <style>
         table {
@@ -373,7 +343,7 @@ function build_calendar($month, $year)
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLongTitle">Booking for: <span id="slot"></span></h4>
+                        <h4 class="modal-title" id="exampleModalLongTitle">Booking for: <span id="slot"></span><?php echo $_SESSION['generate_id'] ?></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -409,7 +379,7 @@ function build_calendar($month, $year)
                                         <div class="valid-feedback">Valid.</div>
                                         <div class="invalid-feedback">Please Select the book time</div>
 
-                                        <input type="text" name="therapistID" value="<?php
+                                        <input type="hidden" name="therapistID" value="<?php
                                                                                         echo $_SESSION['select_id'];
                                                                                         ?>">
                                     </div>
