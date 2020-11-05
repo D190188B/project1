@@ -92,7 +92,7 @@
     background: none;
     color: darkblue;
     border: none;
-    margin: 56px 0 0 -15px;
+    margin: 59px 0 0 -15px;
     border-radius: 10px;
     transition: ease 0.5s;
 }
@@ -108,7 +108,7 @@
 }
 
 #thera_profile .logout {
-    margin-top: 91px;
+    margin-top: 113px;
 }
 
 #thera_profile #Appointment {
@@ -116,16 +116,6 @@
     display: none;
     padding: 10px;
 }
-
-#thera_profile #today {
-    overflow: hidden;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    height: 515px;
-}
-
-
-
 
 #thera_profile h4#profile_h4 {
     color: black;
@@ -180,18 +170,29 @@
     margin-bottom: 10px;
 }
 
+#thera_profile #view{
+    margin-bottom:10px;
+}
+
+#thera_profile #today {
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: 553px;
+}
+
 #thera_profile #waiting {
     overflow: hidden;
     overflow-y: scroll;
     overflow-x: scroll;
-    height: 515px;
+    height: 553px;
 }
 
-#thera_profile #earlier {
+#thera_profile #all {
     overflow: hidden;
     overflow-y: scroll;
     overflow-x: scroll;
-    height: 515px;
+    height: 553px;
 }
 
 #thera_profile #uploadProfile {
@@ -226,7 +227,7 @@
 #thera_profile #camera_icon {
     position: absolute;
     top: 0px;
-    left: 152px;
+    left: 177px;
     width: 60px !important;
     filter: invert(100%) !important;
     border-width: 0 !important;
