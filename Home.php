@@ -92,7 +92,6 @@ include ("sessionTop.php");
 
             <div class="arti-content1Right">
               <p>Need to talk to someone? Our therapists are available to give emotional support over online chat.<br><br>
-                <strong>It's anonymous and completely safe.</strong><br><br>
                 When you need someone to talk to, we're here to listen and help you feel better.<br>
               </p>
 
