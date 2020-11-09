@@ -55,7 +55,7 @@ function therapist_Table()
         $this_page_first_result = ($page - 1) * $results_per_page;
 
         //$retrieve the sql LIMIT starting number for the results on the displaying page
-        $sqli = "SELECT * FROM therapist LEFT JOIN therastatus on therapist.statusID=therastatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID ORDER BY created_at DESC LIMIT  " . $this_page_first_result . ',' . $results_per_page;
+        $sqli = "SELECT * FROM therapist LEFT JOIN onstatus on therapist.statusID=onstatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID ORDER BY created_at DESC LIMIT  " . $this_page_first_result . ',' . $results_per_page;
 
         $results = mysqli_query($conn, $sqli) or die($conn->error . __LINE__);
 
@@ -116,7 +116,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
                 $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
-                $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $therapist_Table .= "</tbody></table>";
@@ -153,7 +153,7 @@ function therapist_Table()
         $this_page_first_result = ($page - 1) * $results_per_page;
 
         //$retrieve the sql LIMIT starting number for the results on the displaying page
-        $sqli = "SELECT * FROM therapist LEFT JOIN therastatus on therapist.statusID=therastatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID ORDER BY created_at DESC LIMIT  " . $this_page_first_result . ',' . $results_per_page;
+        $sqli = "SELECT * FROM therapist LEFT JOIN onstatus on therapist.statusID=onstatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID ORDER BY created_at DESC LIMIT  " . $this_page_first_result . ',' . $results_per_page;
 
         $results = mysqli_query($conn, $sqli) or die($conn->error . __LINE__);
 
@@ -214,7 +214,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
                 $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
-                $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $therapist_Table .= "</tbody></table>";
@@ -222,7 +222,7 @@ function therapist_Table()
         echo $therapist_Table;
     } else {
         $search = $_POST['searchTxt'];
-        $sql = "SELECT * FROM therapist LEFT JOIN therastatus on therapist.statusID=therastatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID where therapist_id LIKE '%" . $search . "%' or name_first LIKE '%" . $search . "%' or name_last LIKE '%" . $search . "%' ORDER BY created_at DESC"; //id is database name
+        $sql = "SELECT * FROM therapist LEFT JOIN onstatus on therapist.statusID=onstatus.id LEFT JOIN language on therapist.therapist_id=language.thera_ID where therapist_id LIKE '%" . $search . "%' or name_first LIKE '%" . $search . "%' or name_last LIKE '%" . $search . "%' ORDER BY created_at DESC"; //id is database name
         $result = $conn->query($sql) or die($conn->error . __LINE__);
         $therapist_Table = "<table class='table table-striped custab'>";
         $therapist_Table .= "<thead><tr>";
@@ -282,7 +282,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
                 $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
-                $therapist_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $therapist_Table .= "</tbody></table>";
@@ -365,24 +365,25 @@ if (isset($_POST['reject'])) {
 
 <body>
     <form action="therapistTable.php" method="POST" enctype="multipart/form-data" id="theraTable"></form>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <a href="Admin.php">
-                    <h4 style="padding-top:20px;">Back</h4>
-                </a>
-                <center>
-                    <h4 style="padding-top:20px;">Therapists Table</h4>
-                </center>
-                <h3>Search</h3>
-                <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="theraTable" style="width:50%;display:inline-block">
-                <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="theraTable">
-                <br />
-                <br />
-                <?php echo therapist_Table() ?>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="Admin.php">
+                        <h4 style="padding-top:20px;">Back</h4>
+                    </a>
+                    <center>
+                        <h4 style="padding-top:20px;">Therapists Table</h4>
+                    </center>
+                    <h3>Search</h3>
+                    <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="theraTable" style="width:50%;display:inline-block">
+                    <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="theraTable">
+                    <br />
+                    <br />
+                    <?php echo therapist_Table() ?>
+                </div>
             </div>
         </div>
-    </div>
+    
     <div class="modal fade" id="therapistDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -476,7 +477,7 @@ if (isset($_POST['reject'])) {
 
                     <div class="col">
                         <h4 style="color:rgb(34, 19, 48)">Resume</h4>
-                        <center><img src="" class="img" alt="profile" id="resume" name="resume" style="max-width:100%;"></center>
+                        <input type="text" readonly name="resume" id="resume" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
