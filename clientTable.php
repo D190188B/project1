@@ -102,7 +102,7 @@ function client_Table()
                 $client_Table .= "<td>$user_time2</td>";
 
                 $client_Table .= "<td><center><button class='btn btn-success btn-xs client' data-toggle='modal'  data-target='#clientDetail' data-clientid='$id' data-clientfname='$name_first' data-clientlname='$name_last' data-clientemail='$email' data-clientbirth='$birth' data-clientphone='$phone' data-clientaddress='$address' data-clientcity='$city' data-clientpost='$post_code' data-clientstate='$state' data-clientimage='$profile_image'>Details</button></center>";
-                $client_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $client_Table .= "<center><button name='delete' form='clientTable' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $client_Table .= "</tbody></table>";
@@ -175,7 +175,7 @@ function client_Table()
                 $client_Table .= "<td>$user_time2</td>";
 
                 $client_Table .= "<td><center><button class='btn btn-success btn-xs client' data-toggle='modal'  data-target='#clientDetail' data-clientid='$id' data-clientfname='$name_first' data-clientlname='$name_last' data-clientemail='$email' data-clientbirth='$birth' data-clientphone='$phone' data-clientaddress='$address' data-clientcity='$city' data-clientpost='$post_code' data-clientstate='$state' data-clientimage='$profile_image'>Details</button></center>";
-                $client_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $client_Table .= "<center><button name='delete' form='clientTable' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $client_Table .= "</tbody></table>";
@@ -218,7 +218,7 @@ function client_Table()
                 $client_Table .= "<td>$user_time2</td>";
 
                 $client_Table .= "<td><center><button class='btn btn-success btn-xs client' data-toggle='modal'  data-target='#clientDetail' data-clientid='$id' data-clientfname='$name_first' data-clientlname='$name_last' data-clientemail='$email' data-clientbirth='$birth' data-clientphone='$phone' data-clientaddress='$address' data-clientcity='$city' data-clientpost='$post_code' data-clientstate='$state' data-clientimage='$profile_image'>Details</button></center>";
-                $client_Table .= "<center><button name='delete' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
+                $client_Table .= "<center><button name='delete' form='clientTable' type='submit' class='btn btn-danger btn-xs my-2' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
         $client_Table .= "</tbody></table>";
@@ -265,24 +265,24 @@ function client_Table()
 
 <body>
     <form action="clientTable.php" method="POST" enctype="multipart/form-data" id="clientTable"></form>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <a href="Admin.php">
-                    <h4 style="padding-top:20px;">Back</h4>
-                </a>
-                <center>
-                    <h4 style="padding-top:20px;">Clients Table</h4>
-                </center>
-                <h3>Search</h3>
-                <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="clientTable" style="width:50%;display:inline-block">
-                <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="clientTable">
-                <br />
-                <br />
-                <?php echo client_Table() ?>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="Admin.php">
+                        <h4 style="padding-top:20px;">Back</h4>
+                    </a>
+                    <center>
+                        <h4 style="padding-top:20px;">Clients Table</h4>
+                    </center>
+                    <h3>Search</h3>
+                    <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="clientTable" style="width:50%;display:inline-block">
+                    <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="clientTable">
+                    <br />
+                    <br />
+                    <?php echo client_Table() ?>
+                </div>
             </div>
         </div>
-    </div>
     <div class="modal fade" id="clientDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
