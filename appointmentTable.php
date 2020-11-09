@@ -65,12 +65,12 @@ if (isset($_POST['delete'])) {
 
 <body>
     <form action="appointmentTable.php" method="POST" enctype="multipart/form-data">
-        <div class="container" style="margin-left:130px;">
+        <div class="container" align="center" style="position:relative">
             <div class="row col-md-12 col-md-offset-3">
                 <a href="Admin.php">
                     <h4 style="padding-top:20px;">Back</h4>
                 </a>
-                <h4 style="padding-top:20px;padding-left:350px;">Appointment Table</h4>
+                <h4 style="position:absolute;top:20px;right:40%;">Appointment Table</h4>
                 <table class="table table-striped custab">
                     <thead>
                         <tr>
@@ -80,8 +80,9 @@ if (isset($_POST['delete'])) {
                             <th>Time</th>
                             <th>Date</th>
                             <th>Therapist</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center">Payment Status</th>
                             <th>created_TIME</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,7 +110,7 @@ if (isset($_POST['delete'])) {
                                     <td><?php echo $user_time ?></td>
                                     <td><?php echo $user_date ?></td>
                                     <td><?php echo $therapist ?></td>
-                                    <td><?php echo $paymentStatus ?></td>
+                                    <td>No</td>
                                     <td><?php echo $created_TIME ?></td>
 
                                     <td class="text-center">
