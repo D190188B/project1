@@ -26,7 +26,6 @@ if (isset($_SESSION['thera_id'])) {
 			$_SESSION['name_last'] = $row['name_last'];
 			$_SESSION['about'] = $row['about'];
 			$_SESSION['age'] = $row['age'];
-			$_SESSION['license'] = $row['license'];
 			$_SESSION['profile_image'] = $row['profile_image'];
 			$_SESSION['gender'] = $row['gender'];
 		}
