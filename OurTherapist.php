@@ -66,15 +66,15 @@ include("sessionTop.php");
                         <div class="col-md-6 my-2">
                             <div class="form-group w-100">
                                 <label for="licenseType" style="display:block">
-                                    <h2>Sort by License Type</h2>
+                                    <h2>Sort by Education Level</h2>
                                 </label>
-                                <select name="licenseType" class="custom-select" style="width:50%;" id="licenseType">
+                                <select name="educationType" class="custom-select" style="width:50%;" id="educationType">
                                     <option value="All" class="getLicense">All</option>
-                                    <option value="Clinical Social Worker" class="getLicense">Clinical Social Worker</option>
-                                    <option value="Marriage & Family Therapist" class="getLicense">Marriage & Family Therapist</option>
-                                    <option value="Mental Health Counselor" class="getLicense">Mental Health Counselor</option>
-                                    <option value="Professional Counselor" class="getLicense">Professional Counselor</option>
-                                    <option value="Psychologist" class="getLicense">Psychologist</option>
+                                    <option value="M. Clin. Psych." class="getLicense">M. Clin. Psych.</option>
+                                    <option value="M.A. Coun. Psych." class="getLicense">M.A. Coun. Psych.</option>
+                                    <option value="M.A. Counseling" class="getLicense">M.A. Counseling</option>
+                                    <option value="PhD" class="getLicense">PhD</option>
+                                    <option value="PsyD" class="getLicense">PsyD</option>
                                 </select>
                             </div>
                         </div>
@@ -94,7 +94,7 @@ include("sessionTop.php");
                                 $name_first = $row['name_first'];
                                 $name_last = $row['name_last'];
                                 $profile_image = $row['profile_image'];
-                                $license = $row['license'];
+                                $education_level = $row['education_level'];
                         ?>
                                 <div class="col-md-3">
                                     <a href="therapistDetail.php?id=<?php echo $id ?>">
@@ -102,7 +102,7 @@ include("sessionTop.php");
                                             <div class="card-body">
                                                 <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
                                                 <h4 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h4>
-                                                <h5 class="therapistedu"><?php echo $license ?></h5>
+                                                <h5 class="therapistedu"><?php echo $education_level ?></h5>
                                             </div>
                                         </div>
                                     </a>
