@@ -12,21 +12,19 @@ if (isset($_GET['id']) && isset($_SESSION['client_id']) && ($count == 0)) {
     $_SESSION['rec_work_id'] = $_GET['id'];
     $_SESSION['work_id'] = '';
     $_SESSION['generate_id'] = $generateID;
-    $_SESSION['work_thera_name']='';
-    $_SESSION['work_thera_profile_image']='';
+    $_SESSION['work_thera_name'] = '';
+    $_SESSION['work_thera_profile_image'] = '';
 
-    $sql="SELECT * FROM services where id='".$_GET['id']."'";
-    $run = $conn->query($sql) or die($conn->error.__LINE__);
+    $sql = "SELECT * FROM services where id='" . $_GET['id'] . "'";
+    $run = $conn->query($sql) or die($conn->error . __LINE__);
 
-    if($run->num_rows>0){
-        while($row=$run->fetch_assoc()){
-            $name= $row['name'];
+    if ($run->num_rows > 0) {
+        while ($row = $run->fetch_assoc()) {
+            $name = $row['name'];
+            $_SESSION['specialty_name'] = $name;
         }
-        $msg = "<div class='alert alert-success'><center><h5><strong>We heard you'd like help with</strong>: ".$name."</h5></center></div>";
+        $msg = "<div class='alert alert-success'><center><h5><strong>We heard you'd like help with</strong>: " . $name . "</h5></center></div>";
     }
-
-    
-    
 } else if (isset($_GET['work_id']) && isset($_SESSION['client_id']) && ($count == 0)) {
 
     $_SESSION['work_id'] = $_GET['work_id'];
@@ -95,7 +93,9 @@ if (isset($_POST['finish1'])) { //if finish without the recommendation question
             background: url("images/question.jpg");
             padding-top: 59px;
             padding-bottom: 150px;
-            background-size: cover;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         strong {
