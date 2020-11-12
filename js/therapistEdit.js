@@ -26,6 +26,10 @@
         let about = document.querySelector('#about');
         let submit = document.querySelector('#submit');
 
+        let english = document.querySelector('#english');
+        let mandarin = document.querySelector('#mandarin');
+        let malay = document.querySelector('#malay');
+
         let camera_icon = document.querySelector('#camera_icon');
 
 
@@ -148,6 +152,10 @@
           change_word.style.display = "block";
           changePhoto.style.display = "block";
           camera_icon.style.display = "block";
+
+          english.style.display = "block";
+          malay.style.display = "block";
+          mandarin.style.display = "block";
         });
 
 
@@ -231,6 +239,7 @@
               display: "block"
             });
           });
+
           $('#change').click(function () {
             if (($('#password_new').val() == $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length <= 6)) {
               $('#password_feedback').css({
