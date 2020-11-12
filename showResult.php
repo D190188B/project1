@@ -1,75 +1,67 @@
 <?php
 include("sessionTop.php");
+$generate_id = uniqid();
 
-if (isset($_SESSION['client_id'])) { //if already login
-    $id = $_SESSION['client_id'];
-
-    $sql = "select * from client where id ='$id'"; //id is database name
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) { //over 1 database(record) so run
-        while ($row = $result->fetch_assoc()) {
-            $_SESSION['client_id'] = $row['id'];
-            $_SESSION['client_name_first'] = $row['name_first'];
-            $_SESSION['client_name_last'] = $row['name_last'];
-            $_SESSION['client_email'] = $row['email'];
-            $_SESSION['client_birth'] = $row['birth'];
-            $_SESSION['client_phone'] = $row['phone'];
-            $_SESSION['client_address'] = $row['address'];
-            $_SESSION['client_city'] = $row['city'];
-            $_SESSION['client_state'] = $row['state'];
-            $_SESSION['client_post_code'] = $row['post_code'];
-            $_SESSION['client_profileImage'] = $row['profileImage'];
-        }
-    }
-}
-
-$email = $_SESSION['client_email'];
-
-$query = "select * from user_choices where user_email='$email'";
-$choices = $conn->query($query) or die($conn->error . __LINE__);
-
-if ($choices->num_rows > 0) {
-    while ($row = $choices->fetch_assoc()) {
-        $_SESSION['generate_id'] = $row['selectID'];
-        $choice1 = $row['choice_ID'];
-        $_SESSION['user_email'] = $row['user_email'];
-        switch ($choice1) {
-            case 5:
-            case 6:
-            case 7:
-                $_SESSION['choice_gender'] = $choice1;//get gender choice
-                break;
-
-            case 8:
-            case 9:
-            case 10:
-                $_SESSION['choice_age'] = $choice1;//get age choice
-                break;
-
-            case 98:
-            case 99:
-            case 100:
-                $_SESSION['choice_lan'] = $choice1;//get language choice
-                break;
-        }
-    }
-} else {
+if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) && (isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) && (isset($_SESSION['choice_lan']))) && (empty($_SESSION['generate_id']) && (isset($_SESSION['generate_id'])))) {
+    echo '<script>window.alert("You cannot direct access this page..!");window.location.assign("Home.php")</script>';
     $_SESSION['generate_id'] = '';
     $_SESSION['user_email'] = '';
+
+} else if (!empty($_SESSION['generate_id']) && (empty($_SESSION['choice_gender'])) && (empty($_SESSION['choice_age'])) && (empty($_SESSION['choice_lan'])) && (empty($_SESSION['generate_id']))) {
+    $email = $_SESSION['client_email'];
+    $query = "select * from user_choices where user_email='$email'";
+    $choices = $conn->query($query) or die($conn->error . __LINE__);
+
+    if ($choices->num_rows > 0) {
+        while ($row = $choices->fetch_assoc()) {
+            $_SESSION['generate_id'] = $row['selectID'];
+            $choice1 = $row['choice_ID'];
+            $_SESSION['user_email'] = $row['user_email'];
+            switch ($choice1) {
+                case 5:
+                case 6:
+                case 7:
+                    $_SESSION['choice_gender'] = $choice1; //get gender choice
+                    break;
+
+                case 8:
+                case 9:
+                case 10:
+                    $_SESSION['choice_age'] = $choice1; //get age choice
+                    break;
+
+                case 98:
+                case 99:
+                case 100:
+                    $_SESSION['choice_lan'] = $choice1; //get language choice
+                    break;
+            }
+        }
+    }
+} else if ((!empty($_SESSION['choice_gender'])) && (!empty($_SESSION['choice_age'])) && (!empty($_SESSION['choice_lan'])) && (empty($_SESSION['generate_id']))) {
+    $_SESSION['generate_id'] = $generate_id;
 }
 
 
 if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in database where the generate_id=this.generate_id
     $generate = $_SESSION['generate_id'];
 
-    $sqli = "delete from user_choices where selectID='$generate'";
-    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+    $sql = "SELECT * FROM user_choices where selectID='$generate'";
+    $run = $conn->query($sql) or die($conn->error . __LINE__);
 
-    $_SESSION['rec_work_id'] = '';
-    $_SESSION['work_id'] = '';
-
-    echo '<script>window.location.assign("help.php");</script>';
+    if ($run->num_rows > 0) {
+        $sqli = "delete from user_choices where selectID='$generate'";
+        $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+        
+        $_SESSION['rec_work_id'] = '';
+        $_SESSION['work_id'] = '';
+        echo '<script>window.location.assign("help.php");</script>';
+        
+    } else {
+        $_SESSION['rec_work_id'] = '';
+        $_SESSION['work_id'] = '';
+        echo '<script>window.location.assign("help.php");</script>';
+    }
 }
 ?>
 
