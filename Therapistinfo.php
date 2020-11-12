@@ -1,19 +1,21 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 
 //if submit the registration
 if (isset($_POST['submit'])) {
-  $generateid = uniqid();//declare the unique id
+  $generateid = uniqid(); //declare the unique id
 
   //if all the checkboxes haven't checked, will ask him checked again
-  if ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Chinese']))) {
+  if ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Mandarin'])) && (empty($_REQUEST['specialties']))) {
+    echo '<script>window.alert("Please checked at least one language and one specialty")</script>';
+  } elseif ((empty($_REQUEST['Malay'])) && (empty($_REQUEST['English'])) && (empty($_REQUEST['Mandarin']))) {
     echo '<script>window.alert("Please checked at least one language")</script>';
-
-  } else {//if atleast one checkbox has been checked
+  } else if (empty($_REQUEST['specialties'])) {
+    echo '<script>window.alert("Please checked at least one specialty")</script>';
+  } else { //if atleast one checkbox has been checked
     //insert the id
     $lan = "insert into language values('$generateid','','','')";
     $run = $conn->query($lan) or die($conn->error . __LINE__);
-
 
     if (empty($_REQUEST['Malay'])) {
       $updateLan = "update language set Malay='No' where thera_ID='$generateid'";
@@ -38,123 +40,132 @@ if (isset($_POST['submit'])) {
       $updateLan = "update language set Mandarin='Yes' where thera_ID='$generateid'";
       $run1 = $conn->query($updateLan) or die($conn->error . __LINE__);
     }
-  }
 
-  $error = array();
-  
-  $license = validate_input_text($_POST['license']);
-  if (empty($license)) {
-    $error[] = "You forgot to enter your license";
-  }
+    $error = array();
 
-  $gender = validate_input_text($_POST['gender']);
-  if (empty($gender)) {
-    $error[] = "You forgot to enter your gender";
-  }
+    $salutation = validate_input_text($_POST['salutation']);
+    if (empty($salutation)) {
+      $error[] = "You forgot to enter your salutation";
+    }
 
-  $age = validate_input_text($_POST['age']);
-  if(empty($age)){
-    $error[] = "You forgot to enter your age";
-  }
+    $education = validate_input_text($_POST['education']);
+    if (empty($education)) {
+      $error[] = "You forgot to enter your education level";
+    }
 
-  $firstname = validate_input_text($_POST['firstname']);
-  if (empty($firstname)) {
-    $error[] = "You forgot to enter your Name";
-  }
+    $gender = validate_input_text($_POST['gender']);
+    if (empty($gender)) {
+      $error[] = "You forgot to enter your gender";
+    }
 
-  $lastname = validate_input_text($_POST['lastName']);
-  if (empty($lastname)) {
-    $error[] = "You forgot to enter your Name";
-  }
+    $age = validate_input_text($_POST['age']);
+    if (empty($age)) {
+      $error[] = "You forgot to enter your age";
+    }
 
-  $email = validate_input_email($_POST['email']);
-  if (empty($email)) {
-    $error[] = "You forgot to enter your Email";
-  }
+    $firstname = validate_input_text($_POST['firstname']);
+    if (empty($firstname)) {
+      $error[] = "You forgot to enter your Name";
+    }
 
-  $phone = validate_input_text($_POST['phone']);
-  $phone1 = "+6".$phone;
-  if (empty($phone1)) {
-    $error[] = "You forgot to enter your phone number";
-  }
+    $lastname = validate_input_text($_POST['lastName']);
+    if (empty($lastname)) {
+      $error[] = "You forgot to enter your Name";
+    }
 
-  $address = mysqli_real_escape_string($conn, $_POST['address']);
-  if (empty($address)) {
-    $error[] = "You forgot to enter your address";
-  }
+    $email = validate_input_email($_POST['email']);
+    if (empty($email)) {
+      $error[] = "You forgot to enter your Email";
+    }
 
-  $state = validate_input_text($_POST['state']);
-  if (empty($state)) {
-    $error[] = "You forgot to enter your state";
-  }
+    $phone = validate_input_text($_POST['phone']);
+    $phone1 = "+6" . $phone;
+    if (empty($phone1)) {
+      $error[] = "You forgot to enter your phone number";
+    }
 
-  $city = validate_input_text($_POST['city']);
-  if (empty($city)) {
-    $error[] = "You forgot to enter your city";
-  }
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    if (empty($address)) {
+      $error[] = "You forgot to enter your address";
+    }
 
+    $state = validate_input_text($_POST['state']);
+    if (empty($state)) {
+      $error[] = "You forgot to enter your state";
+    }
 
-  $postCode = validate_input_text($_POST['postCode']);
-  if (empty($postCode)) {
-    $error[] = "You forgot to enter your postCode";
-  }
-
-  $ic = mysqli_real_escape_string($conn, $_POST['ic']);
-  if (empty($ic)) {
-    $error[] = "You forgot to enter your ic";
-  }
-
-  $password = validate_input_text($_POST['password']);
-  if (empty($password)) {
-    $error[] = "You forgot to enter your password";
-  }
-
-  $confirm_pwd = validate_input_text($_POST['confirm_pwd']);
-  if (empty($confirm_pwd)) {
-    $error[] = "You forgot to enter your Confirm Password";
-  }
+    $city = validate_input_text($_POST['city']);
+    if (empty($city)) {
+      $error[] = "You forgot to enter your city";
+    }
 
 
-  $file1 = $_FILES['certificate'];
-  $fileCer = upload_certificate('./images/certificate/', $file1);
+    $postCode = validate_input_text($_POST['postCode']);
+    if (empty($postCode)) {
+      $error[] = "You forgot to enter your postCode";
+    }
 
-  $files = $_FILES['profileUpload'];
-  $profileImage = upload_thera('./images/therapists/', $files);
+    $ic = mysqli_real_escape_string($conn, $_POST['ic']);
+    if (empty($ic)) {
+      $error[] = "You forgot to enter your ic";
+    }
+
+    $password = validate_input_text($_POST['password']);
+    if (empty($password)) {
+      $error[] = "You forgot to enter your password";
+    }
+
+    $confirm_pwd = validate_input_text($_POST['confirm_pwd']);
+    if (empty($confirm_pwd)) {
+      $error[] = "You forgot to enter your Confirm Password";
+    }
 
 
-  //if no error
-  if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
-    // register a new user
-    $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
+    $file1 = $_FILES['certificate'];
+    $fileCer = upload_certificate('./images/certificate/', $file1);
 
-    $sqli = "Select * from therapist where email='$email'"; //username and password same ？
-    $result1 = mysqli_query($conn, $sqli) or die($conn->error . __LINE__); //sql
+    $files = $_FILES['profileUpload'];
+    $profileImage = upload_thera('./images/therapists/', $files);
 
-    $count = mysqli_num_rows($result1);
 
-    // if this email no exist in database
-    if ($count == 0) {
-      $sql = "insert into therapist values('$generateid','$firstname','$lastname',' ','$gender','$age','$email','$phone1','$ic','$address','$city','$postCode','$state','$license','$fileCer','$hashed_pass','$profileImage','1',NOW())";
-      $result = $conn->query($sql);
+    //if no error
+    if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
+      // register a new user
+      $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
-      //display successful statement
-      echo '<style type="text/css"> 
+      $sqli = "Select * from therapist where email='$email'"; //username and password same ？
+      $result1 = mysqli_query($conn, $sqli) or die($conn->error . __LINE__); //sql
+      $count = mysqli_num_rows($result1);
+
+      // if this email no exist in database
+      if ($count == 0) {
+        $sql = "insert into therapist values('$generateid','$firstname','$lastname','$salutation','','$gender','$age','$email','$phone1','$ic','$address','$city','$postCode','$state','$education','$fileCer','$hashed_pass','$profileImage','1',NOW())";
+        $result = $conn->query($sql);
+
+        foreach ($_REQUEST['specialties'] as $specialty) {
+          $spec = "INSERT into specialties values('','$generateid','$specialty')";
+          $runspec = $conn->query($spec) or die($conn->error . __LINE__);
+        }
+
+        //display successful statement
+        echo '<style type="text/css"> 
       #info .register-success{
           display:block !important;            
       }</style>';
-    } else {
-      //display already registered statement
-      echo '<style type="text/css"> 
+      } else {
+        //display already registered statement
+        echo '<style type="text/css"> 
       #info .already-registered{
           display:block !important;            
       }</style>';
-    }
-  } else {
-    //display password not match statement
-    echo '<style type="text/css"> 
+      }
+    } else {
+      //display password not match statement
+      echo '<style type="text/css"> 
     #info .password-notmatch{
           display:block !important;            
       }</style>';
+    }
   }
 }
 
@@ -179,7 +190,7 @@ if (isset($_POST['submit'])) {
 
   <div class="alert alert-success alert-dismissible fade show text-center register-success">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Register Successful!</strong> You can Login Now!
+    <strong>Register Successful!</strong>
   </div>
 
   <div class="alert alert-danger alert-dismissible fade show text-center already-registered">
