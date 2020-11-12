@@ -74,28 +74,29 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      $(document).ready(function(e) {
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function(e) {
 
-        let $uploadfile = $('#edit .modal .modal-dialog .modal-content .modal-body input[type="file"]');
+      let $uploadfile = $('#edit .modal .modal-dialog .modal-content .modal-body input[type="file"]');
 
-        $uploadfile.change(function() {
-          readURL(this);
-        });
+      $uploadfile.change(function() {
+        readURL(this);
       });
+    });
 
-      function readURL(input) {
-        if (input.files && input.files[0]) {
-          let reader = new FileReader();
-          reader.onload = function(e) {
-            $("#edit .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
-            $("#edit .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
-              display: "none"
-            });
-          }
-          reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          $("#edit .modal .modal-dialog .modal-content .modal-body .img").attr('src', e.target.result);
+          $("#edit .modal .modal-dialog .modal-content .modal-body .camera-icon").css({
+            display: "none"
+          });
         }
+        reader.readAsDataURL(input.files[0]);
       }
-    </script>
+    }
+  </script>
 
-    <section>
+  <section>
