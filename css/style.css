@@ -89,12 +89,11 @@
     background-color: yellow;
 }
 
-#register #password_length {
-    color: red;
-    display: none;
-}
 
-#register #password_same{
+#register #password_same,
+#register #password_length,
+#register #birth_warning,
+#register #email_warning{
     color: red;
     display: none;
 }
