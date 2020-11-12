@@ -1,15 +1,14 @@
+<style>
+    #register img {
+        margin-left: 283px
+    }
 
-    <style>
+    @media screen and (max-width:767px) {
         #register img {
-            margin-left: 283px
+            margin-left: 100px
         }
-
-        @media screen and (max-width:767px) {
-            #register img {
-                margin-left: 100px
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <section id="registerThera">
     <div class="modal fade" id="TheraReg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -30,10 +29,10 @@
                             <input type="file" class="form-control-file" name="profileUpload" id="upload-profile" form="regthera-form" required>
                         </div>
 
-                        <!-- <div class="col">
-                            <h4 style="color:rgb(34, 19, 48)">About Yourself</h4>
-                            <textarea required name="about" id="about" cols="100" rows="5"></textarea>
-                        </div> -->
+                        <div class="col" align="center">
+                            <h3>Personal Details</h3>
+                            <hr>
+                        </div>
 
                         <div class="row" style="margin-top:30px;">
                             <div class="col">
@@ -51,6 +50,20 @@
                             </div>
                         </div>
 
+                        <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">Salutation</h4>
+                            <select id="salutation" name="salutation" class="form-control">
+                                <option value=""></option>
+                                <option value="Ms">Ms</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Assoc Prof">Assoc Prof</option>
+                                <option value="Prof">Prof</option>
+                                <option value="Assoc Prof Dr">Assoc Prof Dr</option>
+                                <option value="Prof Dr">Prof Dr</option>
+                            </select>
+                        </div>
+
                         <div class="col" style="margin-bottom:10px;">
                             <h4 style="color:rgb(34, 19, 48)">Gender</h4>
                             <div class="custom-control custom-radio custom-control-inline">
@@ -61,24 +74,9 @@
                                 <input type="radio" id="female" name="gender" class="custom-control-input" value="Female" required>
                                 <label class="custom-control-label" for="female">Female</label>
                             </div>
+                            <span id="gender_warning">*This field cannot be change after you register!</span>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
-                        </div>
-
-                        <div class="col" style="margin-bottom:10px;">
-                            <h4 style="color:rgb(34, 19, 48)">Language</h4>
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" id="Malay" name="Malay" class="custom-control-input" value="Malay">
-                                <label class="custom-control-label" for="Malay">Malay</label>
-                            </div>
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" id="English" name="English" class="custom-control-input" value="English">
-                                <label class="custom-control-label" for="English">English</label>
-                            </div>
-                            <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" id="Mandarin" name="Mandarin" class="custom-control-input" value="Mandarin">
-                                <label class="custom-control-label" for="Mandarin">Mandarin</label>
-                            </div>
                         </div>
 
                         <div class="col">
@@ -120,6 +118,7 @@
                                 <option value="59">59</option>
                                 <option value="60">60</option>
                             </select>
+                            <span id="age_warning">*This field cannot be change after you register!</span>
                         </div>
 
                         <div class="col">
@@ -143,6 +142,7 @@
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
+
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">City</h4>
                             <input type="text" required name="city" id="city" class="form-control" placeholder="city">
@@ -165,26 +165,9 @@
                         </div>
 
                         <div class="col">
-                            <h4 style="color:rgb(34, 19, 48)">License Type</h4>
-                            <select id="license" name="license" class="form-control">
-                                <option value="Clinical Social Worker">Clinical Social Worker</option>
-                                <option value="Marriage & Family Therapist">Marriage & Family Therapist</option>
-                                <option value="Mental Health Counselor">Mental Health Counselor</option>
-                                <option value="Professional Counselor">Professional Counselor</option>
-                                <option value="Psychologist">Psychologist</option>
-                            </select>
-                        </div>
-
-                        <div class="col">
-                            <h4 style="color:rgb(34, 19, 48)">Resume(include your certificate photo)</h4>
-                            <input type="file" required name="certificate" id="certificate" class="form-control-file">
-                            <div class="valid-feedback">Valid.</div>
-                            <div class="invalid-feedback">Please fill out this field.</div>
-                        </div>
-
-                        <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Email</h4>
                             <input type="email" required name="email" id="email" class="form-control" placeholder="email">
+                            <span id="email_warning">*Email cannot be change after you register!</span>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -199,8 +182,87 @@
 
                         <div class="col">
                             <h4 style="color:rgb(34, 19, 48)">Confirm Password</h4>
-                            <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control-file" placeholder="confirm password">
+                            <input type="password" required name="confirm_pwd" id="confirm_pwd" class="form-control" placeholder="confirm password">
                             <span id="password_same">Password are not same!</span>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+
+                        <div class="col" align="center" style="margin-top:10px;">
+                            <h3>Profile Details</h3>
+                            <hr>
+                        </div>
+
+                        <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">Education level</h4>
+                            <select id="education" name="education" class="form-control">
+                                <option value=""></option>
+                                <option value="M. Clin. Psych.">M. Clin. Psych.</option>
+                                <option value="M.A. Coun. Psych.">M.A. Coun. Psych.</option>
+                                <option value="M.A. Counseling">M.A. Counseling</option>
+                                <option value="PhD">PhD</option>
+                                <option value="PsyD">PsyD</option>
+                            </select>
+                        </div>
+
+                        <div class="col" style="margin-bottom:10px;">
+                            <h4 style="color:rgb(34, 19, 48)">Language(one or more)<span class="redstar">*</span></h4>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="Malay" name="Malay" class="custom-control-input" value="Malay">
+                                <label class="custom-control-label" for="Malay">Malay</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="English" name="English" class="custom-control-input" value="English">
+                                <label class="custom-control-label" for="English">English</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" id="Mandarin" name="Mandarin" class="custom-control-input" value="Mandarin">
+                                <label class="custom-control-label" for="Mandarin">Mandarin</label>
+                            </div>
+                        </div>
+
+                        <div class="col" style="margin-bottom:10px;">
+                            <h4 style="color:rgb(34, 19, 48)">Specialties(one or more)<span class="redstar">*</span></h4>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="anxiety" name="specialties[]" class="custom-control-input" value="Anxiety">
+                                <label class="custom-control-label" for="anxiety">Anxiety</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="stress" name="specialtiess[]" class="custom-control-input" value="Stress">
+                                <label class="custom-control-label" for="stress">Stress</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="self-Esteem" name="specialties[]" class="custom-control-input" value="Self-Esteem">
+                                <label class="custom-control-label" for="self-Esteem">Self-Esteem</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="depression" name="specialties[]" class="custom-control-input" value="Depression">
+                                <label class="custom-control-label" for="depression">Depression</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="grief" name="specialties[]" class="custom-control-input" value="Grief">
+                                <label class="custom-control-label" for="grief">Grief</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="bipolar-disorder" name="specialties[]" class="custom-control-input" value="Bipolar disorder">
+                                <label class="custom-control-label" for="bipolar-disorder">Bipolar disorder</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="anger" name="specialties[]" class="custom-control-input" value="Anger">
+                                <label class="custom-control-label" for="anger">Anger</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="other" name="specialties[]" class="custom-control-input" value="Others">
+                                <label class="custom-control-label" for="other">Other</label>
+                            </div>
+
+                            <span id="spec_warning">Please checked at least one</span>
+                        </div>
+
+                        <div class="col">
+                            <h4 style="color:rgb(34, 19, 48)">Resume(include your certificate photo)</h4>
+                            <input type="file" required name="certificate" id="certificate" class="form-control-file">
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -224,6 +286,7 @@
         </div>
     </div>
     <script type="text/javascript">
+        var specialties = document.getElementsByName('specialties[]');
         (function() {
             'use strict';
             window.addEventListener('load', function() {
@@ -258,6 +321,7 @@
                                 display: "none"
                             });
                         }
+
                         form.classList.add('was-validated');
                     }, false);
                 });
@@ -272,6 +336,30 @@
                 readURL(this);
             });
 
+
+            $('#email').keyup(function() {
+                $('#email_warning').css({
+                    display: "block"
+                });
+            });
+
+            $('#male').change(function() {
+                $('#gender_warning').css({
+                    display: "block"
+                });
+            });
+
+            $('#female').change(function() {
+                $('#gender_warning').css({
+                    display: "block"
+                });
+            });
+
+            $('#age').change(function() {
+                $('#age_warning').css({
+                    display: "block"
+                });
+            });
         });
 
         //change the image
