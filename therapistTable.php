@@ -82,7 +82,7 @@ function therapist_Table()
                 $therapist_city = $row['therapist_city'];
                 $therapist_postCode = $row['therapist_postCode'];
                 $therapist_state = $row['therapist_state'];
-                $license = $row['license'];
+                $education_level = $row['education_level'];
                 $resume = $row['resume'];
                 $profile_image = $row['profile_image'];
                 $statusID = $row['statusID'];
@@ -115,7 +115,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-education='$education_level' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -180,7 +180,7 @@ function therapist_Table()
                 $therapist_city = $row['therapist_city'];
                 $therapist_postCode = $row['therapist_postCode'];
                 $therapist_state = $row['therapist_state'];
-                $license = $row['license'];
+                $education_level = $row['education_level'];
                 $resume = $row['resume'];
                 $profile_image = $row['profile_image'];
                 $statusID = $row['statusID'];
@@ -213,7 +213,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-education='$education_level' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -248,7 +248,7 @@ function therapist_Table()
                 $therapist_city = $row['therapist_city'];
                 $therapist_postCode = $row['therapist_postCode'];
                 $therapist_state = $row['therapist_state'];
-                $license = $row['license'];
+                $education_level = $row['education_level'];
                 $resume = $row['resume'];
                 $profile_image = $row['profile_image'];
                 $statusID = $row['statusID'];
@@ -281,7 +281,7 @@ function therapist_Table()
                     $therapist_Table .= "<center><button name='accept' type='submit' class='btn btn-outline-success btn-xs' onclick='return confirm(\"Are you sure you want to Accept?\")' value='$id' style='display:block' form='theraTable'>Accept</button></center>";
                     $therapist_Table .= "<center><button name='reject' type='submit' class='btn btn-outline-danger btn-xs'  onclick='return confirm(\"Are you sure you want to Reject?\")' value='$id' style='display:block' form='theraTable'>Reject</button></center>";
                 }
-                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-theralicense='$license' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
+                $therapist_Table .= "<center><button class='btn btn-success btn-xs thera' data-toggle='modal'  data-target='#therapistDetail' data-theraid='$id' data-therafname='$name_first' data-theralname='$name_last' data-theraabout='$about' data-theragender='$gender' data-theraage='$age' data-theraemail='$email' data-theraphone='$phone' data-theraic='$ic' data-theraaddress='$address' data-theracity='$therapist_city' data-therapost='$therapist_postCode' data-therastate='$therapist_state' data-education='$education_level' data-theraresume='$resume' data-theraprofile='$profile_image' data-theramalay='$malay' data-theramandarin='$mandarin' data-theraenglish='$english'>Details</button></center>";
                 $therapist_Table .= "<center><button name='delete' form='theraTable' type='submit' class='btn btn-danger btn-xs' value='$id' onclick='return confirm(\"Are you sure you want to delete?\")' style='display:block'>Delete</button></center></td></tr>";
             }
         }
@@ -471,8 +471,8 @@ if (isset($_POST['reject'])) {
                     </div>
 
                     <div class="col">
-                        <h4 style="color:rgb(34, 19, 48)">License Type</h4>
-                        <input type="text" readonly name="license" id="license" class="form-control">
+                        <h4 style="color:rgb(34, 19, 48)">Education Level</h4>
+                        <input type="text" readonly name="education" id="education" class="form-control">
                     </div>
 
                     <div class="col">
