@@ -102,6 +102,10 @@
     box-shadow: none;
 }
 
+#regthera-form .redstar{
+    color:red;
+}
+
 @media screen and (max-width: 414px) {
     #registerThera .modal .modal-dialog .modal-content .modal-body .camera-icon {
         left: 157px;
@@ -111,12 +115,13 @@
 
 }
 
-#registerThera #password_length {
-    color: red;
-    display: none;
-}
-
-#registerThera #password_same {
+#registerThera #password_length,
+#email_warning,
+#registerThera #password_same,
+#age_warning,
+#gender_warning,
+#spec_warning
+ {
     color: red;
     display: none;
 }
