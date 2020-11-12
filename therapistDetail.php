@@ -1,5 +1,5 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 
 //if get therapist id
 if (isset($_GET['id'])) {
@@ -21,12 +21,17 @@ if (isset($_GET['id'])) {
             $_SESSOPM['detail_thera_phone'] = $row['phone'];
             $_SESSION['detail_thera_age'] = $row['age'];
             $_SESSION['detail_thera_email'] = $row['email'];
-            $_SESSION['detail_thera_license'] = $row['license'];
+            $_SESSION['detail_education_level'] = $row['education_level'];
             $_SESSION['detail_thera_profile_image'] = $row['profile_image'];
         }
     }
 }
 
+
+if (isset($_POST['direct'])) {
+    $_SESSION['work_id'] = $_SESSION['detail_work_theraID'];
+    echo "<script>window.location.assign('Appointment.php')</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,35 +43,36 @@ if (isset($_GET['id'])) {
     <title>Therapist Detail</title>
 
     <style>
-
-    #submit{
-        margin-top:10px;
-    }
+        #submit {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
 <header>
     <?php include("header1.php") ?>
 </header>
+
 <body>
 
     <section id="theraDetail">
         <div class="container">
-            <a href="OurTherapist.php"><h3>Back</h3></a>
+            <a href="OurTherapist.php">
+                <h3>Back</h3>
+            </a>
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 text-center" id="theraTop">
                         <img src="<?php echo $_SESSION['detail_thera_profile_image'] ?>" alt="image" id="image" name="image">
                         <h3 class="theraName"><?php echo $_SESSION['detail_thera_name_first'] . "&nbsp;" . $_SESSION['detail_thera_name_last'] ?></h3>
-                        <h4 id="theraLic"><?php echo $_SESSION['detail_thera_license'] ?></h4>
+                        <h4 id="theraLic"><?php echo $_SESSION['detail_education_level'] ?></h4>
                         <h4 class="paraTop">
                             Age: <?php echo $_SESSION['detail_thera_age'] ?>
                         </h4>
                         <h4 class="paraTop">
                             Gender:<?php echo $_SESSION['detail_thera_gender'] ?>
                         </h4>
-
-                        <a href="question.php?work_id=<?php echo $_SESSION['detail_work_theraID'] ?>"><button type="submit" name="submit" id="submit" class="btn btn-outline-danger">Work with me!</button></a>
+                        <button type="submit" name="submit" id="submit" class="btn btn-outline-danger" data-toggle="modal" data-target="#check">Work with me!</button>
                         <hr>
                     </div>
 
@@ -148,7 +154,29 @@ if (isset($_GET['id'])) {
         </div>
 
     </section>
+    <!-- Modal -->
+    <div class="modal fade" id="check" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Do you want to answer the questions to help the therapist know your situation better?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="therapistDetail.php" method="POST" id="detail" enctype="multipart/form-data">
+                </form>
+                <div class="modal-body" align="center">
+                    <a href="question.php?work_id=<?php echo $_SESSION['detail_work_theraID'] ?>" class="btn btn-outline-success mx-3" style="display:inline-block">Yes</a>
+                    <button class="btn btn-outline-danger" id="direct" name="direct" style="display:inline-block" form="detail">No, direct make appointment</button>
+                </div>
 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
