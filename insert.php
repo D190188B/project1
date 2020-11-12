@@ -2,9 +2,9 @@
 include("sessionTop.php");
 
 $output = '';
-if (isset($_POST['getLicense'])) {
-    $getLicense = mysqli_real_escape_string($conn, $_POST['getLicense']);
-    if ($getLicense == 'All') {
+if (isset($_POST['getEdu'])) {
+    $getEdu = mysqli_real_escape_string($conn, $_POST['getEdu']);
+    if ($getEdu == 'All') {
         $sql = "SELECT * FROM therapist where statusID='2'";
         $result = mysqli_query($conn, $sql);
 
@@ -16,7 +16,7 @@ if (isset($_POST['getLicense'])) {
                 <div class="card-body">
                     <img src="' . $row['profile_image'] . '" alt="image" id="therapist1">
                     <h4 class="therapistname">' . $row['name_first'] . '&nbsp;' . $row['name_last'] . '</h4>
-                    <h5 class="therapistedu">' . $row['license'] . '</h5>
+                    <h5 class="therapistedu">' . $row['education_level'] . '</h5>
                 </div>
             </div>
         </a>
@@ -25,7 +25,7 @@ if (isset($_POST['getLicense'])) {
             echo $output;
         }
     } else {
-        $sql = "SELECT * FROM therapist where license='$getLicense' and statusID='2'";
+        $sql = "SELECT * FROM therapist where education_level='$getEdu' and statusID='2'";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -36,7 +36,7 @@ if (isset($_POST['getLicense'])) {
                 <div class="card-body">
                     <img src="' . $row['profile_image'] . '" alt="image" id="therapist1">
                     <h4 class="therapistname">' . $row['name_first'] . '&nbsp;' . $row['name_last'] . '</h4>
-                    <h5 class="therapistedu">' . $row['license'] . '</h5>
+                    <h5 class="therapistedu">' . $row['education_level'] . '</h5>
                 </div>
             </div>
         </a>
@@ -50,10 +50,10 @@ if (isset($_POST['getLicense'])) {
 
 if (isset($_POST['search'])) {
     $search = mysqli_real_escape_string($conn, $_POST['search']);
-    $sql = "SELECT * FROM therapist where name_first LIKE '%" . $search . "%' or name_last LIKE '%" . $search . "%' or license LIKE '%" . $search . "%' and statusID='2'";
+    $sql = "SELECT * FROM therapist where name_first LIKE '%" . $search . "%' or name_last LIKE '%" . $search . "%' or education_level LIKE '%" . $search . "%' and statusID='2'";
     $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) > 0) {
+    if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_array($result)) {
             $output .= '<div class="col-md-3">
         <a href="therapistDetail.php?id=' . $row['therapist_id'] . '">
@@ -61,7 +61,7 @@ if (isset($_POST['search'])) {
                 <div class="card-body">
                     <img src="' . $row['profile_image'] . '" alt="image" id="therapist1">
                     <h4 class="therapistname">' . $row['name_first'] . '&nbsp;' . $row['name_last'] . '</h4>
-                    <h5 class="therapistedu">' . $row['license'] . '</h5>
+                    <h5 class="therapistedu">' . $row['education_level'] . '</h5>
                 </div>
             </div>
         </a>
