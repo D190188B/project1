@@ -33,7 +33,7 @@ if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || 
             $_SESSION['select_therapist_city'] = $row['therapist_city'];
             $_SESSION['select_therapist_postCode'] = $row['therapist_postCode'];
             $_SESSION['select_therapist_state'] = $row['therapist_state'];
-            $_SESSION['select_license'] = $row['license'];
+            $_SESSION['select_education_level'] = $row['education_level'];
             $_SESSION['select_resume'] = $row['resume'];
             $_SESSION['select_profile_image'] = $row['profile_image'];
             $_SESSION['select_statusID'] = $row['statusID'];
@@ -46,7 +46,7 @@ if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || 
     $_SESSION['rec_word_id'] = '';
     $_SESSION['work_id'] = '';
     echo '<script>window.alert("You cant access this page without answer the questions....!!!!");window.location.assign("help.php")</script>';
-} else {
+} else if (!isset($_SESSION['client_id'])) {
     $_SESSION['generate_id'] = '';
     $_SESSION['appointment_thera'] = '';
     $_SESSION['rec_word_id'] = '';
@@ -88,8 +88,11 @@ if (isset($_POST['upload'])) { //upload appointment
     $user_time3 = strtotime($date);
     $user_time4 = date("Y-m-d", $user_time3);
 
+    $sqli = "SELECT * FROM user_choices where selectID='" . $_SESSION['generate_id'] . "'";
+    $run = $conn->query($sqli) or die($conn->error . __LINE__);
+
     if (empty($error)) {
-        if (!empty($_SESSION['generate_id'])) {
+        if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) > 0)) {
             $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
@@ -101,6 +104,25 @@ if (isset($_POST['upload'])) { //upload appointment
                 $_SESSION['user_email'] = '';
                 $_SESSION['work_id'] = '';
                 $_SESSION['rec_work_id'] = '';
+                $_SESSION['choice_gender'] = '';
+                $_SESSION['choice_age'] = '';
+                $_SESSION['choice_lan'] = '';
+            }
+        } else if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) == 0)) {
+            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
+            $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+            if ($result == true) {
+
+                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                header('refresh: 3; url=Home.php');
+                $_SESSION['generate_id'] = '';
+                $_SESSION['user_email'] = '';
+                $_SESSION['work_id'] = '';
+                $_SESSION['rec_work_id'] = '';
+                $_SESSION['choice_gender'] = '';
+                $_SESSION['choice_age'] = '';
+                $_SESSION['choice_lan'] = '';
             }
         } else {
             $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
@@ -326,7 +348,7 @@ function build_calendar($month, $year)
                                                                         echo $_SESSION['select_name_first'] . "&nbsp;" . $_SESSION['select_name_last'];
                                                                         ?></h3>
                                             <h3 class="therapist_license"><?php
-                                                                            echo $_SESSION['select_license'];
+                                                                            echo $_SESSION['select_education_level'];
                                                                             ?></h3>
                                         </div>
                                     </div>
