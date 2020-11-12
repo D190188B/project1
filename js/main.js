@@ -13,7 +13,7 @@ $(document).ready(function (e) {
         var theraCity = $(this).attr('data-theracity');
         var theraPost = $(this).attr('data-therapost');
         var theraState = $(this).attr('data-therastate');
-        var theraLicense = $(this).attr('data-theralicense');
+        var data_education = $(this).attr('data-education');
         var theraResume = $(this).attr('data-theraresume');
         var theraProfile = $(this).attr('data-theraprofile');
         // var theraMalay = $(this).attr('data-theraMalay');
@@ -35,7 +35,7 @@ $(document).ready(function (e) {
         $('#city').val(theraCity);
         $('#postCode').val(theraPost);
         $('#state').val(theraState);
-        $('#license').val(theraLicense);
+        $('#education').val(data_education);
         $('#resume').val(theraResume);
     });
 
@@ -57,12 +57,12 @@ $(document).ready(function (e) {
     });
 
     $(".custom-select").change(function () {
-        var license = $(".custom-select").val();
+        var education = $(this).val();
         $.ajax({
             url: "insert.php",
             method: "post",
             data: {
-                getLicense: license
+                getEdu: education
             },
             dataType: "text",
             success: function (data) {
