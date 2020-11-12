@@ -34,7 +34,7 @@ if (isset($_SESSION['thera_id'])) {
             $_SESSOPM['thera_phone'] = $row['phone'];
             $_SESSION['thera_age'] = $row['age'];
             $_SESSION['thera_email'] = $row['email'];
-            $_SESSION['thera_license'] = $row['license'];
+            $_SESSION['thera_education'] = $row['education_level'];
             $_SESSION['thera_profile_image'] = $row['profile_image'];
             $_SESSION['thera_gender'] = $row['gender'];
             $_SESSION['thera_malay'] = $row['Malay'];
@@ -502,8 +502,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                 <h4 style="color:black">Language</h4>
                                 <hr>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $_SESSION['thera_malay'] ?>" id="<?php echo $_SESSION['thera_malay'] ?>" name="malay" style="margin-top:9px;display:none">
-                                    <label class="form-check-label" for="<?php echo $_SESSION['thera_malay'] ?>">
+                                    <label class="form-check-label" for="malay">
                                         <h4>Malay</h4>
                                     </label>
                                     <?php if ($_SESSION['thera_malay'] == "Yes") {
@@ -513,8 +512,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                     } ?>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $_SESSION['thera_english'] ?>" id="<?php echo $_SESSION['thera_english'] ?>" name="english" style="margin-top:9px;display:none">
-                                    <label class="form-check-label" for="<?php echo $_SESSION['thera_english'] ?>">
+                                    <label class="form-check-label" for="english">
                                         <h4>English</h4>
                                     </label>
                                     <?php if ($_SESSION['thera_english'] == "Yes") {
@@ -524,8 +522,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                     } ?>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $_SESSION['thera_mandarin'] ?>" id="<?php echo $_SESSION['thera_mandarin'] ?>" name="mandarin" style="margin-top:9px;display:none">
-                                    <label class="form-check-label" for="<?php echo $_SESSION['thera_mandarin'] ?>">
+                                    <label class="form-check-label" for="mandarin">
                                         <h4>Mandarin</h4>
                                     </label>
                                     <?php if ($_SESSION['thera_mandarin'] == "Yes") {
@@ -660,12 +657,8 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                 }
                                                 ?>
 
-                                                <td><?php if ($statusID == '1') {
-                                                    ?>
-                                                        <button name="accept" type="submit" class="btn btn-info btn-xs" onclick="return confirm('Are you sure you want to Accept?')" value="<?php echo $appointment_id ?>" id="accept" form="thera_save">Accept</button>
-                                                        <br>
-                                                    <?php
-                                                    } else if ($statusID == '5') {
+                                                <td><?php
+                                                    if ($statusID == '5') {
                                                     ?>
                                                         <a href="https://api.whatsapp.com/send?phone=<?php echo $user_phone ?>&text=&source=&data=" target="null"><button name="chat" type="submit" class="btn btn-outline-success btn-xs my-2" id="chat">Chat</button></a>
                                                     <?php
@@ -910,6 +903,8 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
 
     <script type="text/javascript">
         $(document).ready(function(e) {
+
+
             $(".view").click(function() {
 
                 $('#slot').html($(this).attr('data-appointmentID'));
