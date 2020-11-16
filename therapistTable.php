@@ -477,7 +477,8 @@ if (isset($_POST['reject'])) {
 
                     <div class="col">
                         <h4 style="color:rgb(34, 19, 48)">Resume</h4>
-                        <input type="text" readonly name="resume" id="resume" class="form-control">
+                        <!-- <input type="text" readonly name="resume" id="resume" class="form-control"> -->
+                        <img src="" alt="image" id="resume" style="width:100%">
                     </div>
                 </div>
                 <div class="modal-footer">
