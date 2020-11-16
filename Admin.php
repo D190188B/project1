@@ -113,7 +113,7 @@ if (isset($_SESSION['thera_id'])) {
 
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="#" class="btn btn-primary btn-lg w-75 h-100" role="button">
+										<a href="reviewTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-comment"></span> <br />Reviews</a>
 									</div>
 
