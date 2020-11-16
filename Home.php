@@ -1,5 +1,6 @@
 <?php
 include ("sessionTop.php");
+$_SESSION['generate_id'] = '';
 ?>
 
 <!doctype html>
@@ -95,7 +96,7 @@ include ("sessionTop.php");
                 When you need someone to talk to, we're here to listen and help you feel better.<br>
               </p>
 
-              <button class="btn1" type="submit"><a href="question.php?id=1">Get Started</a></button>
+              <button class="btn1" type="submit"><a href="help.php">Get Started</a></button>
             </div>
 
 
@@ -116,7 +117,7 @@ include ("sessionTop.php");
                 Discover your personal growth path and learn new coping skills to grow stronger each day.<br><br>
                 Each step on your path is a simple self help activity, designed to help you feel better.<br>
 
-                <button class="btn2"><a href="question.php?id=1">Get Started</a></button>
+                <button class="btn2"><a href="help.php">Get Started</a></button>
               </p>
 
             </div>
