@@ -2,12 +2,11 @@
 include("sessionTop.php");
 $generate_id = uniqid();
 
-if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) && (isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) && (isset($_SESSION['choice_lan']))) && (empty($_SESSION['generate_id']) && (isset($_SESSION['generate_id'])))) {
+if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) && (isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) && (isset($_SESSION['choice_lan']))) && (empty($_SESSION['generate_id']) && (isset($_SESSION['generate_id']))) && (isset($_SESSION['client_id']))) {
     echo '<script>window.alert("You cannot direct access this page..!");window.location.assign("Home.php")</script>';
     $_SESSION['generate_id'] = '';
     $_SESSION['user_email'] = '';
-
-} else if (!empty($_SESSION['generate_id']) && (empty($_SESSION['choice_gender'])) && (empty($_SESSION['choice_age'])) && (empty($_SESSION['choice_lan'])) && (empty($_SESSION['generate_id']))) {
+} else if ((!empty($_SESSION['generate_id'])) && ((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) || (!isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) || (!isset($_SESSION['choice_lan']))) && isset($_SESSION['client_id'])) {
     $email = $_SESSION['client_email'];
     $query = "select * from user_choices where user_email='$email'";
     $choices = $conn->query($query) or die($conn->error . __LINE__);
@@ -38,8 +37,10 @@ if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender'])))
             }
         }
     }
-} else if ((!empty($_SESSION['choice_gender'])) && (!empty($_SESSION['choice_age'])) && (!empty($_SESSION['choice_lan'])) && (empty($_SESSION['generate_id']))) {
+} else if ((!empty($_SESSION['choice_gender'])) && (!empty($_SESSION['choice_age'])) && (!empty($_SESSION['choice_lan'])) && ((empty($_SESSION['generate_id'])) || (!isset($_SESSION['generate_id']))) && isset($_SESSION['client_id'])) {
     $_SESSION['generate_id'] = $generate_id;
+} else if(!isset($_SESSION['client_id'])){
+    echo '<script>window.alert("You must login first..!");window.location.assign("login.php")</script>';
 }
 
 
@@ -52,11 +53,10 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
     if ($run->num_rows > 0) {
         $sqli = "delete from user_choices where selectID='$generate'";
         $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
-        
+
         $_SESSION['rec_work_id'] = '';
         $_SESSION['work_id'] = '';
         echo '<script>window.location.assign("help.php");</script>';
-        
     } else {
         $_SESSION['rec_work_id'] = '';
         $_SESSION['work_id'] = '';
@@ -99,7 +99,7 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
                         <?php include("ResultExtend.php") ?>
 
                         <div class="col-md-12">
-                            <form action="showResult.php" method="POST" id="cancel">
+                            <form action="showResult.php" method="POST">
                                 <input type="submit" value="Cancel" name="cancel" id="cancel" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel?')">
                             </form>
                         </div>
