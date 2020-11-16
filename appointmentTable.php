@@ -110,7 +110,11 @@ if (isset($_POST['delete'])) {
                                     <td><?php echo $user_time ?></td>
                                     <td><?php echo $user_date ?></td>
                                     <td><?php echo $therapist ?></td>
-                                    <td>No</td>
+                                    <td><?php if ($paymentStatus == "2") {
+                                            echo "<span style='color:green;font-size:25px;font-weight:600'>Paid</span>";
+                                        } else {
+                                            echo "<span style='color:red'>No</span>";
+                                        } ?></td>
                                     <td><?php echo $created_TIME ?></td>
 
                                     <td class="text-center">
