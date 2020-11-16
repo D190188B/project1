@@ -90,10 +90,21 @@ if (isset($_POST['direct'])) {
                         <h3 class="theraAbout">SPECIALTIES</h3>
 
                         <ul>
-                            <li>Stres,Anxiety</li>
-                            <li>Relationship issues</li>
-                            <li>Self esteem</li>
-                            <li>Depression</li>
+                            <?php
+                            $runSpec = "SELECT * FROM specialties where Therapist_ID ='" . $_SESSION['detail_work_theraID'] . "'";
+                            $getSpec = $conn->query($runSpec) or die($conn->error . __LINE__);
+
+                            if ($getSpec->num_rows > 0) {
+                                while ($row = $getSpec->fetch_array()) {
+                                    $specialty = $row['specialty'];
+
+                            ?>
+
+                                    <li><?php echo $specialty ?></li>
+                            <?php
+                                }
+                            }
+                            ?>
                         </ul>
                         <p class="para"><strong>Years of Experience</strong>&nbsp;:22</p>
                         <hr>
