@@ -82,6 +82,11 @@ if (isset($_POST['upload'])) { //upload appointment
         $error[] = "You forgot to enter your therapistID";
     }
 
+    $session = validate_input_text($_POST['session']);
+    if(empty($session)){
+        $error[] = "You forgot to enter your sessionID";
+    }
+
     $user_time1 = strtotime($time);
     $user_time2 = date("h:i a", $user_time1);
 
@@ -93,7 +98,8 @@ if (isset($_POST['upload'])) { //upload appointment
 
     if (empty($error)) {
         if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) > 0)) {
-            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
+            
+            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
@@ -109,7 +115,7 @@ if (isset($_POST['upload'])) { //upload appointment
                 $_SESSION['choice_lan'] = '';
             }
         } else if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) == 0)) {
-            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
+            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
@@ -125,7 +131,7 @@ if (isset($_POST['upload'])) { //upload appointment
                 $_SESSION['choice_lan'] = '';
             }
         } else {
-            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
+            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
@@ -396,6 +402,14 @@ function build_calendar($month, $year)
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="session">Session</label>
+                                        <select id="session" name="session" class="custom-select">
+                                            <option value="1">per week (RM 70.00)</option>
+                                            <option value="2">per month (RM 250.00)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="time">Time</label>
                                         <input type="time" class="form-control" name="time" placeholder="Time" required>
                                         <div class="valid-feedback">Valid.</div>
@@ -405,6 +419,7 @@ function build_calendar($month, $year)
                                                                                         echo $_SESSION['select_id'];
                                                                                         ?>">
                                     </div>
+
                             </div>
                         </div>
                     </div>
