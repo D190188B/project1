@@ -1,13 +1,17 @@
 <?php
 include('sessionTop.php');
+$date = date("Y-m-d"); //get the current date);
+
 
 if (isset($_GET['appointmentID'])) {
+
     $_SESSION['pay_appointmentID'] = $_GET['appointmentID'];
     $appointmentID = $_GET['appointmentID'];
     $sql = "SELECT * FROM appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where appointment_id='$appointmentID'";
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result->num_rows > 0) {
+
         while ($row = $result->fetch_assoc()) {
             $appointment_id = $row['appointment_id'];
             $user_Email = $row['user_Email'];
@@ -16,9 +20,15 @@ if (isset($_GET['appointmentID'])) {
             $user_date = $row['user_date'];
             $paymentStatus = $row['paymentStatus'];
             $created_TIME = $row['created_TIME'];
+            $sessionID = $row['session_ID'];
             $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
+
+            $user_time3 = strtotime($user_date);
+            $user_time4 = date("Y-m-d", $user_time3);
         }
     }
+} else {
+    echo '<script>window.alert("You cannot direct access this page..!")</script>';
 }
 ?>
 
@@ -75,12 +85,47 @@ if (isset($_GET['appointmentID'])) {
 
                     <div class="col-md-12">
                         <h4>Therapist</h4>
-                        <input type="text" class="form-control" name="appointmentID" id="appointmentID" value="<?php echo $therapist ?>" readonly>
+                        <input type="text" class="form-control" name="Therapist" id="Therapist" value="<?php echo $therapist ?>" readonly>
                     </div>
 
                     <div class="col-md-12">
                         <h4>Payment amount(RM)</h4>
-                        <input type="text" class="form-control" name="Amount" id="Amount" value="10.00" readonly>
+                        <input type="text" class="form-control" name="Amount" id="Amount" value="<?php
+                                                                                                    $sum = 0;
+                                                                                                    if ($sessionID == 1) {
+                                                                                                        $sum = 0;
+
+                                                                                                        while ($user_time4 <= $date) {
+
+                                                                                                            $user_time4 = date('Y-m-d', strtotime($user_time4 . ' +7 day'));
+                                                                                                            $sum += 70;
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        $sum = 0;
+
+                                                                                                        //Then we'll get the first day of the month that is in the argument of this function
+                                                                                                        $getCurrent = mktime(0, 0, 0, date('m', strtotime($user_time4)), date('d', strtotime($user_time4)), date('Y', strtotime($user_time4)));
+                                                                                                        $getconCurrent = date('Y-m-d', $getCurrent);
+
+                                                                                                        //Now getting the number of days in a month
+                                                                                                        $numberCurrentDays = date('t', $getCurrent);
+
+                                                                                                        while ($getconCurrent <= $date) {
+                                                                                                            //Then we'll get the first day of the month that is in the argument of this function
+                                                                                                            $getCurrent = mktime(0, 0, 0, date('m', strtotime($user_time4)) + 1, date('d', strtotime($user_time4)), date('Y', strtotime($user_time4)));
+
+                                                                                                            $getconCurrent = date('Y-m-d', $getCurrent);
+
+                                                                                                            //Now getting the number of days in a month
+                                                                                                            $numberCurrentDays = date('t', $getCurrent);
+
+                                                                                                            $plusDay = "+" . $numberCurrentDays . " day";
+                                                                                                            $user_time4 = date('Y-m-d', strtotime($user_time4 . $plusDay));
+                                                                                                            $sum += 250;
+                                                                                                        }
+                                                                                                    }
+                                                                                                    echo number_format($sum, 2);
+                                                                                                    ?>" readonly>
                     </div>
 
                     <div class="col-md-12">
