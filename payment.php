@@ -93,36 +93,10 @@ if (isset($_GET['appointmentID'])) {
                         <input type="text" class="form-control" name="Amount" id="Amount" value="<?php
                                                                                                     $sum = 0;
                                                                                                     if ($sessionID == 1) {
-                                                                                                        $sum = 0;
+                                                                                                        $sum = 70;
 
-                                                                                                        while ($user_time4 <= $date) {
-
-                                                                                                            $user_time4 = date('Y-m-d', strtotime($user_time4 . ' +7 day'));
-                                                                                                            $sum += 70;
-                                                                                                        }
                                                                                                     } else {
-                                                                                                        $sum = 0;
-
-                                                                                                        //Then we'll get the first day of the month that is in the argument of this function
-                                                                                                        $getCurrent = mktime(0, 0, 0, date('m', strtotime($user_time4)), date('d', strtotime($user_time4)), date('Y', strtotime($user_time4)));
-                                                                                                        $getconCurrent = date('Y-m-d', $getCurrent);
-
-                                                                                                        //Now getting the number of days in a month
-                                                                                                        $numberCurrentDays = date('t', $getCurrent);
-
-                                                                                                        while ($getconCurrent <= $date) {
-                                                                                                            //Then we'll get the first day of the month that is in the argument of this function
-                                                                                                            $getCurrent = mktime(0, 0, 0, date('m', strtotime($user_time4)) + 1, date('d', strtotime($user_time4)), date('Y', strtotime($user_time4)));
-
-                                                                                                            $getconCurrent = date('Y-m-d', $getCurrent);
-
-                                                                                                            //Now getting the number of days in a month
-                                                                                                            $numberCurrentDays = date('t', $getCurrent);
-
-                                                                                                            $plusDay = "+" . $numberCurrentDays . " day";
-                                                                                                            $user_time4 = date('Y-m-d', strtotime($user_time4 . $plusDay));
-                                                                                                            $sum += 250;
-                                                                                                        }
+                                                                                                        $sum = 250;
                                                                                                     }
                                                                                                     echo number_format($sum, 2);
                                                                                                     ?>" readonly>
