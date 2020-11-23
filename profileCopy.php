@@ -167,7 +167,7 @@ $getWait = $conn->query($wait) or die($conn->error . __LINE__);
 
 
 //get today list
-$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date ='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
+$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date <='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
 //get today list
 $results = $conn->query($mysql) or die($conn->error . __LINE__);
 //get today number
@@ -181,7 +181,7 @@ $AcceptNum = 0;
 $paidNum = 0;
 
 //get the payment
-$paid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='2' and paymentStatus='1'";
+$paid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and (appointment_status='5' or appointment_status='2') and paymentStatus='1'";
 //get the payment
 $getPaid = $conn->query($paid) or die($conn->error . __LINE__);
 //get the payment list number
@@ -193,8 +193,68 @@ if ($getPaidNum->num_rows > 0) {
     }
 }
 
+$CurrentPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='5' and paymentStatus='2' ";
+$getCurrentPaid = $conn->query($CurrentPaid) or die($conn->error . __LINE__);
+if ($getCurrentPaid->num_rows > 0) {
+    while ($row = $getCurrentPaid->fetch_assoc()) {
+        $appointment_id = $row['appointment_id'];
+        $user_Email = $row['user_Email'];
+        $user_method = $row['user_method'];
+        $user_time = $row['user_time'];
+        $user_date = $row['user_date'];
+        $paymentStatus = $row['paymentStatus'];
+        $session_Time = $row['session_Time'];
+        $created_TIME = $row['created_TIME'];
+        $sessionID = $row['session_ID'];
+        $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
+
+        $user_time3 = strtotime($user_date);
+        $user_time4 = date("Y-m-d", $user_time3);
+
+        $sum = 0;
+        if ($sessionID == 1) {
+            $count = 0;
+
+            //Then we'll get the first day of the month that is in the argument of this function
+            $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+            $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+
+            while ($getconAppointmentTime != $date && $count != 7) {
+                $count++;
+                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+
+                if ($count == 7 && $getconAppointmentTime == $date) {
+                    $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
+                    $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+                    header("refresh:0;url=profileCopy.php");
+                }
+            }
+        } else {
+            $count = 0;
+
+            //Then we'll get the first day of the month that is in the argument of this function
+            $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+            $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+
+            //Now getting the number of days in a month
+            $numberCurrentDays = date('t', $getAppointmentTime);
+
+            while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
+                $count++;
+                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+
+                if ($count == $numberCurrentDays && $getconAppointmentTime == $date) {
+                    $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
+                    $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+                    header("refresh:0;url=profileCopy.php");
+                }
+            }
+        }
+    }
+}
+
 //get the payment history
-$paidHistory = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='2' and paymentStatus='2'";
+$paidHistory = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and paymentStatus='2'";
 
 //get the payment history
 $getPaidHistory = $conn->query($paidHistory) or die($conn->error . __LINE__);
@@ -207,6 +267,7 @@ if ($getTodayNum->num_rows > 0) {
         $user_date = $row['user_date'];
         $appointment_status = $row['appointment_status'];
         $paymentStatus = $row['paymentStatus'];
+        $session_ID = $row['session_ID'];
 
         $user_time1 = strtotime($row['user_time']);
         $user_time2 = date("h:i a", $user_time1);
@@ -215,15 +276,16 @@ if ($getTodayNum->num_rows > 0) {
         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        if (($appointment_status == '2') && ($paymentStatus == '2')) {
+        if (($appointment_status == '2')) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
-        } else if (($appointment_status == '2') && ($paymentStatus == '1')) {
-            $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
-            $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
-            header("refresh:0;url=profileCopy.php");
         }
+        // } else if (($appointment_status == '2') && ($paymentStatus == '1')) {
+        //     $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
+        //     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+        //     header("refresh:0;url=profileCopy.php");
+        // }
 
         if ($appointment_status == '5') {
             ++$appointmentNum;
@@ -258,8 +320,10 @@ if (isset($_POST['submitReview'])) {
         $error[] = "You forgot to enter your text_area";
     }
 
+    $name = $_SESSION['client_name_first'] . " " . $_SESSION['client_name_last'];
+
     if (empty($error)) {
-        $sql = "INSERT INTO review values ('','$AppointmentID','$TherapistID','$text_review',NOW())";
+        $sql = "INSERT INTO review values ('','$AppointmentID','$name','$TherapistID','$text_review',1,NOW())";
         $result = $conn->query($sql) or die($conn->error . __LINE__);
 
         if ($result == true) {
@@ -268,7 +332,7 @@ if (isset($_POST['submitReview'])) {
             display:block !important;            
         }</style>';
 
-        header("refresh:1;url=profileCopy.php");
+            header("refresh:1;url=profileCopy.php");
         }
     }
 }
@@ -286,7 +350,9 @@ if (isset($_POST['submitReview'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("header1.php") ?>
+<header>
+    <?php require_once("header1.php") ?>
+</header>
 
 <body>
     <section id="profile_copy">
@@ -519,6 +585,7 @@ if (isset($_POST['submitReview'])) {
                                             $user_method = $row['user_method'];
                                             $user_time = $row['user_time'];
                                             $user_date = $row['user_date'];
+                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
@@ -617,6 +684,7 @@ if (isset($_POST['submitReview'])) {
                                             $user_method = $row['user_method'];
                                             $user_time = $row['user_time'];
                                             $user_date = $row['user_date'];
+                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
 
@@ -700,6 +768,7 @@ if (isset($_POST['submitReview'])) {
                                             $user_method = $row['user_method'];
                                             $user_time = $row['user_time'];
                                             $user_date = $row['user_date'];
+                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
@@ -764,9 +833,9 @@ if (isset($_POST['submitReview'])) {
                                                     }
 
                                                     $checkReview = "SELECT * FROM review where Appointment_ID='$appointment_id'";
-                                                    $check = $conn->query($checkReview) or die($conn->error.__LINE__);
+                                                    $check = $conn->query($checkReview) or die($conn->error . __LINE__);
 
-                                                    if (($statusID == '6') && ($check->num_rows==0)) {
+                                                    if (($statusID == '6') && ($check->num_rows == 0)) {
                                                         echo "<button name=\"reviews\" data-toggle=\"modal\" data-target=\"#reviewModal\" class=\"btn btn-info btn-xs reviews\" data-review=\"$appointment_id\" data-therapistID=\"$therapist_id\">Make reviews</button>";
                                                     }
                                                     ?>
@@ -819,6 +888,7 @@ if (isset($_POST['submitReview'])) {
                                             $user_method = $row['user_method'];
                                             $user_time = $row['user_time'];
                                             $user_date = $row['user_date'];
+                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $paymentStatus = $row['paymentStatus'];
 
@@ -879,6 +949,7 @@ if (isset($_POST['submitReview'])) {
                                             $user_method = $row['user_method'];
                                             $user_time = $row['user_time'];
                                             $user_date = $row['user_date'];
+                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $paymentStatus = $row['paymentStatus'];
 
@@ -987,35 +1058,15 @@ if (isset($_POST['submitReview'])) {
             </div>
         </div>
     </section>
-    <script src="https://www.paypal.com/sdk/js?client-id=AWvgBnBqNDG7BblFWo-V7Jx_cKStjDXdalDvZiJ4QqcnKYtcCBGkTd1hn3LPCELeXgiNwl0RI9Tnsxsc&currency=MYR">
-        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+
     </script>
     <script>
-        var Amount = $('#Amount').val();
-
         $(document).ready(function(e) {
             $(".reviews").click(function() {
                 $('#appointmentID').val($(this).attr('data-review'));
                 $('#therapist').val($(this).attr('data-therapistID'));
             });
         });
-
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                // This function sets up the details of the transaction, including the amount and line item details.
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: Amount
-                        }
-                    }],
-                });
-            },
-            onApprove: function(data, actions) {
-                // This function captures the funds from the transaction.
-                window.location = "transaction-completed.php?&orderID=" + data.orderID;
-            }
-        }).render('#paypal-button-container');
     </script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
