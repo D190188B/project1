@@ -119,7 +119,7 @@ if (isset($_POST['search'])) {
 // }
 
 if (isset($_POST['appontmentID'])) {
-    $total=0;
+    $total = 0;
     $appointmentID = $_POST['appontmentID'];
     $getChoices = "SELECT * FROM user_choices left join questions on user_choices.question_ID=questions.question_number left join choices on user_choices.choice_ID=choices.choice_id where selectID ='$appointmentID'";
     $run = $conn->query($getChoices) or die($conn->error . __LINE__);
@@ -127,16 +127,18 @@ if (isset($_POST['appontmentID'])) {
     if ($run->num_rows > 0) {
         $output = "<div class='row'>";
         while ($row = $run->fetch_assoc()) {
+            $question_num = $row['question_number'];
             $question = $row['question_text'];
             $choice = $row['text'];
 
-        $output .= "<div class='col-md-12 my-2'>
+            if ($question_num > 5 && $question_num !=31) {
+                $output .= "<div class='col-md-12 my-2'>
                 <h5 style='color:rgb(34, 19, 48)'>$question</h5>
                 <input type='text' name='user_choices' class='form-control' value='$choice' readonly>
             </div>";
-        
+            }
         }
-        $output.="</div>";
+        $output .= "</div>";
         echo $output;
     }
 }
