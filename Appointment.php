@@ -83,7 +83,7 @@ if (isset($_POST['upload'])) { //upload appointment
     }
 
     $session = validate_input_text($_POST['session']);
-    if(empty($session)){
+    if (empty($session)) {
         $error[] = "You forgot to enter your sessionID";
     }
 
@@ -97,41 +97,60 @@ if (isset($_POST['upload'])) { //upload appointment
     $run = $conn->query($sqli) or die($conn->error . __LINE__);
 
     if (empty($error)) {
-        if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) > 0)) {
-            
-            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW())";
-            $result = $conn->query($sql) or die($conn->error . __LINE__);
+        if (!empty($_SESSION['generate_id']) && ((!empty($_SESSION['work_id'])) || (!empty($_SESSION['rec_work_id']))) && (mysqli_num_rows($run) > 0)) {
 
-            if ($result == true) {
+            if ((!empty($_SESSION['rec_work_id'])) && (!empty($_SESSION['directRec'])) && (mysqli_num_rows($run) == 3)) {
+                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
+                $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-                header('refresh: 3; url=Home.php');
-                $_SESSION['generate_id'] = '';
-                $_SESSION['user_email'] = '';
-                $_SESSION['work_id'] = '';
-                $_SESSION['rec_work_id'] = '';
-                $_SESSION['choice_gender'] = '';
-                $_SESSION['choice_age'] = '';
-                $_SESSION['choice_lan'] = '';
-            }
-        } else if (!empty($_SESSION['generate_id']) && (mysqli_num_rows($run) == 0)) {
-            $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW())";
-            $result = $conn->query($sql) or die($conn->error . __LINE__);
+                if ($result == true) {
+                    $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                    header('refresh: 3; url=Home.php');
+                    $_SESSION['generate_id'] = '';
+                    $_SESSION['user_email'] = '';
+                    $_SESSION['work_id'] = '';
+                    $_SESSION['rec_work_id'] = '';
+                    $_SESSION['choice_gender'] = '';
+                    $_SESSION['choice_age'] = '';
+                    $_SESSION['choice_lan'] = '';
+                    $_SESSION['directRec'] = '';
+                }
+            } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
+                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-            if ($result == true) {
+                if ($result == true) {
+                    $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                    header('refresh: 3; url=Home.php');
+                    $_SESSION['generate_id'] = '';
+                    $_SESSION['user_email'] = '';
+                    $_SESSION['work_id'] = '';
+                    $_SESSION['rec_work_id'] = '';
+                    $_SESSION['choice_gender'] = '';
+                    $_SESSION['choice_age'] = '';
+                    $_SESSION['choice_lan'] = '';
+                    $_SESSION['directRec'] = '';
+                }
+            } else {
+                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-                header('refresh: 3; url=Home.php');
-                $_SESSION['generate_id'] = '';
-                $_SESSION['user_email'] = '';
-                $_SESSION['work_id'] = '';
-                $_SESSION['rec_work_id'] = '';
-                $_SESSION['choice_gender'] = '';
-                $_SESSION['choice_age'] = '';
-                $_SESSION['choice_lan'] = '';
+                if ($result == true) {
+
+                    $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                    header('refresh: 3; url=Home.php');
+                    $_SESSION['generate_id'] = '';
+                    $_SESSION['user_email'] = '';
+                    $_SESSION['work_id'] = '';
+                    $_SESSION['rec_work_id'] = '';
+                    $_SESSION['choice_gender'] = '';
+                    $_SESSION['choice_age'] = '';
+                    $_SESSION['choice_lan'] = '';
+                    $_SESSION['directRec'] = '';
+                }
             }
         } else {
-            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW())";
+            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
             $result = $conn->query($sql) or die($conn->error . __LINE__);
 
             if ($result == true) {
@@ -142,6 +161,10 @@ if (isset($_POST['upload'])) { //upload appointment
                 $_SESSION['user_email'] = '';
                 $_SESSION['work_id'] = '';
                 $_SESSION['rec_work_id'] = '';
+                $_SESSION['choice_gender'] = '';
+                $_SESSION['choice_age'] = '';
+                $_SESSION['choice_lan'] = '';
+                $_SESSION['directRec'] = '';
             }
         }
     } else {
@@ -404,9 +427,10 @@ function build_calendar($month, $year)
                                     <div class="form-group">
                                         <label for="session">Session</label>
                                         <select id="session" name="session" class="custom-select">
-                                            <option value="1">per week (RM 70.00)</option>
-                                            <option value="2">per month (RM 250.00)</option>
+                                            <option value="1" data-money="70.00">per week (RM 70.00)</option>
+                                            <option value="2" data-money="250.00">per month (RM 250.00)</option>
                                         </select>
+                                        <input type="hidden" name="amount" id="amount" value="">
                                     </div>
 
                                     <div class="form-group">
@@ -425,9 +449,12 @@ function build_calendar($month, $year)
                     </div>
                     <div class="modal-footer">
                         <!-- Submit Appointment -->
-                        <input type="submit" name="upload" value="Submit Appointment" class="form-control" onclick="return confirm('Confirm to submit?')">
+                        <input type="submit" name="upload" value="Submit Appointment" class="form-control" onclick="return confirm('Are you sure you want to submit?')" id="submit">
                         <!-- End submit -->
                         </form>
+                        <div class="col-md-12">
+                            <div id="paypal-button-container" style="display:none"></div>
+                        </div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -437,11 +464,14 @@ function build_calendar($month, $year)
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+
             $(".book").click(function() {
                 var dateslot = $(this).attr('data-dateslot');
                 $("#slot").html(dateslot);
                 $("#dateslot").val(dateslot);
             });
+
         });
 
         (function() {
