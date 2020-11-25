@@ -2,9 +2,8 @@
 include('sessionTop.php');
 $date = date("Y-m-d"); //get the current date);
 
-
+$sum = 0;
 if (isset($_GET['appointmentID'])) {
-
     $_SESSION['pay_appointmentID'] = $_GET['appointmentID'];
     $appointmentID = $_GET['appointmentID'];
     $sql = "SELECT * FROM appointment left join therapist on appointment.therapist_ID=therapist.therapist_id where appointment_id='$appointmentID'";
@@ -23,8 +22,53 @@ if (isset($_GET['appointmentID'])) {
             $sessionID = $row['session_ID'];
             $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
 
+            $session_Time = date("Y-m-d", strtotime($row['session_Time']));
+
             $user_time3 = strtotime($user_date);
             $user_time4 = date("Y-m-d", $user_time3);
+
+            if ($sessionID == 1) {
+
+                //Then we'll get the first day of the month that is in the argument of this function
+                $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+                $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +7 day'));
+
+                // while ($count != 7) {
+                //     $count++;
+                //     $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+
+                //     if ($count == 7 && $getconAppointmentTime >= $date) {
+                //         $sum+=70;
+                //     }
+                // }
+                if ($date >= $getconAppointmentTime) {
+                    $sum += 70;
+                }
+            } else {
+                $count = 0;
+
+                //Then we'll get the first day of the month that is in the argument of this function
+                $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+                $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+
+                //Now getting the number of days in a month
+                echo $numberCurrentDays = date('t', $getAppointmentTime);
+                $plusDays = " +" . $numberCurrentDays . "day";
+                echo $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . $plusDays));
+
+                if($date >= $getconAppointmentTime){
+                    $sum += 250;
+                }
+
+                // while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
+                //     $count++;
+                //     $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+
+                //     if ($count == $numberCurrentDays && $getconAppointmentTime == $date) {
+                //     }
+                // }
+            }
         }
     }
 } else {
@@ -91,13 +135,7 @@ if (isset($_GET['appointmentID'])) {
                     <div class="col-md-12">
                         <h4>Payment amount(RM)</h4>
                         <input type="text" class="form-control" name="Amount" id="Amount" value="<?php
-                                                                                                    $sum = 0;
-                                                                                                    if ($sessionID == 1) {
-                                                                                                        $sum = 70;
 
-                                                                                                    } else {
-                                                                                                        $sum = 250;
-                                                                                                    }
                                                                                                     echo number_format($sum, 2);
                                                                                                     ?>" readonly>
                     </div>
