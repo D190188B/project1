@@ -190,7 +190,7 @@ $date = date("Y-m-d"); //get the date
 $time = date("h:i a"); //get the time
 
 //display today list
-$sql = "SELECT * FROM appointment LEFT JOIN onstatus on appointment.appointment_status=onstatus.id where therapist_ID='" . $_SESSION['thera_id'] . "' and user_date='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
+$sql = "SELECT * FROM appointment LEFT JOIN onstatus on appointment.appointment_status=onstatus.id where therapist_ID='" . $_SESSION['thera_id'] . "' and user_date<='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 //display today number
 $getRe = $conn->query($sql) or die($conn->error . __LINE__);
