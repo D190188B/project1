@@ -1,5 +1,11 @@
 <?php
+$generate_id = uniqid();
 include("sessionTop.php");
+
+$_SESSION['choice_gender']='';
+$_SESSION['choice_age']='';
+$_SESSION['choice_lan']='';
+$_SESSION['generate_id']='';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -11,9 +17,7 @@ if (isset($_GET['id'])) {
             $_SESSION['specialty_name'] = $row['name'];
         }
     }
-    $_SESSION['rec_work_id']=$_GET['id'];
-    $_SESSION['generate_id'] = '';
-    
+    $_SESSION['rec_work_id'] = $_GET['id'];
 } else if (isset($_SESSION['current_id']) && (!empty($_SESSION['current_id']))) {
     $_SESSION['current_id'] = '';
 } else if (isset($_SESSION['current_id']) && (empty($_SESSION['current_id']))) {
@@ -23,9 +27,23 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_POST['continue'])) {
-    $_SESSION['choice_gender'] = $_POST['gender'];
-    $_SESSION['choice_age'] = $_POST['age'];
-    $_SESSION['choice_lan'] = $_POST['language'];
+
+    $gender = $_POST['gender'];
+    $age = $_POST['age'];
+    $language = $_POST['language'];
+
+    $email = $_SESSION['client_email'];
+    $_SESSION['directRec'] = "Yes";
+    $_SESSION['generate_id'] = $generate_id;
+
+    $sql = "INSERT into user_choices values('','$generate_id','2','$gender','$email')";
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    $sqli = "INSERT into user_choices values('','$generate_id','3','$age','$email')";
+    $result1 = $conn->query($sqli) or die($conn->error . __LINE__);
+
+    $sq = "INSERT into user_choices values('','$generate_id','31','$language','$email')";
+    $result1 = $conn->query($sq) or die($conn->error . __LINE__);
 
     echo '<script>window.location.assign("showResult.php")</script>';
 }
