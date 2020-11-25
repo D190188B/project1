@@ -167,7 +167,7 @@ $getWait = $conn->query($wait) or die($conn->error . __LINE__);
 
 
 //get today list
-$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date <='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
+$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date<='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
 //get today list
 $results = $conn->query($mysql) or die($conn->error . __LINE__);
 //get today number
@@ -211,7 +211,7 @@ if ($getCurrentPaid->num_rows > 0) {
         $user_time3 = strtotime($user_date);
         $user_time4 = date("Y-m-d", $user_time3);
 
-        $sum = 0;
+
         if ($sessionID == 1) {
             $count = 0;
 
@@ -276,7 +276,7 @@ if ($getTodayNum->num_rows > 0) {
         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        if (($appointment_status == '2')) {
+        if (($appointment_status == '2') && $user_time4 == $date) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
