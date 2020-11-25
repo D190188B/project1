@@ -2,17 +2,49 @@
 include("sessionTop.php");
 $generate_id = uniqid();
 
-if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) && (isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) && (isset($_SESSION['choice_lan']))) && (empty($_SESSION['generate_id']) && (isset($_SESSION['generate_id']))) && (isset($_SESSION['client_id']))) {
+if (((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) || (!isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) || (!isset($_SESSION['choice_lan']))) && (empty($_SESSION['generate_id']) || (!isset($_SESSION['generate_id']))) && (isset($_SESSION['client_id'])) && (!isset($_SESSION['change_id']))) {
     echo '<script>window.alert("You cannot direct access this page..!");window.location.assign("Home.php")</script>';
     $_SESSION['generate_id'] = '';
     $_SESSION['user_email'] = '';
-} else if ((!empty($_SESSION['generate_id'])) && ((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) || (!isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) || (!isset($_SESSION['choice_lan']))) && isset($_SESSION['client_id'])) {
+} else if ((!empty($_SESSION['generate_id']) && (isset($_SESSION['generate_id']))) && ((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))) && ((empty($_SESSION['choice_age'])) || (!isset($_SESSION['choice_age']))) && ((empty($_SESSION['choice_lan'])) || (!isset($_SESSION['choice_lan']))) && isset($_SESSION['client_id']) && (!isset($_SESSION['change_id']) || (empty($_SESSION['change_id'])))) {
     $email = $_SESSION['client_email'];
     $query = "select * from user_choices where user_email='$email'";
     $choices = $conn->query($query) or die($conn->error . __LINE__);
 
     if ($choices->num_rows > 0) {
         while ($row = $choices->fetch_assoc()) {
+            $_SESSION['generate_id'] = $row['selectID'];
+            $choice1 = $row['choice_ID'];
+            $_SESSION['user_email'] = $row['user_email'];
+            switch ($choice1) {
+                case 5:
+                case 6:
+                case 7:
+                   echo $_SESSION['choice_gender'] = $choice1; //get gender choice
+                    break;
+
+                case 8:
+                case 9:
+                case 10:
+                    $_SESSION['choice_age'] = $choice1; //get age choice
+                    break;
+
+                case 98:
+                case 99:
+                case 100:
+                    $_SESSION['choice_lan'] = $choice1; //get language choice
+                    break;
+            }
+        }
+    }
+} else if ((isset($_SESSION['change_id']) && (!empty($_SESSION['change_id']))) && isset($_SESSION['client_id'])) {
+    $_SESSION['generate_id'] = $_SESSION['change_id'];
+    $query = "select * from user_choices left join appointment on user_choices.selectID=appointment.appointment_id where selectID='" . $_SESSION['generate_id'] . "'";
+    $choices = $conn->query($query) or die($conn->error . __LINE__);
+
+    if ($choices->num_rows > 0) {
+        while ($row = $choices->fetch_assoc()) {
+            $_SESSION['change_therapist'] = $row['therapist_ID'];
             $_SESSION['generate_id'] = $row['selectID'];
             $choice1 = $row['choice_ID'];
             $_SESSION['user_email'] = $row['user_email'];
@@ -39,7 +71,7 @@ if (((empty($_SESSION['choice_gender'])) && (isset($_SESSION['choice_gender'])))
     }
 } else if ((!empty($_SESSION['choice_gender'])) && (!empty($_SESSION['choice_age'])) && (!empty($_SESSION['choice_lan'])) && ((empty($_SESSION['generate_id'])) || (!isset($_SESSION['generate_id']))) && isset($_SESSION['client_id'])) {
     $_SESSION['generate_id'] = $generate_id;
-} else if(!isset($_SESSION['client_id'])){
+} else if (!isset($_SESSION['client_id'])) {
     echo '<script>window.alert("You must login first..!");window.location.assign("login.php")</script>';
 }
 
