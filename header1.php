@@ -35,7 +35,7 @@
     <!-- nav bar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="position:fixed;background-color:rgba(34,19,48);">
         <!-- Brand -->
-        <a class="navbar-brand" href="Home.php">Logo</a>
+        <a class="navbar-brand" href="Home.php"><img src="images/Logo.png" alt="logo" style="width:35px"></a>
 
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
