@@ -59,7 +59,7 @@ if (isset($_SESSION['client_id'])) { //if already login
     }
   }
 
-  $topMysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and user_date ='$date1' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
+  $topMysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and user_date <='$date1' and (appointment_status='2' or appointment_status='5' or appointment_status='6') ORDER BY created_TIME DESC";
   $getTodayNum1 = $conn->query($topMysql) or die($conn->error . __LINE__);
   if ($getTodayNum1->num_rows > 0) {
     while ($row = $getTodayNum1->fetch_assoc()) {
@@ -78,7 +78,16 @@ if (isset($_SESSION['client_id'])) { //if already login
   if ($getTopPaid->num_rows > 0) {
     while ($row = $getTopPaid->fetch_assoc()) {
       $appointment_status = $row['appointment_status'];
-        ++$appointmentNumTop;
+      ++$appointmentNumTop;
+    }
+  }
+
+  $checkReject1 = "SELECT * from appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='3'";
+  $runReject1 = $conn->query($checkReject1) or die($conn->error . __LINE__);
+
+  if ($runReject1->num_rows > 0) {
+    while ($row = $runReject1->fetch_assoc()) {
+      ++$appointmentNumTop;
     }
   }
 }
