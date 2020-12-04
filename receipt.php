@@ -41,7 +41,7 @@ if (isset($_SESSION['receipt_ID'])) {
             $_SESSION['receipt_Time'] = date("h:i a", $user_time2);
         }
     }
-}else{
+} else {
     echo "<script>window.alert('You cannot directly access this page...!')</script>";
 }
 ?>
@@ -50,6 +50,7 @@ if (isset($_SESSION['receipt_ID'])) {
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
