@@ -1,7 +1,7 @@
 <?php
 include("sessionTop.php");
 
-$sql = "SELECT * FROM review left join therapist on review.Therapist_ID=therapist.therapist_id ORDER BY Created_Time ASC";
+$sql = "SELECT * FROM review left join therapist on review.Therapist_ID=therapist.therapist_id where checkReview='2' ORDER BY Created_Time ASC";
 $run = $conn->query($sql) or die($conn->error . __LINE__);
 
 ?>
@@ -10,6 +10,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <title>Review</title>
     <link rel="stylesheet" type="text/css" href="css/Reviews.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +35,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
     <div class="logo-header">
         <div class="align-items-center">
             <div class="col-md-12 text-center header-content" style="padding-top:100px;">
-                <img src="https://i.imgur.com/A0t1a3D.png" class="img-fluid logo" alt="logo">
+                <img src="images/Logo.jpg" style="width:20%;height:20%" class="img-fluid logo" alt="logo">
                 <h1 style="color:white">Let's leave some review for us</h1>
                 <p>These are reviews for therapists that work with Care and Healing</p>
             </div>
@@ -51,6 +52,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                         $review_ID = $row['review_ID'];
                         $Appointment_ID = $row['Appointment_ID'];
                         $review = $row['review'];
+                        $checkReview = $row['checkReview'];
                         $client_Name = $row['client_Name'];
 
                         $user_time1 = strtotime($row['Created_Time']);
@@ -59,7 +61,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                         $Time = date("h:i a", $user_time1);
                         $Date = date("Y-m-d", $user_time1);
 
-                        $image=$row['profile_image'];
+                        $image = $row['profile_image'];
                 ?>
 
                         <div class="col-md-6 gedf-main">
@@ -87,10 +89,10 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="mr-2">
-                                                <img class="rounded-circle" width="45" src="<?php echo $image?>" alt="image">
+                                                <img class="rounded-circle" width="45" src="<?php echo $image ?>" alt="image">
                                             </div>
                                             <div class="ml-2">
-                                                <div class="h5 m-0">@<?php echo $name?></div>
+                                                <div class="h5 m-0">@<?php echo $name ?></div>
                                                 <div class="h7 text-muted">Miracles Lee Cross</div>
                                             </div>
                                         </div>
