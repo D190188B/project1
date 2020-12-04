@@ -193,70 +193,70 @@ if ($getPaidNum->num_rows > 0) {
     }
 }
 
-//check if the time is up and didn't cancel, continue to pay
-$CurrentPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='5' and paymentStatus='2' ";
-$getCurrentPaid = $conn->query($CurrentPaid) or die($conn->error . __LINE__);
-if ($getCurrentPaid->num_rows > 0) {
-    while ($row = $getCurrentPaid->fetch_assoc()) {
-        $appointment_id = $row['appointment_id'];
-        $user_Email = $row['user_Email'];
-        $user_method = $row['user_method'];
+// //check if the time is up and didn't cancel, continue to pay
+// $CurrentPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='5' and paymentStatus='2' ";
+// $getCurrentPaid = $conn->query($CurrentPaid) or die($conn->error . __LINE__);
+// if ($getCurrentPaid->num_rows > 0) {
+//     while ($row = $getCurrentPaid->fetch_assoc()) {
+//         $appointment_id = $row['appointment_id'];
+//         $user_Email = $row['user_Email'];
+//         $user_method = $row['user_method'];
 
-        $user_date = $row['user_date'];
-        $paymentStatus = $row['paymentStatus'];
-        $session_Time = $row['session_Time'];
-        $created_TIME = $row['created_TIME'];
-        $sessionID = $row['session_ID'];
-        $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
+//         $user_date = $row['user_date'];
+//         $paymentStatus = $row['paymentStatus'];
+//         $session_Time = $row['session_Time'];
+//         $created_TIME = $row['created_TIME'];
+//         $sessionID = $row['session_ID'];
+//         $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
 
-        $user_time3 = strtotime($user_date);
-        $user_time4 = date("Y-m-d", $user_time3);
+//         $user_time3 = strtotime($user_date);
+//         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        //if weekly session
-        if ($sessionID == 1) {
-            $count = 0;
-            //get the date
-            $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
-            $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+//         //if weekly session
+//         if ($sessionID == 1) {
+//             $count = 0;
+//             //get the date
+//             $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+//             $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
 
-            //if no over 7 days
-            while ($getconAppointmentTime != $date && $count != 7) {
-                $count++;
-                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+//             //if no over 7 days
+//             while ($getconAppointmentTime != $date && $count != 7) {
+//                 $count++;
+//                 $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
 
-                //if the time is up, reset the paymentStatus
-                if ($count == 7 && $getconAppointmentTime == $date) {
-                    $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
-                    $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
-                    header("refresh:0;url=profileCopy.php");
-                }
-            }
-        } else { //if month session
-            $count = 0;
+//                 //if the time is up, reset the paymentStatus
+//                 if ($count == 7 && $getconAppointmentTime == $date) {
+//                     $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
+//                     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+//                     header("refresh:0;url=profileCopy.php");
+//                 }
+//             }
+//         } else { //if month session
+//             $count = 0;
 
-            //if no over a month
-            $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
-            $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+//             //if no over a month
+//             $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+//             $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
 
-            //Now getting the number of days in this month
-            $numberCurrentDays = date('t', $getAppointmentTime);
+//             //Now getting the number of days in this month
+//             $numberCurrentDays = date('t', $getAppointmentTime);
 
-            //If the time is not up and the number of days in this month is not same with count
-            while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
-                $count++;
-                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
+//             //If the time is not up and the number of days in this month is not same with count
+//             while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
+//                 $count++;
+//                 $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
 
-                //if the time is up, reset the paymentStatus
-                if ($count == $numberCurrentDays && $getconAppointmentTime == $date) {
-                    $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
-                    $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
-                    header("refresh:0;url=profileCopy.php");
-                }
-            }
-        }
-    }
-}
+//                 //if the time is up, reset the paymentStatus
+//                 if ($count == $numberCurrentDays && $getconAppointmentTime == $date) {
+//                     $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
+//                     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+//                     header("refresh:0;url=profileCopy.php");
+//                 }
+//             }
+//         }
+//     }
+// }
 
 $checkReject = "SELECT * from appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='3'";
 $runReject = $conn->query($checkReject) or die($conn->error . __LINE__);
@@ -370,7 +370,7 @@ if (isset($_POST['changeThera1'])) {
 ?>
 
 <head>
-<link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
@@ -639,7 +639,7 @@ if (isset($_POST['changeThera1'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php switch ($statusID) {
                                                     case 1:
                                                         echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
@@ -818,7 +818,7 @@ if (isset($_POST['changeThera1'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php switch ($statusID) {
 
                                                     case 1:
@@ -999,7 +999,7 @@ if (isset($_POST['changeThera1'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <td>
                                                     <a href="receipt.php?receiptID=<?php echo $appointment_id ?>"><button name="checkout" id="checkout" type="submit" class="btn btn-success btn-xs">Receipt</button></a><br>
                                                 </td>
