@@ -228,7 +228,7 @@
                                 <label class="custom-control-label" for="anxiety">Anxiety</label>
                             </div>
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="stress" name="specialtiess[]" class="custom-control-input" value="Stress">
+                                <input type="checkbox" id="stress" name="specialties[]" class="custom-control-input" value="Stress">
                                 <label class="custom-control-label" for="stress">Stress</label>
                             </div>
                             <div class="custom-control custom-checkbox">
