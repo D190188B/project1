@@ -2,6 +2,7 @@
 $generate_id = uniqid();
 include("sessionTop.php");
 
+$_SESSION['change_id'] = "";
 $_SESSION['choice_gender']='';
 $_SESSION['choice_age']='';
 $_SESSION['choice_lan']='';
@@ -54,6 +55,7 @@ if (isset($_POST['continue'])) {
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>checkDirect</title>
 
