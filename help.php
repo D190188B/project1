@@ -3,12 +3,14 @@ include("sessionTop.php");
 $sql = "select * from services";
 $result = $conn->query($sql) or die($conn->error . __LINE__);
 $_SESSION['generate_id'] = '';
+$_SESSION['change_id'] = "";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service</title>
@@ -59,13 +61,13 @@ $_SESSION['generate_id'] = '';
                     <div class="col-md-3">
                         <h3 class="work">Tell us about yourself</h3>
                         <i class="fa fa-users" aria-hidden="true"></i>
-                        <p class="work-text">XXX is accepting of people from every gender, orientation and identity</p>
+                        <p class="work-text">C&H is accepting of people from every gender, orientation and identity</p>
                     </div>
 
                     <div class="col-md-3 offset-md-1">
                         <h3 class="work">Get matched to a licensed therapist</h3>
                         <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                        <p class="work-text">Our counselors specialize in the XXX community</p>
+                        <p class="work-text">Our counselors specialize in the C&H community</p>
                     </div>
 
                     <div class="col-md-3 offset-md-1">
