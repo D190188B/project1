@@ -71,7 +71,7 @@ if (isset($_SESSION['client_id'])) { //if already login
   }
 
 
-  $topPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='2' and paymentStatus='1'";
+  $topPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and (appointment_status='2' or appointment_status='5') and paymentStatus='1'";
   //get the payment
   $getTopPaid = $conn->query($topPaid) or die($conn->error . __LINE__);
 
