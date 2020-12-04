@@ -174,6 +174,7 @@ if (isset($_POST['submit'])) {
 <html lang="en">
 
 <head>
+  <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
   <title>therapistInformation</title>
   <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
 
