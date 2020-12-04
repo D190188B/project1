@@ -29,10 +29,10 @@ if (isset($_GET['appointmentID'])) {
 
             if ($sessionID == 1) {
 
-                //Then we'll get the first day of the month that is in the argument of this function
-                $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
-                $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
-                $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +7 day'));
+                // Then we'll get the first day of the month that is in the argument of this function
+                // $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+                // $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+                // $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +7 day'));
 
                 // while ($count != 7) {
                 //     $count++;
@@ -42,24 +42,24 @@ if (isset($_GET['appointmentID'])) {
                 //         $sum+=70;
                 //     }
                 // }
-                if ($date >= $getconAppointmentTime) {
-                    $sum += 70;
-                }
+                // if ($date >= $getconAppointmentTime) {
+                $sum += 70;
+                // }
             } else {
-                $count = 0;
+                // $count = 0;
 
-                //Then we'll get the first day of the month that is in the argument of this function
-                $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
-                $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
+                // //Then we'll get the first day of the month that is in the argument of this function
+                // $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
+                // $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
 
-                //Now getting the number of days in a month
-                echo $numberCurrentDays = date('t', $getAppointmentTime);
-                $plusDays = " +" . $numberCurrentDays . "day";
-                echo $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . $plusDays));
+                // //Now getting the number of days in a month
+                // $numberCurrentDays = date('t', $getAppointmentTime);
+                // $plusDays = " +" . $numberCurrentDays . "day";
+                // $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . $plusDays));
 
-                if($date >= $getconAppointmentTime){
-                    $sum += 250;
-                }
+                // if($date >= $getconAppointmentTime){
+                $sum += 250;
+                // }
 
                 // while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
                 //     $count++;
@@ -80,6 +80,7 @@ if (isset($_GET['appointmentID'])) {
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
