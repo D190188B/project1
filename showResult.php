@@ -20,7 +20,7 @@ if (((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))
                 case 5:
                 case 6:
                 case 7:
-                   echo $_SESSION['choice_gender'] = $choice1; //get gender choice
+                    $_SESSION['choice_gender'] = $choice1; //get gender choice
                     break;
 
                 case 8:
@@ -46,6 +46,7 @@ if (((empty($_SESSION['choice_gender'])) || (!isset($_SESSION['choice_gender']))
         while ($row = $choices->fetch_assoc()) {
             $_SESSION['change_therapist'] = $row['therapist_ID'];
             $_SESSION['generate_id'] = $row['selectID'];
+            $_SESSION['specialty_name'] = $row['specialty_name'];
             $choice1 = $row['choice_ID'];
             $_SESSION['user_email'] = $row['user_email'];
             switch ($choice1) {
@@ -98,6 +99,7 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
 ?>
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show Result</title>
