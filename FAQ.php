@@ -149,7 +149,7 @@ include("sessionTop.php");
               <div id="collapseEight" class="panel-collapse collapse">
                 <div class="panel-body">
                   <p>While the usual cost of face-to-face therapy in private practice is about RM200 and above per session (1 hour),
-                    the cost for using this online platform would be at only RM100 1 day for unlimited messaging to your personal therapist.
+                    the cost for using this online platform would be at only RM110 （1 day） for unlimited messaging to your personal therapist.
                     By using this, the amount charged will be the same regardless of the amount of messages and communication that you
                     have with your therapist.You will be charged via your credit card on a monthly recurring basis for the services that you receive
                     through this platform.</p>
