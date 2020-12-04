@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) { //if user register an account
     }
 
     $phone = validate_input_text($_POST['phone']);
-    $phone1 = "+6".$phone;
+    $phone1 = "+6" . $phone;
     if (empty($phone1)) {
         $error[] = "You forgot to enter your phone number";
     }
@@ -161,6 +161,9 @@ if (isset($_POST['login'])) { //if user login
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <header>
