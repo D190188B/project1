@@ -1,5 +1,5 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 ?>
 
 <!doctype html>
@@ -7,6 +7,7 @@ include ("sessionTop.php");
 
 <head>
   <title>FAQ</title>
+  <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -27,12 +28,12 @@ include ("sessionTop.php");
               <div class="panel-heading">
                 <h4 class="panel-title">
                   <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                    1) What is The ? </a>
+                    1) What is The C&H? </a>
                 </h4>
               </div>
               <div id="collapseOne" class="panel-collapse collapse">
                 <div class="panel-body">
-                  The __ is an online counseling platform for licensed/ registered therapists (such as counselors and clinical psychologists).
+                  The C&H is an online counseling platform for licensed/ registered therapists (such as counselors and clinical psychologists).
                   We change the way people get help with facing life's challenges by providing convenient,
                   discreet and affordable access to a licensed therapist.
                   It makes professional counseling available anytime, anywhere, through a computer, tablet or smartphone.
@@ -148,14 +149,14 @@ include ("sessionTop.php");
               <div id="collapseEight" class="panel-collapse collapse">
                 <div class="panel-body">
                   <p>While the usual cost of face-to-face therapy in private practice is about RM200 and above per session (1 hour),
-                    the cost for using this online platform would be at only RM192 per month for unlimited messaging to your personal therapist.
+                    the cost for using this online platform would be at only RM100 1 day for unlimited messaging to your personal therapist.
                     By using this, the amount charged will be the same regardless of the amount of messages and communication that you
                     have with your therapist.You will be charged via your credit card on a monthly recurring basis for the services that you receive
                     through this platform.</p>
                   <p> Once you believe that you are satisfied and no longer require the services provided through this platform,
                     you can easily cancel the subscription in the “settings” page. You will still be able to utilize the services here upon cancellation,
                     up to the date your subscription ends. </p>
-                  <p>We also have a <a href="#">30-day 100% money back guarantee</a> practice to all our clients, because we believe you deserve quality help and guidance. Get matched to a qualified mental health professional risk-free.</p>
+
                 </div>
               </div>
             </div>
@@ -228,7 +229,7 @@ include ("sessionTop.php");
               </div>
               <div id="collapseTwelve" class="panel-collapse collapse">
                 <div class="panel-body">
-                  <p>Click <a href="#">here</a> to get started.
+                  <p>Click <a href="help.php">here</a> to get started.
                 </div>
               </div>
             </div>
