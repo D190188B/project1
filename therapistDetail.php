@@ -38,6 +38,7 @@ if (isset($_POST['direct'])) {
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Therapist Detail</title>
@@ -152,13 +153,38 @@ if (isset($_POST['direct'])) {
 
                     <div class="col-md-12" id="theraRe">
                         <h3 class="theraRe">REVIEWS</h3>
-                        <p class="review">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut doloremque deserunt asperiores facilis nemo quos fuga molestiae corrupti? Ipsum autem cupiditate voluptas ducimus praesentium aliquid porro labore! A, velit eaque?
-                        </p>
+                        <?php
+                        $checkReview = "SELECT * FROM review left join therapist on review.Therapist_ID=therapist.therapist_id where checkReview='2' and review.Therapist_ID='" . $_SESSION['detail_work_theraID'] . "' ORDER BY Created_Time DESC";
+                        $runCheck = $conn->query($checkReview) or die($conn->error . __LINE__);
 
-                        <p class="review">
+                        if ($runCheck->num_rows > 0) {
+                            while ($row = $runCheck->fetch_array()) {
+                                $review_ID = $row['review_ID'];
+                                $Appointment_ID = $row['Appointment_ID'];
+                                $review = $row['review'];
+                                $client_Name = $row['client_Name'];
+
+                                $user_time1 = strtotime($row['Created_Time']);
+                                $name = $row['name_first'] . " " . $row['name_last'];
+
+                                // $Time = date("h:i a", $user_time1);
+                                $Date_Time = date("Y-m-d h:i a", $user_time1);
+
+                                $image = $row['profile_image'];
+
+                        ?>
+
+                                <p class="review">
+                                    <h5>Written by <?php echo $client_Name ?> on <?php echo $Date_Time ?></h5>
+                                    <?php echo $review ?>
+                                </p>
+                        <?php
+                            }
+                        } ?>
+
+                        <!-- <p class="review">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt, omnis. Ad nobis eveniet suscipit aliquid voluptate voluptatem a, nihil sapiente inventore perspiciatis, voluptas cupiditate magnam dolor asperiores quis eaque quam.
-                        </p>
+                        </p> -->
                     </div>
                 </div>
             </div>
