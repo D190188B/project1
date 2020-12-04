@@ -294,6 +294,16 @@
           event.preventDefault();
         }
       });
+
+      $(".changing").click(function () {
+        $("#changeThera1").val($(this).val());
+        $("#cancelThera").val($(this).val());
+      });
+
+      $(".reviews").click(function () {
+        $('#appointmentID').val($(this).attr('data-review'));
+        $('#therapist').val($(this).attr('data-therapistID'));
+      });
     });
 
     function readURL(input) {
