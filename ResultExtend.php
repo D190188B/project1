@@ -2587,8 +2587,8 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
         }
     }
 } else if ((($_SESSION['choice_gender']) == 7) && (($_SESSION['choice_age']) == 10) && (($_SESSION['choice_lan'] == 100))) {
-    if (isset($_SESSION['change_id']) && (!empty($_SESSION['change_id']))) { 
-        $sqli = "SELECT * FROM `specialties` left join therapist on specialties.therapist_ID=therapist.therapist_id LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where specialty='" . $_SESSION['specialty_name'] . "' and therapist.statusID='2' and Mandarin='Yes' and therapist_ID!='" . $_SESSION['change_therapist'] . "'";
+    if (isset($_SESSION['change_id']) && (!empty($_SESSION['change_id']))) {
+        $sqli = "SELECT * FROM `specialties` left join therapist on specialties.therapist_ID=therapist.therapist_id LEFT JOIN `language` on therapist.therapist_id=language.thera_ID where specialty='" . $_SESSION['specialty_name'] . "' and therapist.statusID='2' and Mandarin='Yes' and specialties.therapist_ID!='" . $_SESSION['change_therapist'] . "'";
 
         $run = $conn->query($sqli) or die($conn->error . __LINE__);
         if ($run->num_rows > 0) { //over 1 database(record) so run
