@@ -68,11 +68,6 @@ if (isset($_POST['upload'])) { //upload appointment
         $error[] = "You forgot to enter your method";
     }
 
-    $time = mysqli_real_escape_string($conn, $_POST['time']);
-    if (empty($time)) {
-        $error[] = "You forgot to enter your time";
-    }
-
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     if (empty($date)) {
         $error[] = "You forgot to enter your date";
@@ -87,52 +82,76 @@ if (isset($_POST['upload'])) { //upload appointment
         $error[] = "You forgot to enter your sessionID";
     }
 
-    $user_time1 = strtotime($time);
-    $user_time2 = date("h:i a", $user_time1);
-
     $user_time3 = strtotime($date);
     $user_time4 = date("Y-m-d", $user_time3);
 
     $sqli = "SELECT * FROM user_choices where selectID='" . $_SESSION['generate_id'] . "'";
     $run = $conn->query($sqli) or die($conn->error . __LINE__);
 
+    $check = "SELECT * FROM appointment where appointment_id='" . $_SESSION['generate_id'] . "'";
+    $runcheck = $conn->query($check) or die($conn->error . __LINE__);
+
     if (empty($error)) {
-        if (!empty($_SESSION['generate_id']) && ((!empty($_SESSION['work_id'])) || (!empty($_SESSION['rec_work_id']))) && (mysqli_num_rows($run) > 0)) {
+        if ((mysqli_num_rows($runcheck) > 0)) {
+            $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+            header('refresh: 3; url=Home.php');
+            $sql = "UPDATE appointment set user_method='$method',user_time='$user_time2',user_date='$user_time4',therapist_ID ='" . $_SESSION['appointment_thera'] . "', appointment_status='1' where appointment_id ='" . $_SESSION['generate_id'] . "'";
+            $run = $conn->query($sql) or die($conn->error . __LINE__);
+        } else {
+            if (!empty($_SESSION['generate_id']) && ((!empty($_SESSION['work_id'])) || (!empty($_SESSION['rec_work_id']))) && (mysqli_num_rows($run) > 0)) {
 
-            if ((!empty($_SESSION['rec_work_id'])) && (!empty($_SESSION['directRec'])) && (mysqli_num_rows($run) == 3)) {
-                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
-                $result = $conn->query($sql) or die($conn->error . __LINE__);
+                if ((!empty($_SESSION['rec_work_id'])) && (!empty($_SESSION['directRec'])) && (mysqli_num_rows($run) == 3)) {
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
+                    $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-                if ($result == true) {
-                    $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-                    header('refresh: 3; url=Home.php');
-                    $_SESSION['generate_id'] = '';
-                    $_SESSION['user_email'] = '';
-                    $_SESSION['work_id'] = '';
-                    $_SESSION['rec_work_id'] = '';
-                    $_SESSION['choice_gender'] = '';
-                    $_SESSION['choice_age'] = '';
-                    $_SESSION['choice_lan'] = '';
-                    $_SESSION['directRec'] = '';
-                }
-            } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
-                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
-                $result = $conn->query($sql) or die($conn->error . __LINE__);
+                    if ($result == true) {
+                        $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                        header('refresh: 3; url=Home.php');
+                        $_SESSION['generate_id'] = '';
+                        $_SESSION['user_email'] = '';
+                        $_SESSION['work_id'] = '';
+                        $_SESSION['rec_work_id'] = '';
+                        $_SESSION['choice_gender'] = '';
+                        $_SESSION['choice_age'] = '';
+                        $_SESSION['choice_lan'] = '';
+                        $_SESSION['directRec'] = '';
+                    }
+                } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                    $result = $conn->query($sql) or die($conn->error . __LINE__);
 
-                if ($result == true) {
-                    $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-                    header('refresh: 3; url=Home.php');
-                    $_SESSION['generate_id'] = '';
-                    $_SESSION['user_email'] = '';
-                    $_SESSION['work_id'] = '';
-                    $_SESSION['rec_work_id'] = '';
-                    $_SESSION['choice_gender'] = '';
-                    $_SESSION['choice_age'] = '';
-                    $_SESSION['choice_lan'] = '';
-                    $_SESSION['directRec'] = '';
+                    if ($result == true) {
+                        $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                        header('refresh: 3; url=Home.php');
+                        $_SESSION['generate_id'] = '';
+                        $_SESSION['user_email'] = '';
+                        $_SESSION['work_id'] = '';
+                        $_SESSION['rec_work_id'] = '';
+                        $_SESSION['choice_gender'] = '';
+                        $_SESSION['choice_age'] = '';
+                        $_SESSION['choice_lan'] = '';
+                        $_SESSION['directRec'] = '';
+                    }
+                } else {
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+                    if ($result == true) {
+
+                        $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
+                        header('refresh: 3; url=Home.php');
+                        $_SESSION['generate_id'] = '';
+                        $_SESSION['user_email'] = '';
+                        $_SESSION['work_id'] = '';
+                        $_SESSION['rec_work_id'] = '';
+                        $_SESSION['choice_gender'] = '';
+                        $_SESSION['choice_age'] = '';
+                        $_SESSION['choice_lan'] = '';
+                        $_SESSION['directRec'] = '';
+                    }
                 }
             } else {
-                $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time2','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
                 $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                 if ($result == true) {
@@ -148,23 +167,6 @@ if (isset($_POST['upload'])) { //upload appointment
                     $_SESSION['choice_lan'] = '';
                     $_SESSION['directRec'] = '';
                 }
-            }
-        } else {
-            $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time2','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
-            $result = $conn->query($sql) or die($conn->error . __LINE__);
-
-            if ($result == true) {
-
-                $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
-                header('refresh: 3; url=Home.php');
-                $_SESSION['generate_id'] = '';
-                $_SESSION['user_email'] = '';
-                $_SESSION['work_id'] = '';
-                $_SESSION['rec_work_id'] = '';
-                $_SESSION['choice_gender'] = '';
-                $_SESSION['choice_age'] = '';
-                $_SESSION['choice_lan'] = '';
-                $_SESSION['directRec'] = '';
             }
         }
     } else {
@@ -295,6 +297,7 @@ function build_calendar($month, $year)
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Latest compiled and minified CSS -->
@@ -424,20 +427,23 @@ function build_calendar($month, $year)
                                         </select>
                                     </div>
 
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="session">Session</label>
                                         <select id="session" name="session" class="custom-select">
                                             <option value="1" data-money="70.00">per week (RM 70.00)</option>
                                             <option value="2" data-money="250.00">per month (RM 250.00)</option>
                                         </select>
                                         <input type="hidden" name="amount" id="amount" value="">
+                                    </div> -->
+                                    <div class="form-group">
+                                        <p style="color:red">*You have to pay the bill(RM110) after the therapist accept your appointment.</p>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="time">Time</label>
+                                        <!-- <label for="time">Time</label>
                                         <input type="time" class="form-control" name="time" placeholder="Time" required>
                                         <div class="valid-feedback">Valid.</div>
-                                        <div class="invalid-feedback">Please Select the book time</div>
+                                        <div class="invalid-feedback">Please Select the book time</div> -->
 
                                         <input type="hidden" name="therapistID" value="<?php
                                                                                         echo $_SESSION['select_id'];
