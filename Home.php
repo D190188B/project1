@@ -1,5 +1,5 @@
 <?php
-include ("sessionTop.php");
+include("sessionTop.php");
 $_SESSION['generate_id'] = '';
 ?>
 
@@ -7,13 +7,22 @@ $_SESSION['generate_id'] = '';
 <html lang="en">
 
 <head>
+  <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
+  <style>
+    #map {
+      height: 400px;
+      /* The height is 400 pixels */
+      width: 100%;
+      /* The width is the width of the web page */
+    }
+  </style>
 </head>
 
 <header>
-  <?php include ("header1.php"); ?>
+  <?php include("header1.php"); ?>
 </header>
 
 
@@ -72,7 +81,7 @@ $_SESSION['generate_id'] = '';
             </div>
 
             <div class="arti-contentRight">
-              <p>Counselors in BetterHelp are licensed, trained, experienced, and accredited psychologists (PhD / PsyD), marriage and family therapists (MFT), clinical social workers (LCSW), or licensed professional counselors (LPC). All of them have a Masters Degree or a Doctorate Degree in their field. They have been qualified and certified by their state professional board after successfully completing the necessary education, exams, training and practice. While their experience, expertise and background vary, they all possess at least 3 years and 1,000 hours of hands-on experience. <br></p>
+              <p>Counselors in C&H are licensed, trained, experienced, and accredited psychologists (PhD / PsyD), marriage and family therapists (MFT), clinical social workers (LCSW), or licensed professional counselors (LPC). All of them have a Masters Degree or a Doctorate Degree in their field. They have been qualified and certified by their state professional board after successfully completing the necessary education, exams, training and practice. While their experience, expertise and background vary, they all possess at least 3 years and 1,000 hours of hands-on experience. <br></p>
 
               <button class="btn" type="submit"><a href="OurTherapist.php">Meet Our Therapists</a></button>
             </div>
@@ -121,8 +130,8 @@ $_SESSION['generate_id'] = '';
               </p>
 
             </div>
-
           </div>
+
         </div>
 
         <?php require_once("footer.php"); ?>
@@ -131,6 +140,7 @@ $_SESSION['generate_id'] = '';
   </section>
   <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"></script>
   <script src="js/main.js" type="text/javascript"></script>
+
 </body>
 
 
