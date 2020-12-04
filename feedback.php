@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 <html lang="en" dir="ltr">
 
 <head>
-
+<link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
   <meta charset="utf-8">
   <title>Feedback</title>
   <link rel="stylesheet" href="css/feedback.css">
@@ -103,8 +103,9 @@ if (isset($_POST['submit'])) {
         <span id="feedback_empty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>You must fill up the text area</span>
 
         <button class="btn" id="click" type="submit" onclick="return confirm('Confirm to submit?')" name="submit">Send</button>
+      </div>
     </form>
-    </div>
+
   </body>
 </section>
 
