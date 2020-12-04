@@ -235,12 +235,10 @@
     display: none;
 }
 
-#thera_profile .edit-success {
-    margin-top: -4px !important;
-    display: none;
-}
-
-#thera_profile .edit-fail {
+#thera_profile .edit-success,
+#thera_profile .edit-fail,
+#thera_profile .Password_fail,
+#thera_profile .change-success{
     margin-top: -4px !important;
     display: none;
 }
@@ -261,15 +259,6 @@
     display: none;
 }
 
-#thera_profile .Password_fail {
-    margin-top: -4px !important;
-    display: none;
-}
-
-#thera_profile .change-success {
-    margin-top: -4px !important;
-    display: none;
-}
 
 #thera_profile #password_feedback {
     color: red;
