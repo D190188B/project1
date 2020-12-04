@@ -3,6 +3,7 @@
         let profile_h4 = document.querySelector('#profile_h4');
 
         let appointmentBtn = document.querySelector('#theraAppointment');
+        let generateReportBtn = document.querySelector('.generateReport');
         let appointmentIcon = document.querySelector('#appointment_icon');
         let appointment_h4 = document.querySelector('#appointment_h4');
 
@@ -12,7 +13,7 @@
 
         let profilePage = document.querySelector('#Profile');
         let appointmentPage = document.querySelector('#Appointment');
-        let reportPage = document.querySelector('#Report');
+        let reportPage = document.querySelector('#submitReport-form');
 
 
         let btnEdit = document.querySelector('#edit');
@@ -97,10 +98,28 @@
           profilePage.style.display = "none";
           appointmentPage.style.display = "none";
           reportPage.style.display = "block";
-
         });
 
+        generateReportBtn.addEventListener('click', () => {
 
+          profileIcon.style.color = "white";
+          profile_h4.style.color = "white";
+
+
+          appointmentIcon.style.color = "white";
+          appointment_h4.style.color = "white";
+
+
+
+          reportIcon.style.color = "black";
+          report_h4.style.color = "black";
+
+
+
+          profilePage.style.display = "none";
+          appointmentPage.style.display = "none";
+          reportPage.style.display = "block";
+        });
 
 
         btnEdit.addEventListener('click', () => {
@@ -327,6 +346,59 @@
               });
               event.preventDefault();
             }
+          });
+
+          $('#submitReport').click(function () {
+            if ($('#report_ID').val() == '' && $('#reportFile').val() == '') {
+              $('#selection-empty').css({
+                display: "block"
+              });
+
+              $('#file-empty').css({
+                display: "block"
+              })
+
+              event.preventDefault();
+            } else if ($('#report_ID').val() == '' && $('#reportFile').val() != '') {
+              $('#selection-empty').css({
+                display: "block"
+              });
+
+              $('#file-empty').css({
+                display: "none"
+              })
+
+              event.preventDefault();
+            } else if ($('#report_ID').val() != '' && $('#reportFile').val() == '') {
+              $('#selection-empty').css({
+                display: "none"
+              });
+
+              $('#file-empty').css({
+                display: "block"
+              })
+
+              event.preventDefault();
+            }
+
+          });
+
+          $(".view").click(function () {
+
+            $('#slot').html($(this).attr('data-appointmentID'));
+
+            $.ajax({
+              url: "insert.php",
+              method: "post",
+              data: {
+                appontmentID: $(this).attr('data-appointmentID')
+              },
+              dataType: "text",
+              success: function (data) {
+                $('#modal-body').html(data);
+              }
+            });
+
           });
         });
 
