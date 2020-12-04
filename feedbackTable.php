@@ -14,11 +14,26 @@ if ($conn->connect_error) {
 
 session_start();
 
+if (isset($_SESSION['admin_id'])) {
+	$id = $_SESSION['admin_id'];
+	$sql = "SELECT * from ms_admin where id='$id'";
+	$result = $conn->query($sql) or die($conn->error . __LINE__);
+
+	if ($result->num_rows > 0) { //over 1 database(record) so run
+		while ($row = $result->fetch_assoc()) {
+			$_SESSION['admin_first_name'] = $row['first_name'];
+			$_SESSION['admin_last_name'] = $row['last_name'];
+		}
+	}
+} else {
+	echo "<script>window.alert('You cannot directly access this page!!');window.location.assign('adminLogin.php')</script>";
+}
+
 // if delete
 if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete']; //id
 
-    $sql = "delete from appointment where appointment_id='$deleteID'"; //delete where therapist_id == this.id
+    $sql = "delete from feedback where appointment_id='$deleteID'"; //delete where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 }
 
@@ -30,6 +45,7 @@ if (isset($_POST['delete'])) {
 
 <head>
     <!-- Required meta tags -->
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -89,12 +105,12 @@ if (isset($_POST['delete'])) {
                         if ($result->num_rows > 0) { //over 1 database(record) so run
                             while ($row = $result->fetch_assoc()) {
                                 //display result
-                                $Number = $row['Num'];
-                                $name = $row['name'];
-                                $email = $row['email'];
-                                $feedback = $row['feedback'];
+                                $Number = $row['id'];
+                                $name = $row['client_name'];
+                                $email = $row['client_email'];
+                                $feedback = $row['feedbackMessage'];
 
-                                $getDateTime = strtotime($row['time_created']);
+                                $getDateTime = strtotime($row['create_time']);
                                 $getDate = date("Y-m-d", $getDateTime);
 
                                 $getTime = date("h:i a", $getDateTime);
