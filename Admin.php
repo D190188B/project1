@@ -15,21 +15,24 @@ if ($conn->connect_error) {
 
 session_start();
 
-if (isset($_SESSION['thera_id'])) {
-	$id = $_SESSION['thera_id'];
-	$sql = "SELECT * from therapist where therapist_id='$id'";
+if (isset($_SESSION['admin_id'])) {
+	$id = $_SESSION['admin_id'];
+	$sql = "SELECT * from ms_admin where id='$id'";
 	$result = $conn->query($sql) or die($conn->error . __LINE__);
 
 	if ($result->num_rows > 0) { //over 1 database(record) so run
 		while ($row = $result->fetch_assoc()) {
-			$_SESSION['name_first'] = $row['name_first'];
-			$_SESSION['name_last'] = $row['name_last'];
-			$_SESSION['about'] = $row['about'];
-			$_SESSION['age'] = $row['age'];
-			$_SESSION['profile_image'] = $row['profile_image'];
-			$_SESSION['gender'] = $row['gender'];
+			$_SESSION['admin_first_name'] = $row['first_name'];
+			$_SESSION['admin_last_name'] = $row['last_name'];
 		}
 	}
+} else {
+	echo "<script>window.alert('You cannot directly access this page!!');window.location.assign('adminLogin.php')</script>";
+}
+
+if (isset($_POST['logout'])) {
+	session_destroy();
+	header('refresh: 0; url=adminLogin.php');
 }
 ?>
 
@@ -37,7 +40,8 @@ if (isset($_SESSION['thera_id'])) {
 <html lang="en">
 
 <head>
-	<title>Admin</title>
+	<link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
+	<title>C&H</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
@@ -67,7 +71,12 @@ if (isset($_SESSION['thera_id'])) {
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="page-caption">
-								<h1 class="page-title">Welcome <?php echo $_SESSION['name_first'] . "&nbsp;" . $_SESSION['name_last'] ?></h1>
+								<form action="Admin.php" method="POST">
+									<h1 class="page-title">Welcome <?php echo $_SESSION['admin_first_name'] . "&nbsp;" . $_SESSION['admin_last_name'] ?> &nbsp; &nbsp;
+										<button class="btn btn-danger" name="logout">
+											<h4>Log out</h4>
+										</button></h1>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -102,12 +111,12 @@ if (isset($_SESSION['thera_id'])) {
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="appointmentTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
+										<a href="paymentTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-list-alt"></span><br />Payment List</a>
 									</div>
 
 									<div class="col-xs-12 col-md-3 my-5">
-										<a href="#" class="btn btn-primary btn-lg w-75 h-100" role="button">
+										<a href="reportTable.php" class="btn btn-primary btn-lg w-75 h-100" role="button">
 											<span class="glyphicon glyphicon-signal"></span> <br />Reports</a>
 									</div>
 
