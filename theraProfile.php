@@ -74,6 +74,32 @@ function upload_thera($path, $file)
     return $default;
 }
 
+//check the pathinfo and upload the image
+function upload_report($path, $file)
+{
+    $targetDir = $path;
+    $default = "";
+
+    // get the filename
+    $filename = basename($file['name']);
+    $targetFilePath = $targetDir . $filename;
+    $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+    if (!empty($filename)) {
+        // allow certain file format
+        $allowType = array('doc', 'docx', 'pdf');
+        if (in_array($fileType, $allowType)) {
+            // upload file to the server
+            if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+                return $targetFilePath;
+            }
+        }
+    }
+    // return default image
+    return $default;
+}
+
+
 // prevent injection
 function validate_input_text($textValue)
 {
@@ -205,7 +231,7 @@ if ($checkCurrent->num_rows > 0) {
     while ($row = $checkCurrent->fetch_assoc()) {
         //display result
         $appointment_id = $row['appointment_id'];
-        $user_time = $row['user_time'];
+
         $user_date = $row['user_date'];
         $appointment_status = $row['appointment_status'];
 
@@ -232,6 +258,10 @@ $getWaitTol = $conn->query($wait) or die($conn->error . __LINE__);
 $all = "SELECT * FROM appointment LEFT JOIN onstatus on appointment.appointment_status=onstatus.id where therapist_ID='$id' ORDER BY created_TIME DESC";
 $getAll = $conn->query($all) or die($conn->error . __LINE__);
 
+//report all list
+$report = "SELECT * FROM appointment where therapist_ID='" . $_SESSION['thera_id'] . "' and appointment_status='6'";
+$runReport = $conn->query($report) or die($conn->error . __LINE__);
+
 //today number
 $TodayNum = 0;
 //waiting number
@@ -245,7 +275,7 @@ if ($getReTol->num_rows > 0) {
         $appointment_id = $row['appointment_id'];
         $user_Email = $row['user_Email'];
         $user_method = $row['user_method'];
-        $user_time = $row['user_time'];
+
         $user_date = $row['user_date'];
         $user_phone = $row['user_phone'];
         $appointment_status = $row['appointment_status'];
@@ -339,7 +369,7 @@ if (isset($_POST['change'])) { //if change the password
         #thera_profile .Password_fail{
             display:block !important;            
         }</style>';
-        header('refresh: 1; url=theraProfile.php');
+        // header('refresh: 1; url=theraProfile.php');
     }
 }
 
@@ -347,20 +377,94 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
     session_destroy();
     echo '<script>window.location.assign("therapistLogin.php")</script>';
 }
+
+if (isset($_POST['submitReport'])) {
+    $error = array();
+    $report_ID = validate_input_text($_POST['report_ID']);
+    if (empty($report_ID)) {
+        $error[] = "you forget your report_ID";
+    }
+    $reportFile = upload_report('./report/', $_FILES['reportFile']);
+    if (empty($reportFile)) {
+        $error[] = "you forget your reportFile";
+    }
+
+    if (empty($error)) {
+        $sql = "INSERT INTO report values('','$report_ID','" . $_SESSION['thera_id'] . "','$reportFile',NOW())";
+        $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+        if ($result == true) {
+            echo '<style type="text/css">
+            .report-success{
+                display:block !important;
+            }</style>';
+            header('refresh: 1; url=theraProfile.php');
+        }
+    } else {
+        echo '<style type="text/css">
+        .report-fail{
+            display:block !important;
+        }</style>';
+    }
+}
 ?>
 
 <!doctype html>
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <title>Therapist Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="css/therapistProfile.css">
+
+    <style>
+        #submitReport-form {
+            width: 100%;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            display: none;
+        }
+
+        #reportInside {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        #submitReport {
+            display: inline-block !important;
+            background: darkblue !important;
+            padding: 14px 0 !important;
+            color: white !important;
+            width: 100%;
+            cursor: pointer !important;
+            margin-top: 8px !important;
+            transition: ease 0.5s !important;
+        }
+
+        #submitReport:hover {
+            transition: ease 0.5s !important;
+            background-color: rgba(59, 82, 114) !important;
+        }
+
+        .report-fail {
+            margin-top: -4px !important;
+            display: none;
+        }
+
+        .report-success {
+            margin-top: -4px !important;
+            display: none;
+        }
+    </style>
 
 </head>
 
@@ -370,6 +474,11 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
         <div class="alert alert-success alert-dismissible fade show text-center edit-success">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Edit Successful!</strong>
+        </div>
+
+        <div class="alert alert-success alert-dismissible fade show text-center report-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Submit report Successful!</strong>
         </div>
 
         <div class="alert alert-success alert-dismissible fade show text-center change-success">
@@ -385,6 +494,11 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
         <div class="alert alert-danger alert-dismissible fade show text-center Password_fail">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Your Current Password is not Correct!</strong>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show text-center report-fail">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Submit report fail, Please Try Again!</strong>
         </div>
 
         <div class="row" id="whole">
@@ -592,7 +706,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                         <th>Appointment_ID</th>
                                         <th>Client Email</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
                                         <th>Action</th>
@@ -607,7 +721,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                             $appointment_id = $row['appointment_id'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $user_phone = $row['user_phone'];
                                             $appointment_status = $row['appointment_status'];
@@ -615,6 +729,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                             $status = $row['status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
+                                            $checkDirec = $row['checkDirec'];
 
 
                                             $user_time3 = strtotime($row['user_date']);
@@ -625,7 +740,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $user_Email ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
+                                                <td><?php echo $user_time4?></td>
                                                 <?php
 
                                                 switch ($statusID) {
@@ -661,9 +776,15 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                     if ($statusID == '5') {
                                                     ?>
                                                         <a href="https://api.whatsapp.com/send?phone=<?php echo $user_phone ?>&text=&source=&data=" target="null"><button name="chat" type="submit" class="btn btn-outline-success btn-xs my-2" id="chat">Chat</button></a>
+                                                        <button name="finish" type="submit" class="btn btn-success my-2 btn-xs" onclick="return confirm('Please ensure the consultation was finish')" value="<?php echo $appointment_id ?>" id="finish" form="thera_save">Finish</button>
+
                                                     <?php
+                                                        if ($checkDirec == '1') {
+                                                            echo "<button class='btn btn-success btn-xs my-2 view' name='view' data-toggle='modal' data-target='#viewAns' data-appointmentID='$appointment_id'>View answer</button>";
+                                                        }
                                                     }
                                                     ?>
+                                                </td>
                                             </tr>
                                     <?php }
                                     } ?></tbody>
@@ -676,7 +797,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                         <th>Appointment_ID</th>
                                         <th>Client Email</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -690,7 +811,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                             $appointment_id = $row['appointment_id'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $appointment_status = $row['appointment_status'];
                                             $statusID = $row['id'];
@@ -707,7 +828,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $user_Email ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php
                                                 switch ($statusID) {
                                                     case 1:
@@ -751,7 +872,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                         <th>Appointment_ID</th>
                                         <th>Client Email</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
                                         <th>Action</th>
@@ -766,7 +887,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                             $appointment_id = $row['appointment_id'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $appointment_status = $row['appointment_status'];
                                             $statusID = $row['id'];
@@ -787,7 +908,7 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $user_Email ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time ?></td>
+                                                <td><?php echo $user_time4?></td>
                                                 <?php
                                                 switch ($statusID) {
                                                     case 1:
@@ -812,21 +933,21 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                                                 ?>
                                                 <?php
                                                 switch ($paymentStatus) {
+                                                    case 0:
+                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">-</td>";
+                                                        break;
                                                     case 1:
                                                         echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">No</td>";
                                                         break;
                                                     case 2:
-                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">Yes</td>";
+                                                        echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">paid</td>";
                                                         break;
                                                 }
                                                 ?>
 
                                                 <td><?php switch ($statusID) {
-                                                        case 1:
-                                                            echo "<button name=\"accept\" type=\"submit\" class=\"btn btn-info btn-xs\" onclick=\"return confirm('Are you sure you want to Accept?')\" value=\"$appointment_id\" id=\"accept\" form=\"thera_save\">Accept</button>";
-                                                            break;
-                                                        case 5:
-                                                            echo "<button name=\"finish\" type=\"submit\" class=\"btn btn-outline-success my-2 btn-xs\" onclick=\"return confirm('Please ensure the consultation was finish')\" value=\"$appointment_id\" id=\"finish\" form=\"thera_save\">Finish</button>";
+                                                        case 6:
+                                                            echo "<button name=\"generateReport\" id=\"generateReport\" type=\"submit\" class=\"btn btn-info btn-xs generateReport\" value=\"$appointment_id\">Generate Report</button>";
                                                             break;
                                                     }
                                                     if ($statusID == '1') {
@@ -846,8 +967,60 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
                     </div>
                 </div>
 
-                <div class="col-md-12" id="Report">
+                <div class="col-md-12" id="submitReport-form">
+                    <div class="row" id="reportInside">
+                        <div class="col-md-12">
+                            <h1 style="text-align:center;margin-bottom:40px">Report</h1>
 
+                            <div class="col">
+                                <h5 style="color:rgb(34, 19, 48);">Appointment ID (Finished)</h5>
+                                <select id="report_ID" name="report_ID" form="thera_save" class="form-control">
+                                    <option value=""></option>
+                                    <?php
+                                    if ($runReport->num_rows > 0) {
+                                        while ($row = $runReport->fetch_assoc()) {
+                                            //display result
+                                            $appointment_id = $row['appointment_id'];
+                                            $user_Email = $row['user_Email'];
+                                            $user_method = $row['user_method'];
+
+                                            $user_date = $row['user_date'];
+                                            $specialty_name = $row['specialty_name'];
+                                            $session_ID = $row['session_ID'];
+                                            $checkDirec = $row['checkDirec'];
+
+                                            $paymentStatus = $row['paymentStatus'];
+                                            $created_TIME = $row['created_TIME'];
+                                            $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
+
+                                            $checkReport = "SELECT * FROM report where appointment_id='$appointment_id'";
+                                            $runCheck = $conn->query($checkReport) or die($conn->error . __LINE__);
+
+                                            if ($runCheck->num_rows == 0) {
+                                    ?>
+                                                <option value="<?php echo $appointment_id ?>"><?php echo $appointment_id ?></option>
+
+                                    <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                                <span style="color:red;display:none" id="selection-empty">This field cannot be empty!!!</span>
+                                <hr>
+                            </div>
+
+                            <div class="col">
+                                <h5 style="color:rgb(34, 19, 48);margin-top:30px;">Report File </h5>
+                                <input type="file" name="reportFile" id="reportFile" form="thera_save" class="form-control-file">
+                                <span style="color:red;display:none" id="file-empty">This field cannot be empty!!!</span>
+                                <span style="color:red"> *Only allow .doc, .docx and .pdf file</span>
+                                <hr>
+                            </div>
+
+                            <button class="btn" id="submitReport" type="submit" onclick="return confirm('Confirm to submit the report?')" form="thera_save" name="submitReport">Send</button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -900,30 +1073,6 @@ if (isset($_POST['sub_logout'])) { //mobile version logout
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/therapist.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function(e) {
-
-
-            $(".view").click(function() {
-
-                $('#slot').html($(this).attr('data-appointmentID'));
-
-                $.ajax({
-                    url: "insert.php",
-                    method: "post",
-                    data: {
-                        appontmentID: $(this).attr('data-appointmentID')
-                    },
-                    dataType: "text",
-                    success: function(data) {
-                        $('#modal-body').html(data);
-                    }
-                });
-
-            });
-        });
-    </script>
 </body>
 
 </html>
