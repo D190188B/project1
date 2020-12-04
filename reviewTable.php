@@ -14,6 +14,21 @@ if ($conn->connect_error) {
 
 session_start();
 
+if (isset($_SESSION['admin_id'])) {
+	$id = $_SESSION['admin_id'];
+	$sql = "SELECT * from ms_admin where id='$id'";
+	$result = $conn->query($sql) or die($conn->error . __LINE__);
+
+	if ($result->num_rows > 0) { //over 1 database(record) so run
+		while ($row = $result->fetch_assoc()) {
+			$_SESSION['admin_first_name'] = $row['first_name'];
+			$_SESSION['admin_last_name'] = $row['last_name'];
+		}
+	}
+} else {
+	echo "<script>window.alert('You cannot directly access this page!!');window.location.assign('adminLogin.php')</script>";
+}
+
 // if delete
 if (isset($_POST['delete'])) {
     $deleteID = $_POST['delete']; //id
@@ -35,6 +50,7 @@ if (isset($_POST['approve'])) {
 
 <head>
     <!-- Required meta tags -->
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
