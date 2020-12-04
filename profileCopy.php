@@ -1,5 +1,6 @@
 <?php
 include("sessionTop.php");
+$_SESSION['change_id'] = "";
 
 if (isset($_SESSION['client_id'])) { //if already login
     $id = $_SESSION['client_id'];
@@ -130,10 +131,10 @@ if (isset($_POST['change'])) { //if user change the password
     }
 }
 
-if (isset($_POST['cancel'])) {
-    $deleteID = $_POST['cancel']; //id
+if (isset($_POST['cancel'])) { //if cancel the appointment
+    $cancelID = $_POST['cancel']; //id
 
-    $sql = "delete from appointment where appointment_id='$deleteID'"; //delete where therapist_id == this.id
+    $sql = "update appointment set appointment_status='4' where appointment_id='$cancelID'"; //cancel where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result == true) {
@@ -167,7 +168,7 @@ $getWait = $conn->query($wait) or die($conn->error . __LINE__);
 
 
 //get today list
-$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date<='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
+$mysql = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date='$date' and (appointment_status='2' or appointment_status='5') ORDER BY created_TIME DESC";
 //get today list
 $results = $conn->query($mysql) or die($conn->error . __LINE__);
 //get today number
@@ -176,8 +177,7 @@ $getTodayNum = $conn->query($mysql) or die($conn->error . __LINE__);
 //count number
 $appointmentNum = 0;
 $TodayNum = 0;
-$AcceptNum = 0;
-
+$allNum = 0;
 $paidNum = 0;
 
 //get the payment
@@ -193,6 +193,7 @@ if ($getPaidNum->num_rows > 0) {
     }
 }
 
+//check if the time is up and didn't cancel, continue to pay
 $CurrentPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and appointment_status='5' and paymentStatus='2' ";
 $getCurrentPaid = $conn->query($CurrentPaid) or die($conn->error . __LINE__);
 if ($getCurrentPaid->num_rows > 0) {
@@ -200,7 +201,7 @@ if ($getCurrentPaid->num_rows > 0) {
         $appointment_id = $row['appointment_id'];
         $user_Email = $row['user_Email'];
         $user_method = $row['user_method'];
-        $user_time = $row['user_time'];
+
         $user_date = $row['user_date'];
         $paymentStatus = $row['paymentStatus'];
         $session_Time = $row['session_Time'];
@@ -212,37 +213,41 @@ if ($getCurrentPaid->num_rows > 0) {
         $user_time4 = date("Y-m-d", $user_time3);
 
 
+        //if weekly session
         if ($sessionID == 1) {
             $count = 0;
-
-            //Then we'll get the first day of the month that is in the argument of this function
+            //get the date
             $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
             $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
 
+            //if no over 7 days
             while ($getconAppointmentTime != $date && $count != 7) {
                 $count++;
                 $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
 
+                //if the time is up, reset the paymentStatus
                 if ($count == 7 && $getconAppointmentTime == $date) {
                     $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
                     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
                     header("refresh:0;url=profileCopy.php");
                 }
             }
-        } else {
+        } else { //if month session
             $count = 0;
 
-            //Then we'll get the first day of the month that is in the argument of this function
+            //if no over a month
             $getAppointmentTime = mktime(0, 0, 0, date('m', strtotime($session_Time)), date('d', strtotime($session_Time)), date('Y', strtotime($session_Time)));
             $getconAppointmentTime = date('Y-m-d', $getAppointmentTime);
 
-            //Now getting the number of days in a month
+            //Now getting the number of days in this month
             $numberCurrentDays = date('t', $getAppointmentTime);
 
+            //If the time is not up and the number of days in this month is not same with count
             while ($getconAppointmentTime < $date && $count != $numberCurrentDays) {
                 $count++;
                 $getconAppointmentTime = date('Y-m-d', strtotime($getconAppointmentTime . ' +1 day'));
 
+                //if the time is up, reset the paymentStatus
                 if ($count == $numberCurrentDays && $getconAppointmentTime == $date) {
                     $changeStatus = "UPDATE appointment set paymentStatus='1' where appointment_id='$appointment_id'";
                     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
@@ -253,39 +258,44 @@ if ($getCurrentPaid->num_rows > 0) {
     }
 }
 
+$checkReject = "SELECT * from appointment where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='3'";
+$runReject = $conn->query($checkReject) or die($conn->error . __LINE__);
+
+if ($runReject->num_rows > 0) {
+    while ($row = $runReject->fetch_assoc()) {
+        ++$appointmentNum;
+        ++$allNum;
+    }
+}
+
 //get the payment history
-$paidHistory = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and paymentStatus='2'";
+$paidHistory = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id left join payments on appointment.appointment_id=payments.appointmentID where user_Email='$email' and paymentStatus='2'";
 
 //get the payment history
 $getPaidHistory = $conn->query($paidHistory) or die($conn->error . __LINE__);
 
-
+//if the time is up and already paid it, change the appointment status
 if ($getTodayNum->num_rows > 0) {
     while ($row = $getTodayNum->fetch_assoc()) {
         $appointment_id = $row['appointment_id'];
-        $user_time = $row['user_time'];
         $user_date = $row['user_date'];
         $appointment_status = $row['appointment_status'];
         $paymentStatus = $row['paymentStatus'];
         $session_ID = $row['session_ID'];
 
-        $user_time1 = strtotime($row['user_time']);
-        $user_time2 = date("h:i a", $user_time1);
-
         $user_time3 = strtotime($row['user_date']);
         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        if (($appointment_status == '2') && $user_time4 == $date) {
+        if (($appointment_status == '2') && $user_time4 == $date && $paymentStatus == 2) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
+        } else if (($appointment_status == '2') && $user_time4 == $date &&  ($paymentStatus == 1)) {
+            $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
+            $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+            header("refresh:0;url=profileCopy.php");
         }
-        // } else if (($appointment_status == '2') && ($paymentStatus == '1')) {
-        //     $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
-        //     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
-        //     header("refresh:0;url=profileCopy.php");
-        // }
 
         if ($appointment_status == '5') {
             ++$appointmentNum;
@@ -294,13 +304,15 @@ if ($getTodayNum->num_rows > 0) {
     }
 }
 
+//if theres any appointment accepted
 if ($getAccept->num_rows > 0) {
     while ($row = $getAccept->fetch_assoc()) {
         ++$appointmentNum;
-        ++$AcceptNum;
+        ++$allNum;
     }
 }
 
+//submit the review
 if (isset($_POST['submitReview'])) {
     $AppointmentID = mysqli_real_escape_string($conn, $_POST['appointmentID']);
     $TherapistID = mysqli_real_escape_string($conn, $_POST['therapist']);
@@ -337,9 +349,28 @@ if (isset($_POST['submitReview'])) {
     }
 }
 
+
+if (isset($_POST['finish'])) { //if finish the consultation
+    $id = $_POST['finish']; //id
+    $statusID = 6;
+
+    $sql = "update appointment set appointment_status='$statusID', paymentStatus='0' where appointment_id='$id'"; //set status=3 where therapist_id == this.id
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result == true) { //if the result was successful update
+        header('refresh: 0; url=profileCopy.php');
+    }
+}
+
+if (isset($_POST['changeThera1'])) {
+    $_SESSION['change_id'] = $_POST['changeThera1'];
+    header("refresh:0;url=showResult.php");
+}
+
 ?>
 
 <head>
+<link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
@@ -549,8 +580,8 @@ if (isset($_POST['submitReview'])) {
                             <a class="nav-link" data-toggle="tab" href="#waiting">Wait List &nbsp;</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#all">All&nbsp;<?php if ($AcceptNum != 0) {
-                                                                                            echo "<span class=\"badge badge-primary\">$AcceptNum</span>";
+                            <a class="nav-link" data-toggle="tab" href="#all">All&nbsp;<?php if ($allNum != 0) {
+                                                                                            echo "<span class=\"badge badge-primary\">$allNum</span>";
                                                                                         }
                                                                                         ?></a>
                         </li>
@@ -566,7 +597,7 @@ if (isset($_POST['submitReview'])) {
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
                                         <th>Action<br></th>
@@ -583,7 +614,7 @@ if (isset($_POST['submitReview'])) {
                                             $therapist_nameLast = $row['name_last'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
@@ -595,9 +626,6 @@ if (isset($_POST['submitReview'])) {
                                             $status = $row['status'];
 
                                             $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
-
-                                            $user_time1 = strtotime($row['user_time']);
-                                            $user_time2 = date("h:i a", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -611,7 +639,7 @@ if (isset($_POST['submitReview'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                                <td><?php echo $user_time4?></td>
                                                 <?php switch ($statusID) {
                                                     case 1:
                                                         echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
@@ -649,6 +677,7 @@ if (isset($_POST['submitReview'])) {
                                                     if ($statusID == '5') {
                                                     ?>
                                                         <a href="https://api.whatsapp.com/send?phone=<?php echo $therapist_phone ?>&text=&source=&data=" target="null"><button name="chat" type="submit" class="btn btn-outline-success btn-xs my-2" id="chat">Chat</button></a>
+                                                        <button name="finish" type="submit" class="btn btn-success my-2 btn-xs" onclick="return confirm('Please ensure the consultation was finish')" value="<?php echo $appointment_id ?>" id="finish" form="save">Finish</button>
                                                     <?php
                                                     }
                                                     ?>
@@ -666,7 +695,7 @@ if (isset($_POST['submitReview'])) {
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -682,7 +711,7 @@ if (isset($_POST['submitReview'])) {
                                             $therapist_nameLast = $row['name_last'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
@@ -692,9 +721,6 @@ if (isset($_POST['submitReview'])) {
                                             $status = $row['status'];
 
                                             $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
-
-                                            $user_time1 = strtotime($row['user_time']);
-                                            $user_time2 = date("h:i a", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -708,7 +734,7 @@ if (isset($_POST['submitReview'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php switch ($statusID) {
                                                     case 1:
                                                         echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
@@ -749,7 +775,7 @@ if (isset($_POST['submitReview'])) {
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
                                         <th>Action</th>
@@ -766,21 +792,19 @@ if (isset($_POST['submitReview'])) {
                                             $therapist_nameLast = $row['name_last'];
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
                                             $therapist_id = $row['therapist_id'];
+                                            $checkDirec = $row['checkDirec'];
 
                                             $statusID = $row['id'];
                                             $status = $row['status'];
 
                                             $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
-
-                                            $user_time1 = strtotime($row['user_time']);
-                                            $user_time2 = date("h:i a", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -794,8 +818,9 @@ if (isset($_POST['submitReview'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                                <td><?php echo $user_time4?></td>
                                                 <?php switch ($statusID) {
+
                                                     case 1:
                                                         echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">$status</td>";
                                                         break;
@@ -803,7 +828,7 @@ if (isset($_POST['submitReview'])) {
                                                         echo "<td style=\"color:green;font-size:20px;font-weight:bold;\">$status</td>";
                                                         break;
                                                     case 3:
-                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
+                                                        echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status <br/>(due to personal reasons)</td>";
                                                         break;
                                                     case 4:
                                                         echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">$status</td>";
@@ -818,6 +843,9 @@ if (isset($_POST['submitReview'])) {
 
                                                 <?php
                                                 switch ($paymentStatus) {
+                                                    case 0:
+                                                        echo "<td style=\"color:black;font-size:20px;font-weight:bold;\">-</td>";
+                                                        break;
                                                     case 1:
                                                         echo "<td style=\"color:red;font-size:20px;font-weight:bold;\">No</td>";
                                                         break;
@@ -828,15 +856,17 @@ if (isset($_POST['submitReview'])) {
                                                 ?>
 
                                                 <td>
-                                                    <?php if ($user_time4 > $date) {
+                                                    <?php if ($user_time4 > $date && $checkDirec != 1 && ($appointment_status == 2 || $appointment_status == 1 || $appointment_status == 3)) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
+                                                    } else if ($user_time4 > $date && $checkDirec == 1 && $appointment_status == 3) {
+                                                        echo "<button name=\"cancel\" type=\"submit\" class=\"btn btn-danger btn-xs changing\" value=\"$appointment_id\" data-toggle='modal' data-target='#changeThera'>Change</button>";
                                                     }
 
                                                     $checkReview = "SELECT * FROM review where Appointment_ID='$appointment_id'";
                                                     $check = $conn->query($checkReview) or die($conn->error . __LINE__);
 
                                                     if (($statusID == '6') && ($check->num_rows == 0)) {
-                                                        echo "<button name=\"reviews\" data-toggle=\"modal\" data-target=\"#reviewModal\" class=\"btn btn-info btn-xs reviews\" data-review=\"$appointment_id\" data-therapistID=\"$therapist_id\">Make reviews</button>";
+                                                        echo "<button name=\"reviews\" data-toggle=\"modal\" data-target=\"#reviewModal\" class=\"btn btn-info btn-xs reviews\" data-review=\"$appointment_id\" data-therapistID=\"$therapist_name\">Make reviews</button>";
                                                     }
                                                     ?>
                                                 </td>
@@ -871,7 +901,7 @@ if (isset($_POST['submitReview'])) {
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -886,7 +916,7 @@ if (isset($_POST['submitReview'])) {
                                             $therapist_nameFirst = $row['name_first'];
                                             $therapist_nameLast = $row['name_last'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
@@ -896,9 +926,6 @@ if (isset($_POST['submitReview'])) {
                                             $status = $row['status'];
 
                                             $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
-
-                                            $user_time1 = strtotime($row['user_time']);
-                                            $user_time2 = date("h:i a", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -932,7 +959,7 @@ if (isset($_POST['submitReview'])) {
                                         <th>Appointment_ID</th>
                                         <th>Therapist</th>
                                         <th>Consultation method</th>
-                                        <th>Date and Time</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -947,7 +974,7 @@ if (isset($_POST['submitReview'])) {
                                             $therapist_nameFirst = $row['name_first'];
                                             $therapist_nameLast = $row['name_last'];
                                             $user_method = $row['user_method'];
-                                            $user_time = $row['user_time'];
+
                                             $user_date = $row['user_date'];
                                             $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
@@ -958,8 +985,6 @@ if (isset($_POST['submitReview'])) {
 
                                             $therapist_name = $therapist_nameFirst . "&nbsp;" . $therapist_nameLast;
 
-                                            $user_time1 = strtotime($row['user_time']);
-                                            $user_time2 = date("h:i a", $user_time1);
 
                                             $user_time3 = strtotime($row['user_date']);
                                             $user_time4 = date("Y-m-d", $user_time3);
@@ -974,7 +999,7 @@ if (isset($_POST['submitReview'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                                <td><?php echo $user_time4?></td>
                                                 <td>
                                                     <a href="receipt.php?receiptID=<?php echo $appointment_id ?>"><button name="checkout" id="checkout" type="submit" class="btn btn-success btn-xs">Receipt</button></a><br>
                                                 </td>
@@ -1014,7 +1039,7 @@ if (isset($_POST['submitReview'])) {
 
                                 <div class="form-group">
                                     <label for="therapist">
-                                        <h4>Therapist ID:</h4>
+                                        <h4>Therapist Name:</h4>
                                     </label>
                                     <input type="text" readonly name="therapist" form="save" id="therapist" class="form-control" value="">
                                 </div>
@@ -1038,6 +1063,28 @@ if (isset($_POST['submitReview'])) {
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="changeThera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Do you want to change the therapist?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" align="center">
+                        <button class="btn btn-outline-success mx-3" name="changeThera1" id="changeThera1" form="save" value="" style="display:inline-block">Yes</button>
+                        <button class="btn btn-outline-danger" id="cancelThera" name="cancelThera" value="" form="save" style="display:inline-block">No, cancel this appointment</button>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="col-md-12 hand">
             <div class="row">
@@ -1058,16 +1105,6 @@ if (isset($_POST['submitReview'])) {
             </div>
         </div>
     </section>
-
-    </script>
-    <script>
-        $(document).ready(function(e) {
-            $(".reviews").click(function() {
-                $('#appointmentID').val($(this).attr('data-review'));
-                $('#therapist').val($(this).attr('data-therapistID'));
-            });
-        });
-    </script>
     <script src="js/edit.js" type="text/javascript"></script>
 </body>
 
