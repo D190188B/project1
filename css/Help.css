@@ -72,6 +72,7 @@
     color: white;
     background: rgba(46, 78, 117, 0.6);
     text-align: center;
+    
 }
 
 #help .serviceName span {
@@ -82,8 +83,8 @@
 
 
 #help .col-md-3 {
-    margin-left: 15px;
-    margin-right: 76px;
+    /* margin-left: 15px;
+    margin-right: 76px; */
     padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 35px;
