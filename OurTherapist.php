@@ -6,10 +6,10 @@ include("sessionTop.php");
 <html lang="en">
 
 <head>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Therapist</title>
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 <header>
     <?php require_once("header1.php"); ?>
