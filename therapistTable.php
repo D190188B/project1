@@ -14,19 +14,29 @@ if ($conn->connect_error) {
 
 session_start();
 
-if (isset($_SESSION['admin_id'])) {
-	$id = $_SESSION['admin_id'];
-	$sql = "SELECT * from ms_admin where id='$id'";
-	$result = $conn->query($sql) or die($conn->error . __LINE__);
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-	if ($result->num_rows > 0) { //over 1 database(record) so run
-		while ($row = $result->fetch_assoc()) {
-			$_SESSION['admin_first_name'] = $row['first_name'];
-			$_SESSION['admin_last_name'] = $row['last_name'];
-		}
-	}
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+if (isset($_SESSION['admin_id'])) {
+    $id = $_SESSION['admin_id'];
+    $sql = "SELECT * from ms_admin where id='$id'";
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result->num_rows > 0) { //over 1 database(record) so run
+        while ($row = $result->fetch_assoc()) {
+            $_SESSION['admin_first_name'] = $row['first_name'];
+            $_SESSION['admin_last_name'] = $row['last_name'];
+        }
+    }
 } else {
-	echo "<script>window.alert('You cannot directly access this page!!');window.location.assign('adminLogin.php')</script>";
+    echo "<script>window.alert('You cannot directly access this page!!');window.location.assign('adminLogin.php')</script>";
 }
 
 function therapist_Table()
@@ -206,7 +216,6 @@ function therapist_Table()
                 $english = $row['English'];
 
                 $user_time1 = strtotime($created_at);
-                $user_time2 = date("Y-m-d h:i a", $user_time1);
 
                 $therapist_Table .= "<tr><td>$id</td>";
                 $therapist_Table .= "<td>$name_first&nbsp;$name_last</td>";
@@ -274,7 +283,6 @@ function therapist_Table()
                 $english = $row['English'];
 
                 $user_time1 = strtotime($created_at);
-                $user_time2 = date("Y-m-d h:i a", $user_time1);
 
                 $therapist_Table .= "<tr><td>$id</td>";
                 $therapist_Table .= "<td>$name_first&nbsp;$name_last</td>";
@@ -317,10 +325,58 @@ if (isset($_POST['delete'])) {
 
 //if accept
 if (isset($_POST['accept'])) {
+    $emailTo;
+
     $id = $_POST['accept']; //id
     $statusID = 2;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=2 where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    $sqli = "SELECT * FROM therapist where therapist_id='$id'";
+    $run = $conn->query($sqli) or die($conn->error . __LINE__);
+
+    if ($run->num_rows > 0) {
+        while ($row = $run->fetch_array()) {
+            $emailTo = $row['email'];
+
+            $code = uniqid(true);
+            $query = mysqli_query($conn, "insert into notification(code,email) values ('$code','$emailTo')");
+            if (!$query) { //false
+                exit("Error");
+            }
+            // Instantiation and passing `true` enables exceptions
+            $mail = new PHPMailer(true);
+
+            try {
+                //Server settings         
+                $mail->isSMTP();                                            // Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                $mail->Username   = 'ddwq1.12@gmail.com';                     // SMTP username
+                $mail->Password   = '59Odwq234Fa';                               // SMTP password                          // SMTP password
+                $mail->SMTPSecure = 'ssl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+                //Recipients - sender
+                $mail->setFrom('company-Mail-test@gmail.com', 'Security Mail Company');
+                $mail->addAddress($emailTo);     // Add a recipient
+                $mail->addReplyTo('no-reply@gmail.com', 'No reply');
+
+                // Content
+                $url = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER['PHP_SELF']) . "/therapistLogin.php";
+
+                $mail->Subject = 'Your Register get Approved';
+                $mail->Body    = "<h3>We would like to inform you that we have accepted your registration, you can login your therapist account through this <a href='$url'>link</a></h3>";
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                $mail->send();
+                header('refresh: 0; url=therapistTable.php');
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+            exit();
+        }
+    }
     header('refresh: 0; url=therapistTable.php');
 }
 
@@ -331,6 +387,51 @@ if (isset($_POST['reject'])) {
     $statusID = 3;
     $sql = "update therapist set statusID='$statusID' where therapist_id='$id'"; //set status=3 where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    $sqli = "SELECT * FROM therapist where therapist_id='$id'";
+    $run = $conn->query($sqli) or die($conn->error . __LINE__);
+
+    if ($run->num_rows > 0) {
+        while ($row = $run->fetch_array()) {
+            $emailTo = $row['email'];
+
+            $code = uniqid(true);
+            $query = mysqli_query($conn, "insert into notification(code,email) values ('$code','$emailTo')");
+            if (!$query) { //false
+                exit("Error");
+            }
+            // Instantiation and passing `true` enables exceptions
+            $mail = new PHPMailer(true);
+
+            try {
+                //Server settings         
+                $mail->isSMTP();                                            // Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                $mail->Username   = 'ddwq1.12@gmail.com';                     // SMTP username
+                $mail->Password   = '59Odwq234Fa';                               // SMTP password        // SMTP password
+                $mail->SMTPSecure = 'ssl';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+                //Recipients - sender
+                $mail->setFrom('company-Mail-test@gmail.com', 'Security Mail Company');
+                $mail->addAddress($emailTo);     // Add a recipient
+                $mail->addReplyTo('no-reply@gmail.com', 'No reply');
+
+                // Content
+
+                $mail->Subject = 'Your Register get Rejected';
+                $mail->Body    = "<h1>We would like to inform you that your registration has been rejected, sorry for inconvenience</h1>";
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                $mail->send();
+                header('refresh: 0; url=therapistTable.php');
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+            exit();
+        }
+    }
 }
 
 ?>
@@ -353,7 +454,7 @@ if (isset($_POST['reject'])) {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Therapist Table</title>
+    <title>C&H</title>
 </head>
 <style>
     .custab {
@@ -381,25 +482,25 @@ if (isset($_POST['reject'])) {
 
 <body>
     <form action="therapistTable.php" method="POST" enctype="multipart/form-data" id="theraTable"></form>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="Admin.php">
-                        <h4 style="padding-top:20px;">Back</h4>
-                    </a>
-                    <center>
-                        <h4 style="padding-top:20px;">Therapists Table</h4>
-                    </center>
-                    <h3>Search</h3>
-                    <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="theraTable" style="width:50%;display:inline-block">
-                    <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="theraTable">
-                    <br />
-                    <br />
-                    <?php echo therapist_Table() ?>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="Admin.php">
+                    <h4 style="padding-top:20px;">Back</h4>
+                </a>
+                <center>
+                    <h4 style="padding-top:20px;">Therapists Table</h4>
+                </center>
+                <h3>Search</h3>
+                <input type="search" name="searchTxt" id="searchTxt" class="form-control" form="theraTable" style="width:50%;display:inline-block">
+                <input type="submit" name="searchBtn" id="searchBtn" class="btn btn-primary" value="Search" style="margin-top:-5px;" form="theraTable">
+                <br />
+                <br />
+                <?php echo therapist_Table() ?>
             </div>
         </div>
-    
+    </div>
+
     <div class="modal fade" id="therapistDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
