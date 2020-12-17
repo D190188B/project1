@@ -93,10 +93,11 @@
 #register #password_same,
 #register #password_length,
 #register #birth_warning,
-#register #email_warning{
+#register #email_warning {
     color: red;
     display: none;
 }
+
 @media screen and (max-width:767px) {
     #login-form .container {
         margin-top: 30px;
@@ -146,49 +147,17 @@
     filter: invert(100%) !important;
 }
 
-.register-success {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
-.register-fail {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
-
-.unavailable {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
-.already-registered {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
-.wrong-password {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
-.error {
-    margin-bottom: 50px !important;
-    margin-top: -78px !important;
-    display: none;
-}
-
+.register-success,
+.register-fail,
+.already-registered,
+.unavailable,
+.wrong-password,
+.error,
 .password-notmatch {
     margin-bottom: 50px !important;
-    margin-top: -78px !important;
+    margin-top: -73px !important;
     display: none;
 }
-
 
 /* #reg-form id is in the form action from register.php */
 /* #log-form id i in the form action from login.php */
