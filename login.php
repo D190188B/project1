@@ -164,7 +164,7 @@ if (isset($_POST['login'])) { //if user login
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>C&H</title>
 </head>
 <header>
     <?php require_once("header1.php"); ?>
@@ -245,7 +245,7 @@ if (isset($_POST['login'])) { //if user login
 
                             <div class="form-row my-0">
                                 <div class="col">
-                                    <p>Forget your password? Click here <a href="#">Reset Password</a></p>
+                                    <p>Forget your password? Click here <a href="resetPasswordEmail.php">Reset Password</a></p>
                                     <span class="text-black-100">Don't have account?</span> &nbsp;<button type="button" class="btn btn-white" data-toggle="modal" data-target="#registerModal" id="register"><strong>Register</strong></button>
                                 </div>
                             </div>
