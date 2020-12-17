@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     }
 
     if (empty($error)) {
-        $newPasswordHash = password_hash($password, PASSWORD_DEFAULT);
+        $newPasswordHash = password_hash($newPass, PASSWORD_DEFAULT);
         $sql = "UPDATE client set password='$newPasswordHash' where email='" . $_SESSION['currentResetPassword_Email'] . "'";
         $result = $conn->query($sql) or die($conn->error . __LINE__);
 
