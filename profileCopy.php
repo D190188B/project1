@@ -181,7 +181,7 @@ $allNum = 0;
 $paidNum = 0;
 
 //get the payment
-$paid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and (appointment_status='5' or appointment_status='2') and paymentStatus='1'";
+$paid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='$email' and user_date>'$date' and appointment_status='2'and paymentStatus='1'";
 //get the payment
 $getPaid = $conn->query($paid) or die($conn->error . __LINE__);
 //get the payment list number
@@ -287,11 +287,11 @@ if ($getTodayNum->num_rows > 0) {
         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        if (($appointment_status == '2') && $user_time4 == $date && $paymentStatus == 2) {
+        if (($appointment_status == '2') && $user_time4 <= $date && $paymentStatus == 2) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
-        } else if (($appointment_status == '2') && $user_time4 == $date &&  ($paymentStatus == 1)) {
+        } else if (($appointment_status == '2') && $user_time4 <= $date &&  ($paymentStatus == 1)) {
             $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
@@ -352,9 +352,8 @@ if (isset($_POST['submitReview'])) {
 
 if (isset($_POST['finish'])) { //if finish the consultation
     $id = $_POST['finish']; //id
-    $statusID = 6;
 
-    $sql = "update appointment set appointment_status='$statusID', paymentStatus='0' where appointment_id='$id'"; //set status=3 where therapist_id == this.id
+    $sql = "update appointment set appointment_status='6', paymentStatus='0' where appointment_id='$id'"; //set status=3 where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result == true) { //if the result was successful update
@@ -367,13 +366,24 @@ if (isset($_POST['changeThera1'])) {
     header("refresh:0;url=showResult.php");
 }
 
+if (isset($_POST['cancelThera'])) {
+    $id = $_POST['cancelThera'];
+
+    $sql = "UPDATE appointment set appointment_status='4', paymentStatus='0' where appointment_id='$id'";
+    $result = $conn->query($sql) or die($conn->error . __LINE__);
+
+    if ($result == true) { //if the result was successful update
+        header('refresh: 0; url=profileCopy.php');
+    }
+}
+
 ?>
 
 <head>
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>C&H</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -477,7 +487,7 @@ if (isset($_POST['changeThera1'])) {
                             <div class="row">
                                 <div class="col-md-5">
                                     <img class="camera-icon" src="images/camera-solid.svg" alt="camera" id="camera_icon">
-                                    <img src="<?php echo $_SESSION['client_profileImage'] ?>" class="img" style="width:150px;height:150px;border-radius:50%;border:1px solid black" name="user_image" id="user_image">
+                                    <img src="./images/profile/<?php echo $_SESSION['client_profileImage'] ?>" class="img" style="width:150px;height:150px;border-radius:50%;border:1px solid black" name="user_image" id="user_image">
                                     <input type="file" name="uploadProfile" id="uploadProfile" form="save" class="form-control-file">
                                     <h6 style="margin-top:20px;" id="changePro">Change profile photo</h6>
                                 </div>
@@ -616,7 +626,6 @@ if (isset($_POST['changeThera1'])) {
                                             $user_method = $row['user_method'];
 
                                             $user_date = $row['user_date'];
-                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
@@ -671,7 +680,7 @@ if (isset($_POST['changeThera1'])) {
 
                                                 <td>
 
-                                                    <?php if ($user_time4 > $date) {
+                                                    <?php if ($user_time4 >= $date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
                                                     if ($statusID == '5') {
@@ -712,8 +721,9 @@ if (isset($_POST['changeThera1'])) {
                                             $user_Email = $row['user_Email'];
                                             $user_method = $row['user_method'];
 
+                                            $specialty = $row['specialty_name'];
+
                                             $user_date = $row['user_date'];
-                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
 
@@ -794,13 +804,12 @@ if (isset($_POST['changeThera1'])) {
                                             $user_method = $row['user_method'];
 
                                             $user_date = $row['user_date'];
-                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $created_TIME = $row['created_TIME'];
                                             $paymentStatus = $row['paymentStatus'];
                                             $therapist_id = $row['therapist_id'];
                                             $checkDirec = $row['checkDirec'];
-
+                                            $specialty = $row["specialty_name"];
                                             $statusID = $row['id'];
                                             $status = $row['status'];
 
@@ -856,10 +865,12 @@ if (isset($_POST['changeThera1'])) {
                                                 ?>
 
                                                 <td>
-                                                    <?php if ($user_time4 > $date && $checkDirec != 1 && ($appointment_status == 2 || $appointment_status == 1 || $appointment_status == 3)) {
+                                                    <?php if ($specialty == "-" && ($appointment_status == 2 || $appointment_status == 1 || $appointment_status == 3)) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
-                                                    } else if ($user_time4 > $date && $checkDirec == 1 && $appointment_status == 3) {
+                                                    } else if ($appointment_status == 3 && $specialty != "-") {
                                                         echo "<button name=\"cancel\" type=\"submit\" class=\"btn btn-danger btn-xs changing\" value=\"$appointment_id\" data-toggle='modal' data-target='#changeThera'>Change</button>";
+                                                    }else{
+                                                        echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
 
                                                     $checkReview = "SELECT * FROM review where Appointment_ID='$appointment_id'";
@@ -940,7 +951,7 @@ if (isset($_POST['changeThera1'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $therapist_name ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4 . "<br>" . $user_time2 ?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <td>
                                                     <a href="payment.php?appointmentID=<?php echo $appointment_id ?>" target="blank"><button name="checkout" id="checkout" type="submit" class="btn btn-success btn-xs">Check Out</button></a><br>
                                                     <!-- <div id="paypal-button-container"></div> -->
@@ -1075,7 +1086,7 @@ if (isset($_POST['changeThera1'])) {
                     </div>
                     <div class="modal-body" align="center">
                         <button class="btn btn-outline-success mx-3" name="changeThera1" id="changeThera1" form="save" value="" style="display:inline-block">Yes</button>
-                        <button class="btn btn-outline-danger" id="cancelThera" name="cancelThera" value="" form="save" style="display:inline-block">No, cancel this appointment</button>
+                        <button class="btn btn-outline-danger" id="cancelThera" name="cancelThera" value="" form="save" style="display:inline-block" onclick="return confirm('Are you sure you want to cancel?')">No, cancel this appointment</button>
                     </div>
 
                     <div class="modal-footer">
@@ -1086,8 +1097,8 @@ if (isset($_POST['changeThera1'])) {
         </div>
 
 
-        <div class="col-md-12 hand">
-            <div class="row">
+        <div class="col-md-12 hand" style="margin-left:0;margin-right:0">
+            <div class="row" style="margin-right:0px;margin-left:0;">
                 <div class="col-md-12">
                     <div class="UserIcon" id="UserIconSecond">
                         <i class="fa fa-user" aria-hidden="true" id="profile_iconSecond"></i>
