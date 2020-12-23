@@ -72,15 +72,16 @@ if (isset($_POST['upload'])) { //upload appointment
     if (empty($date)) {
         $error[] = "You forgot to enter your date";
     }
+
     $therapistID = validate_input_text($_POST['therapistID']);
     if (empty($therapistID)) {
         $error[] = "You forgot to enter your therapistID";
     }
 
-    $session = validate_input_text($_POST['session']);
-    if (empty($session)) {
-        $error[] = "You forgot to enter your sessionID";
-    }
+    // $session = validate_input_text($_POST['session']);
+    // if (empty($session)) {
+    //     $error[] = "You forgot to enter your sessionID";
+    // }
 
     $user_time3 = strtotime($date);
     $user_time4 = date("Y-m-d", $user_time3);
@@ -101,7 +102,7 @@ if (isset($_POST['upload'])) { //upload appointment
             if (!empty($_SESSION['generate_id']) && ((!empty($_SESSION['work_id'])) || (!empty($_SESSION['rec_work_id']))) && (mysqli_num_rows($run) > 0)) {
 
                 if ((!empty($_SESSION['rec_work_id'])) && (!empty($_SESSION['directRec'])) && (mysqli_num_rows($run) == 3)) {
-                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
                     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                     if ($result == true) {
@@ -117,7 +118,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['directRec'] = '';
                     }
                 } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
-                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "',1,1,1,NOW(),NOW())";
                     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                     if ($result == true) {
@@ -133,7 +134,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['directRec'] = '';
                     }
                 } else {
-                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,1,NOW(),NOW())";
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,1,NOW(),NOW())";
                     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                     if ($result == true) {
@@ -151,7 +152,7 @@ if (isset($_POST['upload'])) { //upload appointment
                     }
                 }
             } else {
-                $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "','$session',1,1,2,NOW(),NOW())";
+                $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,2,NOW(),NOW())";
                 $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                 if ($result == true) {
@@ -190,7 +191,7 @@ function build_calendar($month, $year)
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     //First of all we'll create an array containing names of all days in a week
-    $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    $daysOfWeek = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 
     //Then we'll get the first day of the month that is in the argument of this function
     $firstDayOfMonth = mktime(0, 0, 0, $month, 1, $year);
@@ -301,7 +302,7 @@ function build_calendar($month, $year)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Latest compiled and minified CSS -->
-    <title>Appointment</title>
+    <title>C&H</title>
     <link rel="stylesheet" type="text/css" href="css/appointment.css">
     <style>
         table {
@@ -333,7 +334,7 @@ function build_calendar($month, $year)
 
     <body>
 
-        <div class="container">
+        <div class="container" id="appointment-wholePage">
             <section class="form pt-5 pb-5">
 
                 <!-- Appointment Form -->
@@ -372,7 +373,7 @@ function build_calendar($month, $year)
                                     <h5 style="color:white">Therapist</h5>
                                     <div class="row" style="padding:20px;border:1px solid white;">
                                         <div class="col-md-6" align="center">
-                                            <img src="<?php echo $_SESSION['select_profile_image'] ?>" alt="img">
+                                            <img src="./images/therapists/<?php echo $_SESSION['select_profile_image'] ?>" alt="img">
                                         </div>
 
                                         <div class="col-md-6">
