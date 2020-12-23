@@ -9,7 +9,7 @@ include("sessionTop.php");
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Therapist</title>
+    <title>C&H</title>
 </head>
 <header>
     <?php require_once("header1.php"); ?>
@@ -100,7 +100,7 @@ include("sessionTop.php");
                                     <a href="therapistDetail.php?id=<?php echo $id ?>">
                                         <div class="card h-100 border-0">
                                             <div class="card-body">
-                                                <img src="<?php echo $profile_image ?>" alt="" id="therapist1">
+                                                <img src="./images/therapists/<?php echo $profile_image ?>" alt="" id="therapist1">
                                                 <h4 class="therapistname"><?php echo $name_first . "&nbsp;" . $name_last ?></h4>
                                                 <h5 class="therapistedu"><?php echo $education_level ?></h5>
                                             </div>
