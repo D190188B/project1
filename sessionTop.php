@@ -71,7 +71,7 @@ if (isset($_SESSION['client_id'])) { //if already login
   }
 
 
-  $topPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and (appointment_status='2' or appointment_status='5') and paymentStatus='1'";
+  $topPaid = "SELECT * from appointment left join therapist on appointment.therapist_ID=therapist.therapist_id left join onstatus on appointment.appointment_status=onstatus.id where user_Email='" . $_SESSION['client_email'] . "' and appointment_status='2' and user_date>'$date1' and paymentStatus='1'";
   //get the payment
   $getTopPaid = $conn->query($topPaid) or die($conn->error . __LINE__);
 
@@ -111,12 +111,12 @@ function upload_profile($path, $file)
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
+        return $filename;
       }
     }
   }
   // return default image
-  return $path . $default;
+  return $default;
 }
 
 function upload_Editprofile($path, $file)
@@ -135,7 +135,7 @@ function upload_Editprofile($path, $file)
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
+        return $filename;
       }
     }
   }
@@ -160,7 +160,7 @@ function upload_certificate($path, $file)
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
+        return $filename;
       }
     }
   } else {
@@ -185,12 +185,9 @@ function upload_thera($path, $file)
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        return $targetFilePath;
+        return $filename;
       }
     }
-  } else {
-    // return default image
-    return $path . $default;
   }
 }
 
