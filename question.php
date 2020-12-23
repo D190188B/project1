@@ -87,7 +87,7 @@ if (isset($_POST['finish1'])) { //if finish without the recommendation question
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
+    <title>C&H</title>
     <link rel="stylesheet" type="text/css" href="css/question.css">
     <style>
         body {
@@ -224,12 +224,12 @@ if (isset($_POST['finish1'])) { //if finish without the recommendation question
                         if (isset($_GET['work_id'])) {
                         ?>
                             <div class="col-md-12" style="text-align: center;padding-top:20px">
-                                <img src="<?php echo $_SESSION['work_thera_profile_image'] ?>" alt="image" name="image" id="image">
+                                <img src="./images/therapists/<?php echo $_SESSION['work_thera_profile_image'] ?>" alt="image" name="image" id="image">
                                 <h3><?php echo $_SESSION['work_thera_name'] ?></h3>
                                 <h3>(PsyD)</h3>
                             <?php } else {
                             ?>
-                                <div class="col-md-12" style="text-align: center;height:420px;">
+                                <div class="col-md-12" id="right-side" style="text-align: center;height:420px;">
                                     <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="margin-top:15px;">
                                         <ol class="carousel-indicators">
                                             <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
