@@ -19,7 +19,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
 ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -61,7 +61,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
         ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -117,7 +117,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -158,7 +158,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -214,7 +214,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -255,7 +255,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -312,7 +312,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -354,7 +354,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -411,7 +411,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -453,7 +453,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -510,7 +510,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -552,7 +552,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -609,7 +609,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -651,7 +651,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -708,7 +708,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -750,7 +750,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -807,7 +807,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -849,7 +849,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -906,7 +906,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -948,7 +948,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1005,7 +1005,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1047,7 +1047,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1104,7 +1104,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1146,7 +1146,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1203,7 +1203,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1245,7 +1245,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1302,7 +1302,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1344,7 +1344,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1401,7 +1401,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1443,7 +1443,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1500,7 +1500,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1542,7 +1542,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1599,7 +1599,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1641,7 +1641,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1698,7 +1698,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1741,7 +1741,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1799,7 +1799,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1842,7 +1842,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1900,7 +1900,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -1943,7 +1943,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2001,7 +2001,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2044,7 +2044,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2102,7 +2102,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2145,7 +2145,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2203,7 +2203,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2246,7 +2246,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2304,7 +2304,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2347,7 +2347,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2405,7 +2405,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2448,7 +2448,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2506,7 +2506,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2549,7 +2549,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2607,7 +2607,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
@@ -2650,7 +2650,7 @@ if ((($_SESSION['choice_gender']) == 5) && (($_SESSION['choice_age']) == 8) && (
                 $gender = $row['gender'];
             ?>
                 <div class="col-md-6">
-                    <img src="<?php echo $profile_image ?>" alt="image">
+                    <img src="./images/therapists/<?php echo $profile_image ?>" alt="image">
 
                 </div>
                 <div class="col-md-6">
