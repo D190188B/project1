@@ -11,7 +11,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
 
 <head>
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
-    <title>Review</title>
+    <title>C&H</title>
     <link rel="stylesheet" type="text/css" href="css/Reviews.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -43,7 +43,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
     </div>
 
     <body>
-        <div class="container">
+        <div class="container" style="padding-top:15px;">
             <div class="row">
                 <!--- \\\\\\\Post-->
                 <?php
@@ -89,7 +89,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="mr-2">
-                                                <img class="rounded-circle" width="45" src="<?php echo $image ?>" alt="image">
+                                                <img class="rounded-circle" width="45" src="./images/therapists/<?php echo $image ?>" alt="image">
                                             </div>
                                             <div class="ml-2">
                                                 <div class="h5 m-0">@<?php echo $name ?></div>
