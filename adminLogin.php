@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) { //if user login
             if (password_verify($password, $passwordHash)) {
                 $_SESSION['admin_id'] = $id;
 
-                echo '<script>window.location.assign("Admin.php")</script>';
+                echo '<script>window.location.assign("Admin/appointmentTable.php")</script>';
             } else {
                 echo '<style type="text/css"> 
         #theraLogin-form .wrong-password{
@@ -95,8 +95,8 @@ if (isset($_POST['submit'])) { //if user login
 <html lang="en">
 
 <head>
-<link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
-    <title>Admin Login</title>
+    <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
+    <title>C&H</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
