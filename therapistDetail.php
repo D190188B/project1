@@ -41,7 +41,7 @@ if (isset($_POST['direct'])) {
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Therapist Detail</title>
+    <title>C&H</title>
 
     <style>
         #submit {
@@ -64,7 +64,7 @@ if (isset($_POST['direct'])) {
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 text-center" id="theraTop">
-                        <img src="<?php echo $_SESSION['detail_thera_profile_image'] ?>" alt="image" id="image" name="image">
+                        <img src="./images/therapists/<?php echo $_SESSION['detail_thera_profile_image'] ?>" alt="image" id="image" name="image">
                         <h3 class="theraName"><?php echo $_SESSION['detail_thera_name_first'] . "&nbsp;" . $_SESSION['detail_thera_name_last'] ?></h3>
                         <h4 id="theraLic"><?php echo $_SESSION['detail_education_level'] ?></h4>
                         <h4 class="paraTop">
