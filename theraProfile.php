@@ -66,7 +66,7 @@ function upload_thera($path, $file)
         if (in_array($fileType, $allowType)) {
             // upload file to the server
             if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-                return $targetFilePath;
+                return $filename;
             }
         }
     }
@@ -91,7 +91,7 @@ function upload_report($path, $file)
         if (in_array($fileType, $allowType)) {
             // upload file to the server
             if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-                return $targetFilePath;
+                return $filename;
             }
         }
     }
@@ -238,7 +238,7 @@ if ($checkCurrent->num_rows > 0) {
         $user_time3 = strtotime($row['user_date']);
         $user_time4 = date("Y-m-d", $user_time3);
 
-        if (($user_time <= $time) && ($user_time4 == $date) && ($appointment_status == 2)) {
+        if (($user_time4 == $date) && ($appointment_status == 2)) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=theraProfile.php");
@@ -361,7 +361,7 @@ if (isset($_POST['change'])) { //if change the password
             display:block !important;            
         }</style>';
 
-            header('refresh: 1; url=theraProfile.php');
+        header('refresh: 1; url=theraProfile.php');
         }
     } else {
         //if update fail
@@ -369,7 +369,7 @@ if (isset($_POST['change'])) { //if change the password
         #thera_profile .Password_fail{
             display:block !important;            
         }</style>';
-        // header('refresh: 1; url=theraProfile.php');
+        header('refresh: 1; url=theraProfile.php');
     }
 }
 
@@ -414,7 +414,7 @@ if (isset($_POST['submitReport'])) {
 
 <head>
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
-    <title>Therapist Profile</title>
+    <title>C&H</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Latest compiled and minified CSS -->
@@ -505,7 +505,7 @@ if (isset($_POST['submitReport'])) {
             <div class="col-md-4">
                 <div class="col-md-12">
                     <img class="camera-icon" src="images/camera-solid.svg" alt="camera" id="camera_icon">
-                    <img src="<?php echo $_SESSION['thera_profile_image'] ?>" alt="image" id="therapist_image">
+                    <img src="./images/therapists/<?php echo $_SESSION['thera_profile_image'] ?>" alt="image" id="therapist_image">
                     <input type="file" name="uploadProfile" id="uploadProfile" form="thera_save" class="form-control-file">
                     <h6 style="margin-top:20px;" id="changePro">Change profile photo</h6>
                     <h4 class="welcome">Welcome, <?php echo $_SESSION['thera_name_first'] . "&nbsp;" . $_SESSION['thera_name_last'] ?></h4>
@@ -740,7 +740,7 @@ if (isset($_POST['submitReport'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $user_Email ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php
 
                                                 switch ($statusID) {
@@ -908,7 +908,7 @@ if (isset($_POST['submitReport'])) {
                                                 <td><?php echo $appointment_id ?></td>
                                                 <td><?php echo $user_Email ?></td>
                                                 <td><?php echo $user_method ?></td>
-                                                <td><?php echo $user_time4?></td>
+                                                <td><?php echo $user_time4 ?></td>
                                                 <?php
                                                 switch ($statusID) {
                                                     case 1:
@@ -1073,6 +1073,26 @@ if (isset($_POST['submitReport'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/therapist.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(e) {
+            $(".view").click(function() {
+
+                $('#slot').html($(this).attr('data-appointmentID'));
+                $.ajax({
+                    url: "insert.php",
+                    method: "post",
+                    data: {
+                        appontmentID: $(this).attr('data-appointmentID')
+                    },
+                    dataType: "text",
+                    success: function(data) {
+                        $('#modal-body').html(data);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
