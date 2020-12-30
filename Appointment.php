@@ -5,13 +5,22 @@ $generateID = uniqid();
 
 $email = $_SESSION['client_email']; //get user email
 
-if (isset($_GET['id'])) {
+$checkAppointment = "SELECT * from appointment where user_Email = '" . $_SESSION['client_email'] . "' and (appointment_status='1' or appointment_status='2' or appointment_status='5')";
+$check = $conn->query($checkAppointment) or die($conn->error . __LINE__);
 
-    $_SESSION['appointment_thera'] = $_GET['id'];
-} else if (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id']))) {
+$count = mysqli_num_rows($check);
 
-    $_SESSION['appointment_thera'] = $_SESSION['work_id'];
+if ($count > 0) {
+    // if user already make the appointment and the status are pending, accept or In consultation
+    echo '<script>window.alert("You must complete the current consultation first...!");window.location.assign("help.php")</script>';
+} else {
+    if (isset($_GET['id'])) {
+        $_SESSION['appointment_thera'] = $_GET['id'];
+    } else if (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id']))) {
+        $_SESSION['appointment_thera'] = $_SESSION['work_id'];
+    }
 }
+
 
 if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id'])))) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
     $therapist_id = $_SESSION['appointment_thera'];
@@ -96,7 +105,7 @@ if (isset($_POST['upload'])) { //upload appointment
         if ((mysqli_num_rows($runcheck) > 0)) {
             $msg = "<div class='alert alert-success'>Booking Successfull,Will Go to the Home Page after 3 seconds</div>";
             header('refresh: 3; url=Home.php');
-            $sql = "UPDATE appointment set user_method='$method',user_time='$user_time2',user_date='$user_time4',therapist_ID ='" . $_SESSION['appointment_thera'] . "', appointment_status='1' where appointment_id ='" . $_SESSION['generate_id'] . "'";
+            $sql = "UPDATE appointment set user_method='$method',user_date='$user_time4',therapist_ID ='" . $_SESSION['appointment_thera'] . "', appointment_status='1' where appointment_id ='" . $_SESSION['generate_id'] . "'";
             $run = $conn->query($sql) or die($conn->error . __LINE__);
         } else {
             if (!empty($_SESSION['generate_id']) && ((!empty($_SESSION['work_id'])) || (!empty($_SESSION['rec_work_id']))) && (mysqli_num_rows($run) > 0)) {
@@ -118,7 +127,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['directRec'] = '';
                     }
                 } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
-                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "',1,1,1,NOW(),NOW())";
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
                     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                     if ($result == true) {
@@ -134,7 +143,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['directRec'] = '';
                     }
                 } else {
-                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,1,NOW(),NOW())";
+                    $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
                     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                     if ($result == true) {
@@ -152,7 +161,7 @@ if (isset($_POST['upload'])) { //upload appointment
                     }
                 }
             } else {
-                $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,2,NOW(),NOW())";
+                $sql = "INSERT INTO `appointment` VALUES('$generateID','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,2,NOW())";
                 $result = $conn->query($sql) or die($conn->error . __LINE__);
 
                 if ($result == true) {
@@ -252,6 +261,9 @@ function build_calendar($month, $year)
     //Getting the current date
     $dateToday = date('Y-m-d');
 
+    $getdateToday = date('Y-m-d', strtotime($dateToday . ' +3 day'));
+
+
     while ($currentDay <= $numberDays) {
         //if seventh column (saturday) reached,start a new row
         if ($dayOfWeek == 7) {
@@ -262,7 +274,7 @@ function build_calendar($month, $year)
         $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
         $date = "$year-$month-$currentDayRel";
 
-        if ($date <= $dateToday) {
+        if ($date <= $getdateToday) {
             $calendar .= "<td><h5>$currentDay</h5><button class='btn btn-danger btn-xs booking' disabled>Book</button>";
         } else if (in_array($date, $bookings)) {
             $calendar .= "<td><h5>$currentDay</h5><button class='btn btn-danger booking' disabled>Already Booked</button>";
@@ -398,7 +410,7 @@ function build_calendar($month, $year)
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLongTitle">Booking for: <span id="slot"></span><?php echo $_SESSION['generate_id'] ?></h4>
+                        <h4 class="modal-title" id="exampleModalLongTitle">Booking for: <span id="slot"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -471,7 +483,6 @@ function build_calendar($month, $year)
 
     <script type="text/javascript">
         $(document).ready(function() {
-
 
             $(".book").click(function() {
                 var dateslot = $(this).attr('data-dateslot');
