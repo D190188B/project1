@@ -207,7 +207,7 @@
         });
       });
       $('#change').click(function () {
-        if (($('#password_new').val() == $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length <= 6)) {
+        if (($('#password_new').val() == $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length < 7)) {
           $('#password_feedback').css({
             display: "none"
           })
@@ -278,7 +278,7 @@
             display: "none"
           });
           event.preventDefault();
-        } else if (($('#password_new').val() != $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length <= 7)) {
+        } else if (($('#password_new').val() != $('#password_confirm').val()) && ($('#password_new').val() != '') && ($('#password_confirm').val() != '') && ($('#password_new').val().length < 7)) {
           $('#password_feedback').css({
             display: "block"
           })
@@ -302,7 +302,8 @@
 
       $(".reviews").click(function () {
         $('#appointmentID').val($(this).attr('data-review'));
-        $('#therapist').val($(this).attr('data-therapistID'));
+        $('#CurrentTherapistID').val($(this).attr('data-therapistID'));
+        $('#therapist').val($(this).attr('data-therapistName'));
       });
     });
 
