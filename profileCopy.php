@@ -342,7 +342,7 @@ if ($getAccept->num_rows > 0) {
 //submit the review
 if (isset($_POST['submitReview'])) {
     $AppointmentID = mysqli_real_escape_string($conn, $_POST['appointmentID']);
-    $TherapistID = mysqli_real_escape_string($conn, $_POST['therapist']);
+    $TherapistID = mysqli_real_escape_string($conn, $_POST['therapistID']);
     $text_review = mysqli_real_escape_string($conn, $_POST['text_review']);
 
     $error = array();
@@ -897,7 +897,7 @@ if (isset($_POST['cancelThera'])) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     } else if ($appointment_status == 3 && $specialty != "-" && $user_time4 >$date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" class=\"btn btn-danger btn-xs changing\" value=\"$appointment_id\" data-toggle='modal' data-target='#changeThera'>Change</button>";
-                                                    } else if (($appointment_status != 5 && $appointment_status != 4)  && $user_time4 >$date) {
+                                                    } else if (($appointment_status != 5 && $appointment_status != 4 && $appointment_status != 6)  && $user_time4 >$date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
 
@@ -905,7 +905,7 @@ if (isset($_POST['cancelThera'])) {
                                                     $check = $conn->query($checkReview) or die($conn->error . __LINE__);
 
                                                     if (($statusID == '6') && ($check->num_rows == 0)) {
-                                                        echo "<button name=\"reviews\" data-toggle=\"modal\" data-target=\"#reviewModal\" class=\"btn btn-info btn-xs reviews\" data-review=\"$appointment_id\" data-therapistID=\"$therapist_name\">Make reviews</button>";
+                                                        echo "<button name=\"reviews\" data-toggle=\"modal\" data-target=\"#reviewModal\" class=\"btn btn-info btn-xs my-2 reviews\" data-review=\"$appointment_id\" data-therapistName=\"$therapist_name\" data-therapistID=\"$therapist_id\">Make reviews</button>";
                                                     }
                                                     ?>
                                                 </td>
@@ -1080,6 +1080,7 @@ if (isset($_POST['cancelThera'])) {
                                         <h4>Therapist Name:</h4>
                                     </label>
                                     <input type="text" readonly name="therapist" form="save" id="therapist" class="form-control" value="">
+                                    <input type="hidden" readonly name="therapistID" form="save" id="CurrentTherapistID" class="form-control" value="">
                                 </div>
 
                                 <label for="text_review">
