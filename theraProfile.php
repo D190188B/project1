@@ -261,6 +261,7 @@ $getAll = $conn->query($all) or die($conn->error . __LINE__);
 //report all list
 $report = "SELECT * FROM appointment where therapist_ID='" . $_SESSION['thera_id'] . "' and appointment_status='6'";
 $runReport = $conn->query($report) or die($conn->error . __LINE__);
+$checkReportlist = $conn->query($report) or die($conn->error . __LINE__);
 
 //today number
 $TodayNum = 0;
@@ -361,7 +362,7 @@ if (isset($_POST['change'])) { //if change the password
             display:block !important;            
         }</style>';
 
-        header('refresh: 1; url=theraProfile.php');
+            header('refresh: 1; url=theraProfile.php');
         }
     } else {
         //if update fail
@@ -947,8 +948,29 @@ if (isset($_POST['submitReport'])) {
 
                                                 <td><?php switch ($statusID) {
                                                         case 6:
-                                                            echo "<button name=\"generateReport\" id=\"generateReport\" type=\"submit\" class=\"btn btn-info btn-xs generateReport\" value=\"$appointment_id\">Generate Report</button>";
-                                                            break;
+                                                    ?>
+                                                    <?php if ($checkReportlist->num_rows > 0) {
+                                                                while ($row = $checkReportlist->fetch_assoc()) {
+                                                                    $appointment_id = $row['appointment_id'];
+                                                                    $user_Email = $row['user_Email'];
+                                                                    $user_method = $row['user_method'];
+
+                                                                    $user_date = $row['user_date'];
+                                                                    $specialty_name = $row['specialty_name'];
+                                                                    $checkDirec = $row['checkDirec'];
+
+                                                                    $paymentStatus = $row['paymentStatus'];
+                                                                    $created_TIME = $row['created_TIME'];
+
+                                                                    $checkReportThis = "SELECT * FROM report where appointment_id='$appointment_id'";
+                                                                    $runCheckThis = $conn->query($checkReportThis) or die($conn->error . __LINE__);
+
+                                                                    if ($runCheckThis->num_rows == 0) {
+                                                                        echo "<button name=\"generateReport\" id=\"generateReport\" type=\"submit\" class=\"btn btn-info btn-xs generateReport\" value=\"$appointment_id\">Generate Report</button>";
+                                                                    }
+                                                                }
+                                                                break;
+                                                            }
                                                     }
                                                     if ($statusID == '1') {
                                                         echo "<button name='cancel' type='submit' form='thera_save' class='btn btn-danger btn-xs' value=$appointment_id onclick='return confirm(\"Are you sure you want to cancel?\")'>Cancel</button>";
@@ -991,7 +1013,6 @@ if (isset($_POST['submitReport'])) {
 
                                             $paymentStatus = $row['paymentStatus'];
                                             $created_TIME = $row['created_TIME'];
-                                            $therapist = $row['name_first'] . "&nbsp;" . $row['name_last'];
 
                                             $checkReport = "SELECT * FROM report where appointment_id='$appointment_id'";
                                             $runCheck = $conn->query($checkReport) or die($conn->error . __LINE__);
