@@ -134,7 +134,7 @@ if (isset($_POST['change'])) { //if user change the password
 if (isset($_POST['cancel'])) { //if cancel the appointment
     $cancelID = $_POST['cancel']; //id
 
-    $sql = "update appointment set appointment_status='4' where appointment_id='$cancelID'"; //cancel where therapist_id == this.id
+    $sql = "update appointment set appointment_status='4',paymentStatus='0' where appointment_id='$cancelID'"; //cancel where therapist_id == this.id
     $result = $conn->query($sql) or die($conn->error . __LINE__);
 
     if ($result == true) {
@@ -148,6 +148,29 @@ $time = date("h:i a"); //get the current time
 
 //show the appointment and therapist
 $email = $_SESSION['client_email'];
+
+$checkDone = "SELECT * FROM appointment where user_email='" . $_SESSION['client_email'] . "'";
+$runCheck = $conn->query($checkDone) or die($conn->error . __LINE__);
+
+if ($runCheck->num_rows > 0) {
+    while ($row = $runCheck->fetch_assoc()) {
+        $appointment_id = $row['appointment_id'];
+        $appointment_status = $row['appointment_status'];
+        $paymentStatus = $row['paymentStatus'];
+
+        $user_time3 = strtotime($row['user_date']);
+        $user_time4 = date("Y-m-d", $user_time3);
+
+        if($user_time4<$date && $appointment_status == 5 && $paymentStatus==2){
+            $changeDone = "UPDATE appointment set appointment_status='6', paymentStatus='0' where appointment_id='$appointment_id'";
+            $runDone = $conn->query($changeDone) or die($conn->error.__LINE__);
+
+            if($runDone == true){
+                header("refresh:0;url=profileCopy.php");
+            }
+        }
+    }
+}
 
 
 //display all the appointment
@@ -281,21 +304,25 @@ if ($getTodayNum->num_rows > 0) {
         $user_date = $row['user_date'];
         $appointment_status = $row['appointment_status'];
         $paymentStatus = $row['paymentStatus'];
-        $session_ID = $row['session_ID'];
 
         $user_time3 = strtotime($row['user_date']);
         $user_time4 = date("Y-m-d", $user_time3);
 
 
-        if (($appointment_status == '2') && $user_time4 <= $date && $paymentStatus == 2) {
+        if (($appointment_status == '2') && $user_time4 == $date && $paymentStatus == 2) {
             $changeStatus = "UPDATE appointment set appointment_status='5' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
-        } else if (($appointment_status == '2') && $user_time4 <= $date &&  ($paymentStatus == 1)) {
+        } else if (($appointment_status == '2') && $user_time4 == $date &&  ($paymentStatus == 1)) {
             $changeStatus = "UPDATE appointment set appointment_status='4' where appointment_id='$appointment_id'";
             $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
             header("refresh:0;url=profileCopy.php");
         }
+        //  else if (($appointment_status == '5') && $user_time4 < $date &&  ($paymentStatus == 2)) {
+        //     $changeStatus = "UPDATE appointment set appointment_status='6', paymentStatus='0' where appointment_id='$appointment_id'";
+        //     $runChange = $conn->query($changeStatus) or die($conn->error . __LINE__);
+        //     header("refresh:0;url=profileCopy.php");
+        // }
 
         if ($appointment_status == '5') {
             ++$appointmentNum;
@@ -680,15 +707,16 @@ if (isset($_POST['cancelThera'])) {
 
                                                 <td>
 
-                                                    <?php if ($user_time4 >= $date) {
-                                                        echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
-                                                    }
+                                                    <?php
                                                     if ($statusID == '5') {
                                                     ?>
                                                         <a href="https://api.whatsapp.com/send?phone=<?php echo $therapist_phone ?>&text=&source=&data=" target="null"><button name="chat" type="submit" class="btn btn-outline-success btn-xs my-2" id="chat">Chat</button></a>
                                                         <button name="finish" type="submit" class="btn btn-success my-2 btn-xs" onclick="return confirm('Please ensure the consultation was finish')" value="<?php echo $appointment_id ?>" id="finish" form="save">Finish</button>
                                                     <?php
                                                     }
+                                                    // if ($user_time4 >= $date) {
+                                                    //     echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
+                                                    // }
                                                     ?>
                                                 </td>
                                             </tr>
@@ -865,11 +893,11 @@ if (isset($_POST['cancelThera'])) {
                                                 ?>
 
                                                 <td>
-                                                    <?php if ($specialty == "-" && ($appointment_status == 2 || $appointment_status == 1 || $appointment_status == 3)) {
+                                                    <?php if ($specialty == "-" && ($appointment_status == 2 || $appointment_status == 1 || $appointment_status == 3) && $user_time4 >$date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
-                                                    } else if ($appointment_status == 3 && $specialty != "-") {
+                                                    } else if ($appointment_status == 3 && $specialty != "-" && $user_time4 >$date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" class=\"btn btn-danger btn-xs changing\" value=\"$appointment_id\" data-toggle='modal' data-target='#changeThera'>Change</button>";
-                                                    }else{
+                                                    } else if (($appointment_status != 5 && $appointment_status != 4)  && $user_time4 >$date) {
                                                         echo "<button name=\"cancel\" type=\"submit\" form=\"save\" class=\"btn btn-danger btn-xs\" value=\"$appointment_id\" onclick=\"return confirm('Are you sure you want to cancel?')\">Cancel</button>";
                                                     }
 
@@ -929,7 +957,6 @@ if (isset($_POST['cancelThera'])) {
                                             $user_method = $row['user_method'];
 
                                             $user_date = $row['user_date'];
-                                            $session_ID = $row['session_ID'];
                                             $appointment_status = $row['appointment_status'];
                                             $paymentStatus = $row['paymentStatus'];
 
