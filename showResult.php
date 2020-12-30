@@ -102,7 +102,7 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
     <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Result</title>
+    <title>C&H</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
@@ -134,7 +134,12 @@ if (isset($_POST['cancel'])) { //if user click cancel, clear all the data in dat
 
                         <div class="col-md-12">
                             <form action="showResult.php" method="POST">
-                                <input type="submit" value="Cancel" name="cancel" id="cancel" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel?')">
+                                <?php if ((isset($_SESSION['change_id']) || !isset($_SESSION['change_id'])) && empty($_SESSION['change_id'])) {
+                                ?>
+                                    <input type="submit" value="Cancel" name="cancel" id="cancel" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel?')">
+                                <?php
+                                }
+                                ?>
                             </form>
                         </div>
                     </div>
