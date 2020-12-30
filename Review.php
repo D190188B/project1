@@ -78,7 +78,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                                 </div>
 
                                 <div class="card-body">
-                                    <h5 class="card-title">Review written by user <?php echo $client_Name ?> after counseling with Dr. <?php echo $name ?> for 3 weeks on issues concerning </h5>
+                                    <h5 class="card-title">Review written by user <?php echo $client_Name ?> after counseling with Dr. <?php echo $name ?></h5>
 
                                     <p class="card-text">
                                         <?php echo $review ?>
@@ -92,8 +92,7 @@ $run = $conn->query($sql) or die($conn->error . __LINE__);
                                                 <img class="rounded-circle" width="45" src="./images/therapists/<?php echo $image ?>" alt="image">
                                             </div>
                                             <div class="ml-2">
-                                                <div class="h5 m-0">@<?php echo $name ?></div>
-                                                <div class="h7 text-muted">Miracles Lee Cross</div>
+                                                <div class="h5 m-0"><?php echo $name ?></div>
                                             </div>
                                         </div>
                                     </div>
