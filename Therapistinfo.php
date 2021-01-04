@@ -123,13 +123,18 @@ if (isset($_POST['submit'])) {
 
     $file1 = $_FILES['certificate'];
     $fileCer = upload_certificate('./images/certificate/', $file1);
+    if (empty($fileCer)) {
+      $error[] = "You forgot to enter your certificate";
+    }
 
     $files = $_FILES['profileUpload'];
     $profileImage = upload_thera('./images/therapists/', $files);
-
+    if (empty($profileImage)) {
+      $error[] = "You forgot to enter your image";
+    }
 
     //if no error
-    if (empty($error) && ($password == $confirm_pwd) && (!empty($fileCer))) {
+    if (empty($error) && ($password == $confirm_pwd)) {
       // register a new user
       $hashed_pass = password_hash($password, PASSWORD_DEFAULT);
 
@@ -145,6 +150,10 @@ if (isset($_POST['submit'])) {
         foreach ($_REQUEST['specialties'] as $specialty) {
           $spec = "INSERT into specialties values('','$generateid','$specialty')";
           $runspec = $conn->query($spec) or die($conn->error . __LINE__);
+        }
+
+        if ($result == true) {
+          echo "<script>window.alert('Once the administrator accept or reject your application, we will send a notification to inform you')</script>";
         }
 
         //display successful statement
@@ -175,7 +184,7 @@ if (isset($_POST['submit'])) {
 
 <head>
   <link rel="icon" href="images/Logo.jpg" type="image/x-icon" />
-  <title>therapistInformation</title>
+  <title>C&H</title>
   <link rel="stylesheet" type="text/css" href="css/therapistRegister.css">
 
 </head>
@@ -186,7 +195,7 @@ if (isset($_POST['submit'])) {
 
   <div class="alert alert-danger alert-dismissible fade show text-center password-notmatch">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Password are not Match, Please Register Again! ..!</strong>
+    <strong>Your have not fulfilled in your information or your password are not same, please try again.</strong>
   </div>
 
   <div class="alert alert-success alert-dismissible fade show text-center register-success">
