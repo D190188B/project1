@@ -36,7 +36,8 @@ $(document).ready(function (e) {
         $('#postCode').val(theraPost);
         $('#state').val(theraState);
         $('#education').val(data_education);
-        $("#resume").attr('src', theraResume);
+        $("#resume").attr('href', theraResume);
+        $("#resume").html(theraResume);
     });
 
 
