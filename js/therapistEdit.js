@@ -27,10 +27,6 @@
         let about = document.querySelector('#about');
         let submit = document.querySelector('#submit');
 
-        let english = document.querySelector('#english');
-        let mandarin = document.querySelector('#mandarin');
-        let malay = document.querySelector('#malay');
-
         let camera_icon = document.querySelector('#camera_icon');
 
 
@@ -100,26 +96,26 @@
           reportPage.style.display = "block";
         });
 
-        generateReportBtn.addEventListener('click', () => {
+        // generateReportBtn.addEventListener('click', () => {
 
-          profileIcon.style.color = "white";
-          profile_h4.style.color = "white";
-
-
-          appointmentIcon.style.color = "white";
-          appointment_h4.style.color = "white";
+        //   profileIcon.style.color = "white";
+        //   profile_h4.style.color = "white";
 
 
-
-          reportIcon.style.color = "black";
-          report_h4.style.color = "black";
+        //   appointmentIcon.style.color = "white";
+        //   appointment_h4.style.color = "white";
 
 
 
-          profilePage.style.display = "none";
-          appointmentPage.style.display = "none";
-          reportPage.style.display = "block";
-        });
+        //   reportIcon.style.color = "black";
+        //   report_h4.style.color = "black";
+
+
+
+        //   profilePage.style.display = "none";
+        //   appointmentPage.style.display = "none";
+        //   reportPage.style.display = "block";
+        // });
 
 
         btnEdit.addEventListener('click', () => {
@@ -172,9 +168,6 @@
           changePhoto.style.display = "block";
           camera_icon.style.display = "block";
 
-          english.style.display = "block";
-          malay.style.display = "block";
-          mandarin.style.display = "block";
         });
 
 
@@ -380,24 +373,6 @@
 
               event.preventDefault();
             }
-
-          });
-
-          $(".view").click(function () {
-
-            $('#slot').html($(this).attr('data-appointmentID'));
-
-            $.ajax({
-              url: "insert.php",
-              method: "post",
-              data: {
-                appontmentID: $(this).attr('data-appointmentID')
-              },
-              dataType: "text",
-              success: function (data) {
-                $('#modal-body').html(data);
-              }
-            });
 
           });
         });
