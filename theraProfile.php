@@ -499,7 +499,7 @@ if (isset($_POST['submitReport'])) {
 
         <div class="alert alert-danger alert-dismissible fade show text-center report-fail">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Submit report fail, Please Try Again!</strong>
+            <strong>You are submit the wrong file type, Please Try Again!</strong>
         </div>
 
         <div class="row" id="whole">
