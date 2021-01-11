@@ -15,7 +15,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalLongTitle" style="color:rgb(34, 19, 48)">Register Form</h4>
+                    <h4 class="modal-title" id="exampleModalLongTitle" style="color:rgb(34, 19, 48)">Therapist Register Form</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -254,14 +254,14 @@
 
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" id="other" name="specialties[]" class="custom-control-input" value="Others">
-                                <label class="custom-control-label" for="other">Other</label>
+                                <label class="custom-control-label" for="other">Panic disorder</label>
                             </div>
 
                             <span id="spec_warning">Please checked at least one</span>
                         </div>
 
                         <div class="col">
-                            <h4 style="color:rgb(34, 19, 48)">Resume(include your certificate photo)</h4>
+                            <h4 style="color:rgb(34, 19, 48)">Resume (<span style="color:red;font-size:15px;"> *Only allow .doc, .docx and .pdf file</span>)</h4>
                             <input type="file" required name="certificate" id="certificate" class="form-control-file">
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
@@ -273,14 +273,13 @@
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Check this checkbox to continue.</div>
                         </div>
-
-
-                        <div class="modal-footer">
-                            <input type="submit" class="form-control" name="submit" value="Register" id="submit">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-top: 20px;">Close</button>
-                        </div>
-
                     </form>
+                    <div class="modal-footer">
+                        <input type="submit" class="form-control" name="submit" form="regthera-form" value="Register" id="submit">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-top: 20px;">Close</button>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -330,7 +329,7 @@
 
         $(document).ready(function(e) {
 
-            let $uploadfile = $('#registerThera .modal .modal-dialog .modal-content .modal-body input[type="file"]');
+            let $uploadfile = $('#registerThera .modal .modal-dialog .modal-content .modal-body #upload-profile');
 
             $uploadfile.change(function() {
                 readURL(this);
