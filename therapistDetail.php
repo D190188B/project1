@@ -117,25 +117,13 @@ if (isset($_POST['direct'])) {
                         <ul class="noStyle">
                             <li><i class="fa fa-comments-o" aria-hidden="true"></i>
                                 <br>
-                                <h5>Online Chat</h5>
+                                <h5>WhatsApp Chat</h5>
                             </li>
 
                             <li>
                                 <i class="fa fa-mobile" aria-hidden="true"></i>
                                 <br>
-                                <h5>Phone</h5>
-                            </li>
-
-                            <li>
-                                <i class="fa fa-video-camera" aria-hidden="true"></i>
-                                <br>
-                                <h5>Video</h5>
-                            </li>
-
-                            <li>
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <br>
-                                <h5>Face to Face</h5>
+                                <h5>WhatsApp Call</h5>
                             </li>
                         </ul>
 
