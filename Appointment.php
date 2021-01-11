@@ -22,7 +22,7 @@ if ($count > 0) {
 }
 
 
-if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id'])))) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
+if (((isset($_SESSION['rec_work_id']) && (!empty($_SESSION['rec_work_id']))) || (isset($_SESSION['change_id']) && !empty($_SESSION['change_id'])) || (isset($_SESSION['work_id']) && (!empty($_SESSION['work_id'])))) && (isset($_SESSION['client_id'])) && (!empty($_SESSION['appointment_thera']))) {
     $therapist_id = $_SESSION['appointment_thera'];
     $sql = "SELECT * FROM therapist where therapist_id='$therapist_id'"; //id is database name
     $result = $conn->query($sql) or die($conn->error . __LINE__);
@@ -125,6 +125,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['choice_age'] = '';
                         $_SESSION['choice_lan'] = '';
                         $_SESSION['directRec'] = '';
+                        $_SESSION['specialty_name'] = '';
                     }
                 } else if ((!empty($_SESSION['rec_work_id'])) && (empty($_SESSION['directRec']))) {
                     $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','" . $_SESSION['specialty_name'] . "','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
@@ -141,6 +142,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['choice_age'] = '';
                         $_SESSION['choice_lan'] = '';
                         $_SESSION['directRec'] = '';
+                        $_SESSION['specialty_name'] = '';
                     }
                 } else {
                     $sql = "INSERT INTO `appointment` VALUES('" . $_SESSION['generate_id'] . "','$email','$method','$user_time4','$therapistID','-','" . $_SESSION['client_phone'] . "',1,1,1,NOW())";
@@ -158,6 +160,7 @@ if (isset($_POST['upload'])) { //upload appointment
                         $_SESSION['choice_age'] = '';
                         $_SESSION['choice_lan'] = '';
                         $_SESSION['directRec'] = '';
+                        $_SESSION['specialty_name'] = '';
                     }
                 }
             } else {
@@ -176,6 +179,7 @@ if (isset($_POST['upload'])) { //upload appointment
                     $_SESSION['choice_age'] = '';
                     $_SESSION['choice_lan'] = '';
                     $_SESSION['directRec'] = '';
+                    $_SESSION['specialty_name'] = '';
                 }
             }
         }
@@ -435,8 +439,8 @@ function build_calendar($month, $year)
                                     <div class="form-group">
                                         <label for="method">Method</label>
                                         <select id="method" name="method" class="custom-select">
-                                            <option value="phone">Phone</option>
-                                            <option value="online chat">Online Chat</option>
+                                            <option value="WhatsApp Call">WhatsApp Call</option>
+                                            <option value="WhatsApp Chat">WhatsApp Chat</option>
                                         </select>
                                     </div>
 
