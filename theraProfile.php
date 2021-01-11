@@ -261,7 +261,7 @@ $getAll = $conn->query($all) or die($conn->error . __LINE__);
 //report all list
 $report = "SELECT * FROM appointment where therapist_ID='" . $_SESSION['thera_id'] . "' and appointment_status='6'";
 $runReport = $conn->query($report) or die($conn->error . __LINE__);
-$checkReportlist = $conn->query($report) or die($conn->error . __LINE__);
+$checkReportNum = $conn->query($report) or die($conn->error . __LINE__);
 
 //today number
 $TodayNum = 0;
@@ -269,6 +269,30 @@ $TodayNum = 0;
 $WaitNum = 0;
 //total number
 $AppointmentTotal = 0;
+
+$ReportNum = 0;
+
+if ($checkReportNum->num_rows > 0) {
+    while ($row = $checkReportNum->fetch_assoc()) {
+        $appointment_id = $row['appointment_id'];
+        $user_Email = $row['user_Email'];
+        $user_method = $row['user_method'];
+
+        $user_date = $row['user_date'];
+        $specialty_name = $row['specialty_name'];
+        $checkDirec = $row['checkDirec'];
+
+        $paymentStatus = $row['paymentStatus'];
+        $created_TIME = $row['created_TIME'];
+
+        $checkReport = "SELECT * FROM report where appointment_id='$appointment_id'";
+        $runCheck = $conn->query($checkReport) or die($conn->error . __LINE__);
+
+        if ($runCheck->num_rows == 0) {
+            ++$ReportNum;
+        }
+    }
+}
 
 //if today number is over 0
 if ($getReTol->num_rows > 0) {
@@ -535,7 +559,9 @@ if (isset($_POST['submitReport'])) {
                             <i class="fa fa-file-text-o" aria-hidden="true" id="report_icon"></i>
                             <button class="theraInfo" name="theraInfoBtn" id="theraReport">
                                 <h4 id="report_h4">Report</h4>
-                            </button>
+                            </button><?php if ($ReportNum != 0) {
+                                            echo "<span class=\"badge badge-danger\" style=\"padding:7px;font-size:20px;\">$ReportNum</span></a>";
+                                        } ?>
                         </li>
                     </ul>
                 </div>
@@ -946,32 +972,7 @@ if (isset($_POST['submitReport'])) {
                                                 }
                                                 ?>
 
-                                                <td><?php switch ($statusID) {
-                                                        case 6:
-                                                    ?>
-                                                    <?php if ($checkReportlist->num_rows > 0) {
-                                                                while ($row = $checkReportlist->fetch_assoc()) {
-                                                                    $appointment_id = $row['appointment_id'];
-                                                                    $user_Email = $row['user_Email'];
-                                                                    $user_method = $row['user_method'];
-
-                                                                    $user_date = $row['user_date'];
-                                                                    $specialty_name = $row['specialty_name'];
-                                                                    $checkDirec = $row['checkDirec'];
-
-                                                                    $paymentStatus = $row['paymentStatus'];
-                                                                    $created_TIME = $row['created_TIME'];
-
-                                                                    $checkReportThis = "SELECT * FROM report where appointment_id='$appointment_id'";
-                                                                    $runCheckThis = $conn->query($checkReportThis) or die($conn->error . __LINE__);
-
-                                                                    if ($runCheckThis->num_rows == 0) {
-                                                                        echo "<button name=\"generateReport\" id=\"generateReport\" type=\"submit\" class=\"btn btn-info btn-xs generateReport\" value=\"$appointment_id\">Generate Report</button>";
-                                                                    }
-                                                                }
-                                                                break;
-                                                            }
-                                                    }
+                                                <td><?php
                                                     if ($statusID == '1') {
                                                         echo "<button name='cancel' type='submit' form='thera_save' class='btn btn-danger btn-xs' value=$appointment_id onclick='return confirm(\"Are you sure you want to cancel?\")'>Cancel</button>";
                                                     }
@@ -1008,7 +1009,6 @@ if (isset($_POST['submitReport'])) {
 
                                             $user_date = $row['user_date'];
                                             $specialty_name = $row['specialty_name'];
-                                            $session_ID = $row['session_ID'];
                                             $checkDirec = $row['checkDirec'];
 
                                             $paymentStatus = $row['paymentStatus'];
