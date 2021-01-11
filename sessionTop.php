@@ -4,6 +4,7 @@ $username = "root"; //database name
 $password = ""; //database password
 $database = "oncoun"; //database name
 
+
 // Create connection #scawx
 $conn = new mysqli($servername, $username, $password, $database);
 
@@ -156,7 +157,7 @@ function upload_certificate($path, $file)
 
   if (!empty($filename)) {
     // allow certain file format
-    $allowType = array('docx', 'doc', 'pptx', 'pdf', 'jpg', 'png', 'jpeg');
+    $allowType = array('doc', 'docx', 'pdf');
     if (in_array($fileType, $allowType)) {
       // upload file to the server
       if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
@@ -189,6 +190,7 @@ function upload_thera($path, $file)
       }
     }
   }
+  return $default;
 }
 
 
