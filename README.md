@@ -64,10 +64,10 @@ To start Snort in inline mode with detailed alerts, use the following command:
 ```bash
    sudo snort -A full -c /etc/snort/snort.conf -i enp0s3:enp0s8 -Q
 ```
-   -A full: Sets the alert mode to full, providing detailed alert information.
-   -c /etc/snort/snort.conf: Specifies the configuration file Snort should use.
-   -i enp0s3:enp0s8: Indicates the network interfaces Snort should monitor.
-   -Q: Enables inline mode, allowing Snort to act as an Intrusion Prevention System (IPS) and block malicious traffic.
+   - A full: Sets the alert mode to full, providing detailed alert information.
+   - c /etc/snort/snort.conf: Specifies the configuration file Snort should use.
+   - i enp0s3:enp0s8: Indicates the network interfaces Snort should monitor.
+   - Q: Enables inline mode, allowing Snort to act as an Intrusion Prevention System (IPS) and block malicious traffic.
 
 ### Testing and Validation
    1. **Ping Test**:
